@@ -19,6 +19,9 @@ interface Message {
   location?: { title?: string; address?: string; latitude: number; longitude: number } | null;
   sticker?: { packageId: string; stickerId: string } | null;
   hasImage?: boolean;
+  hasVideo?: boolean;
+  hasAudio?: boolean;
+  file?: { fileName: string; fileSize: number; r2Key?: string; fileUrl?: string } | null;
   createdAt?: string;
   platform?: string;
   sendMethod?: string;
@@ -857,8 +860,25 @@ function ChatBubble({ msg }: { msg: Message }) {
             />
           )}
           {/* Video */}
-          {msg.videoUrl && (
+          {msg.videoUrl && !msg.videoUrl.startsWith("line-content") && (
             <video src={msg.videoUrl} controls className="rounded-lg max-w-full max-h-44 mb-1" />
+          )}
+          {/* Audio */}
+          {msg.audioUrl && !msg.audioUrl.startsWith("line-content") && (
+            <audio src={msg.audioUrl} controls className="max-w-full my-1" />
+          )}
+          {/* File (PDF, doc, etc.) */}
+          {msg.file && msg.file.fileUrl && (
+            <a
+              href={msg.file.fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 my-1 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition text-xs"
+            >
+              <span className="text-lg">📎</span>
+              <span className="flex-1 truncate">{msg.file.fileName}</span>
+              <span className="text-[10px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
+            </a>
           )}
           {/* Location */}
           {msg.location && (

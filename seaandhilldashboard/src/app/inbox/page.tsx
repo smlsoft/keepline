@@ -22,6 +22,7 @@ interface Message {
   hasAudio?: boolean;
   hasSticker?: boolean;
   hasLocation?: boolean;
+  file?: { fileName: string; fileSize: number; r2Key?: string; fileUrl?: string } | null;
   sendMethod?: string;
   isAutoReply?: boolean;
   createdAt?: string;
@@ -230,6 +231,19 @@ function ChatBubble({
         )}
         {msg.audioUrl?.startsWith("line-content") && (
           <p className="text-xs text-sky-300 my-1">🎵 เสียง (ดูใน LINE)</p>
+        )}
+        {/* File (PDF, doc, etc.) */}
+        {msg.file && msg.file.fileUrl && (
+          <a
+            href={msg.file.fileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 my-1 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition text-xs"
+          >
+            <span className="text-lg">📎</span>
+            <span className="flex-1 truncate">{msg.file.fileName}</span>
+            <span className="text-[10px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
+          </a>
         )}
         {/* Location */}
         {(msg.hasLocation || msg.location) && msg.location && (

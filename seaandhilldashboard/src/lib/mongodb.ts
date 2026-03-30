@@ -37,6 +37,8 @@ export async function getDB(): Promise<Db> {
       db.collection("appointments").createIndex({ staffNames: 1, date: 1 }),
       db.collection("staff").createIndex({ lineUserId: 1 }, { sparse: true }),
       db.collection("staff").createIndex({ active: 1 }),
+      db.collection("tax_deadlines").createIndex({ name: 1, isTemplate: 1 }),
+      db.collection("tax_deadlines").createIndex({ applicableServices: 1 }),
     ]);
     console.log("[MongoDB] Indexes ensured");
   } catch (e) {

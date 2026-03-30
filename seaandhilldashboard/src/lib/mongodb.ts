@@ -40,6 +40,7 @@ export async function getDB(): Promise<Db> {
       db.collection("tax_deadlines").createIndex({ name: 1, isTemplate: 1 }),
       db.collection("tax_deadlines").createIndex({ applicableServices: 1 }),
       db.collection("customer_services").createIndex({ customerId: 1 }, { unique: true }),
+      db.collection("document_checklists").createIndex({ customerId: 1, period: 1 }, { unique: true }),
     ]);
     console.log("[MongoDB] Indexes ensured");
   } catch (e) {

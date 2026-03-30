@@ -3669,6 +3669,10 @@ app.post("/api/inbox/send", sendLimiter, express.json(), async (req, res) => {
   if (!sourceId) {
     return res.status(400).json({ error: "sourceId required" });
   }
+  // ห้าม push ข้อความเข้ากลุ่ม — เก็บข้อมูลเท่านั้น
+  if (sourceId.startsWith("C") || sourceId.startsWith("R")) {
+    return res.status(403).json({ error: "ไม่สามารถส่งข้อความเข้ากลุ่มได้ — กลุ่มใช้เก็บข้อมูลเท่านั้น" });
+  }
   const hasContent = text || imageUrl || videoUrl || audioUrl || location || sticker || template || flex;
   if (!hasContent) {
     return res.status(400).json({ error: "ต้องมีเนื้อหาอย่างน้อย 1 อย่าง" });

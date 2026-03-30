@@ -5,7 +5,7 @@ import { OrbitControls, Html } from "@react-three/drei";
 import { Suspense, useRef, useMemo, useState } from "react";
 import * as THREE from "three";
 
-import { getRandomConversation, getQueueRemaining } from "./conversations";
+// conversations.ts ยังเก็บไว้เผื่อ fallback ในอนาคต
 
 interface Agent { id: number; name: string; role: string; emoji: string; color: string; status: string; quote: string; }
 interface Props { agents: Agent[]; ttsEnabled?: boolean; }
@@ -171,26 +171,28 @@ async function ceoSpeak(agentName: string, enabled: boolean) {
   ttsBusy = true;
   ttsBusySince = Date.now();
 
-  // สุ่มบทสนทนา hardcode (897 ชุด ไม่ซ้ำจนกว่าจะหมด)
-  const conv = getRandomConversation(agentName);
-  console.log(`[CEO] → ${agentName} ${conv?.turns.length || 0} turns (เหลือ ${getQueueRemaining()})`)
-  if (!conv || conv.turns.length === 0) { ttsBusy = false; return; }
+  // ใช้ข้อมูลจริงจาก CEO Plan (AI วิเคราะห์จาก costs/alerts/advice)
+  await fetchCeoPlan(); // ดึงแผนล่าสุด
+  const plan = getCeoPlanFor(agentName);
+  if (!plan) {
+    console.log(`[CEO] → ${agentName} ไม่มีแผนจริง — ข้าม`);
+    ttsBusy = false;
+    return;
+  }
+  const [ceoLine, empLine] = plan;
+  markPlanUsed(agentName);
+  console.log(`[CEO] → ${agentName} (ข้อมูลจริง) CEO: ${ceoLine.slice(0, 30)}...`);
+
   try {
-    // เล่นทุก turn สลับ CEO (Niwat) ↔ พนักงาน (Premwadee)
-    for (let i = 0; i < conv.turns.length; i++) {
-      if (!enabled) break;
-      const text = conv.turns[i];
-      const isCeo = i % 2 === 0;
-      if (isCeo) {
-        const ok = await edgeTTS(text, "th-TH-NiwatNeural", 0.9);
-        if (!ok) await webSpeechFallback(text, 0.5, 0.85);
-      } else {
-        const ok = await edgeTTS(text, "th-TH-PremwadeeNeural", 1.0);
-        if (!ok) await webSpeechFallback(text, 1.8, 0.9);
-      }
+    // CEO ถาม (Niwat)
+    const ok1 = await edgeTTS(ceoLine, "th-TH-NiwatNeural", 0.9);
+    if (!ok1) await webSpeechFallback(ceoLine, 0.5, 0.85);
+    // พนักงานตอบ (Premwadee)
+    if (enabled) {
+      const ok2 = await edgeTTS(empLine, "th-TH-PremwadeeNeural", 1.0);
+      if (!ok2) await webSpeechFallback(empLine, 1.8, 0.9);
     }
   } catch (e) {
-    // ป้องกัน ttsBusy ค้าง
     console.warn("[CEO TTS]", e);
   } finally {
     ttsBusy = false;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useState, useCallback, use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -51,6 +51,53 @@ const STAGES: Record<string, { label: string; color: string; icon: string }> = {
 const SL: Record<string, string> = { green: "ปกติ", yellow: "ติดตาม", red: "ไม่พอใจ" };
 const PL: Record<string, string> = { green: "ไม่สนใจ", yellow: "เริ่มสนใจ", red: "สนใจซื้อ!" };
 
+const SERVICE_TYPES = [
+  { key: "bookkeeping", label: "ทำบัญชีรายเดือน" },
+  { key: "vat", label: "ยื่น VAT (ภพ.30)" },
+  { key: "withholding_tax", label: "ภาษีหัก ณ ที่จ่าย (ภงด.1/3/53)" },
+  { key: "payroll", label: "ทำเงินเดือน" },
+  { key: "social_security", label: "ประกันสังคม" },
+  { key: "closing", label: "ปิดงบการเงิน" },
+  { key: "audit", label: "ตรวจสอบบัญชี" },
+  { key: "internal_audit", label: "ตรวจสอบภายใน" },
+  { key: "registration", label: "จดทะเบียนบริษัท" },
+];
+
+const THAI_MONTHS = [
+  "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+  "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม",
+];
+
+const SERVICE_STATUS_OPTIONS = [
+  { value: "active", label: "ใช้งาน", color: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" },
+  { value: "paused", label: "หยุดชั่วคราว", color: "bg-amber-500/20 text-amber-400 border-amber-500/30" },
+  { value: "cancelled", label: "ยกเลิก", color: "bg-red-500/20 text-red-400 border-red-500/30" },
+];
+
+interface ServiceItem {
+  key: string;
+  label: string;
+  enabled: boolean;
+  monthlyFee: number;
+}
+
+interface CustomerServiceDoc {
+  _id?: string;
+  customerId: string;
+  customerName: string;
+  services: ServiceItem[];
+  fiscalYearEnd: string;
+  assignedStaffId: string;
+  assignedStaffName: string;
+  status: string;
+  notes: string;
+}
+
+interface StaffMember {
+  _id: string;
+  name: string;
+}
+
 function Badge({ level, label }: { level: string; label: string }) {
   const colors: Record<string, string> = {
     green: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
@@ -93,6 +140,21 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
   const [taskNotes, setTaskNotes] = useState("");
   const [taskSaving, setTaskSaving] = useState(false);
   const [taskSaved, setTaskSaved] = useState(false);
+  // Service packages
+  const [svcDoc, setSvcDoc] = useState<CustomerServiceDoc | null>(null);
+  const [svcLoading, setSvcLoading] = useState(true);
+  const [showSvcModal, setShowSvcModal] = useState(false);
+  const [svcForm, setSvcForm] = useState<ServiceItem[]>(
+    SERVICE_TYPES.map((s) => ({ ...s, enabled: false, monthlyFee: 0 }))
+  );
+  const [svcFiscalMonth, setSvcFiscalMonth] = useState(12);
+  const [svcFiscalDay, setSvcFiscalDay] = useState(31);
+  const [svcStaffId, setSvcStaffId] = useState("");
+  const [svcStaffName, setSvcStaffName] = useState("");
+  const [svcStatus, setSvcStatus] = useState("active");
+  const [svcNotes, setSvcNotes] = useState("");
+  const [svcSaving, setSvcSaving] = useState(false);
+  const [staffList, setStaffList] = useState<StaffMember[]>([]);
 
   useEffect(() => {
     fetch(`/dashboard/api/customers/${id}`)
@@ -119,6 +181,86 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
       })
       .catch(() => setLoading(false));
   }, [id]);
+
+  const populateFormFromDoc = useCallback((doc: CustomerServiceDoc) => {
+    const savedMap = new Map((doc.services || []).map((s) => [s.key, s]));
+    setSvcForm(SERVICE_TYPES.map((st) => {
+      const saved = savedMap.get(st.key);
+      return saved ? { ...st, enabled: saved.enabled, monthlyFee: saved.monthlyFee } : { ...st, enabled: false, monthlyFee: 0 };
+    }));
+    if (doc.fiscalYearEnd) {
+      const [m, day] = doc.fiscalYearEnd.split("-").map(Number);
+      setSvcFiscalMonth(m || 12);
+      setSvcFiscalDay(day || 31);
+    }
+    setSvcStaffId(doc.assignedStaffId || "");
+    setSvcStaffName(doc.assignedStaffName || "");
+    setSvcStatus(doc.status || "active");
+    setSvcNotes(doc.notes || "");
+  }, []);
+
+  useEffect(() => {
+    setSvcLoading(true);
+    fetch(`/dashboard/api/customer-services?customerId=${id}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (d && d._id) {
+          setSvcDoc(d);
+          populateFormFromDoc(d);
+        }
+        setSvcLoading(false);
+      })
+      .catch(() => setSvcLoading(false));
+  }, [id, populateFormFromDoc]);
+
+  useEffect(() => {
+    fetch("/dashboard/api/staff")
+      .then((r) => r.json())
+      .then((d) => { if (Array.isArray(d)) setStaffList(d); })
+      .catch(() => {});
+  }, []);
+
+  const openSvcModal = useCallback(() => {
+    if (svcDoc) populateFormFromDoc(svcDoc);
+    setShowSvcModal(true);
+  }, [svcDoc, populateFormFromDoc]);
+
+  const handleSvcSave = async () => {
+    setSvcSaving(true);
+    const payload = {
+      customerId: id,
+      customerName: firstName || lastName ? `${firstName} ${lastName}`.trim() : customer?.name || "",
+      services: svcForm,
+      fiscalYearEnd: `${svcFiscalMonth}-${svcFiscalDay}`,
+      assignedStaffId: svcStaffId,
+      assignedStaffName: svcStaffName,
+      status: svcStatus,
+      notes: svcNotes,
+    };
+
+    try {
+      if (svcDoc?._id) {
+        await fetch(`/dashboard/api/customer-services/${svcDoc._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        setSvcDoc({ ...svcDoc, ...payload });
+      } else {
+        const res = await fetch("/dashboard/api/customer-services", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const created = await res.json();
+        setSvcDoc(created);
+      }
+      setShowSvcModal(false);
+    } catch (err) {
+      console.error("Save service error:", err);
+    }
+    setSvcSaving(false);
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -239,6 +381,145 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
               <button onClick={handleCreateTask} disabled={taskSaving || !taskTitle.trim()}
                 className={`flex-1 px-4 py-2 rounded-lg text-white text-sm font-medium transition disabled:opacity-50 ${taskSaved ? "bg-emerald-600" : "bg-blue-600 hover:bg-blue-500"}`}>
                 {taskSaving ? "กำลังบันทึก..." : taskSaved ? "✓ สร้างแล้ว!" : "📋 สร้างงาน"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Service Packages Modal */}
+      {showSvcModal && (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border theme-border p-4 space-y-3" style={{ background: "var(--bg-card)" }}>
+            <div className="flex items-center justify-between">
+              <h2 className="font-bold text-base">📋 จัดการแพ็คเกจบริการ</h2>
+              <button onClick={() => setShowSvcModal(false)} className="theme-text-muted hover:theme-text text-xl">&times;</button>
+            </div>
+
+            {/* Service checkboxes with fee inputs */}
+            <div className="space-y-1.5">
+              <p className="text-[13px] theme-text-muted font-medium">เลือกบริการ &amp; ค่าบริการต่อเดือน</p>
+              {svcForm.map((s, i) => (
+                <div key={s.key} className="flex items-center gap-2">
+                  <label className="flex items-center gap-1.5 flex-1 min-w-0 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={s.enabled}
+                      onChange={(e) => {
+                        const next = [...svcForm];
+                        next[i] = { ...next[i], enabled: e.target.checked };
+                        setSvcForm(next);
+                      }}
+                      className="w-4 h-4 rounded accent-blue-500"
+                    />
+                    <span className="text-sm truncate">{s.label}</span>
+                  </label>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <span className="text-xs theme-text-muted">฿</span>
+                    <input
+                      type="number"
+                      min="0"
+                      value={s.monthlyFee || ""}
+                      onChange={(e) => {
+                        const next = [...svcForm];
+                        next[i] = { ...next[i], monthlyFee: parseFloat(e.target.value) || 0 };
+                        setSvcForm(next);
+                      }}
+                      placeholder="0"
+                      className="w-24 px-2 py-1 rounded-lg theme-bg-secondary border theme-border text-sm theme-text text-right"
+                      disabled={!s.enabled}
+                    />
+                  </div>
+                </div>
+              ))}
+              {svcForm.some((s) => s.enabled) && (
+                <div className="flex justify-end text-sm font-bold pt-1 border-t theme-border">
+                  <span>รวม: <span className="text-emerald-400">{formatTHB(svcForm.filter((s) => s.enabled).reduce((sum, s) => sum + s.monthlyFee, 0))}</span></span>
+                </div>
+              )}
+            </div>
+
+            {/* Fiscal year end */}
+            <div>
+              <label className="block text-[13px] theme-text-muted mb-1">📅 สิ้นสุดปีบัญชี</label>
+              <div className="grid grid-cols-2 gap-2">
+                <select
+                  value={svcFiscalMonth}
+                  onChange={(e) => setSvcFiscalMonth(Number(e.target.value))}
+                  className="px-2 py-1.5 rounded-lg theme-bg-secondary border theme-border text-sm theme-text"
+                >
+                  {THAI_MONTHS.map((m, i) => (
+                    <option key={i} value={i + 1}>{m}</option>
+                  ))}
+                </select>
+                <div className="flex items-center gap-1">
+                  <span className="text-xs theme-text-muted">วันที่</span>
+                  <input
+                    type="number"
+                    min="1"
+                    max="31"
+                    value={svcFiscalDay}
+                    onChange={(e) => setSvcFiscalDay(Number(e.target.value) || 31)}
+                    className="w-full px-2 py-1.5 rounded-lg theme-bg-secondary border theme-border text-sm theme-text"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Staff assignment */}
+            <div>
+              <label className="block text-[13px] theme-text-muted mb-1">👤 ผู้ดูแลบัญชี</label>
+              <select
+                value={svcStaffId}
+                onChange={(e) => {
+                  const selected = staffList.find((s) => s._id === e.target.value);
+                  setSvcStaffId(e.target.value);
+                  setSvcStaffName(selected?.name || "");
+                }}
+                className="w-full px-2 py-1.5 rounded-lg theme-bg-secondary border theme-border text-sm theme-text"
+              >
+                <option value="">— ไม่ระบุ —</option>
+                {staffList.map((s) => (
+                  <option key={s._id} value={s._id}>{s.name}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Status */}
+            <div>
+              <label className="block text-[13px] theme-text-muted mb-1">สถานะบริการ</label>
+              <select
+                value={svcStatus}
+                onChange={(e) => setSvcStatus(e.target.value)}
+                className="w-full px-2 py-1.5 rounded-lg theme-bg-secondary border theme-border text-sm theme-text"
+              >
+                {SERVICE_STATUS_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Notes */}
+            <div>
+              <label className="block text-[13px] theme-text-muted mb-1">หมายเหตุ</label>
+              <textarea
+                value={svcNotes}
+                onChange={(e) => setSvcNotes(e.target.value)}
+                rows={2}
+                placeholder="รายละเอียดเพิ่มเติม..."
+                className="w-full px-2 py-1.5 rounded-lg theme-bg-secondary border theme-border text-sm theme-text resize-none"
+              />
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-2 pt-1">
+              <button onClick={() => setShowSvcModal(false)}
+                className="flex-1 px-3 py-2 rounded-lg border theme-border text-sm theme-text-muted hover:theme-text transition">
+                ยกเลิก
+              </button>
+              <button onClick={handleSvcSave} disabled={svcSaving}
+                className="flex-1 px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition disabled:opacity-50">
+                {svcSaving ? "กำลังบันทึก..." : "💾 บันทึก"}
               </button>
             </div>
           </div>
@@ -436,6 +717,68 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
               </div>
             </div>
           )}
+
+          {/* Service Packages Section */}
+          <div className="mt-6 pt-4 border-t theme-border">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xs font-bold theme-text-muted uppercase tracking-wide">📋 แพ็คเกจบริการ</h3>
+              <button onClick={openSvcModal}
+                className="text-xs px-2 py-1 rounded-lg bg-blue-900/30 text-blue-400 border border-blue-700/30 hover:bg-blue-800/40 transition">
+                ➕ จัดการบริการ
+              </button>
+            </div>
+            {(() => {
+              if (svcLoading) return <p className="text-xs theme-text-muted animate-pulse">กำลังโหลด...</p>;
+              if (!svcDoc || !svcDoc.services?.some((s) => s.enabled))
+                return <p className="text-xs theme-text-muted">ยังไม่มีแพ็คเกจบริการ — กด &quot;จัดการบริการ&quot; เพื่อเพิ่ม</p>;
+
+              const enabledSvcs = svcDoc.services.filter((s) => s.enabled);
+              const totalFee = enabledSvcs.reduce((sum, s) => sum + s.monthlyFee, 0);
+              const statusOpt = SERVICE_STATUS_OPTIONS.find((o) => o.value === svcDoc.status) || SERVICE_STATUS_OPTIONS[0];
+              const [fyMonth, fyDay] = (svcDoc.fiscalYearEnd || "12-31").split("-").map(Number);
+
+              return (
+                <div className="space-y-2">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-[13px]">
+                      <thead>
+                        <tr className="theme-text-muted text-left">
+                          <th className="py-1 pr-2 font-medium">บริการ</th>
+                          <th className="py-1 pr-2 font-medium text-right">ค่าบริการ/เดือน</th>
+                          <th className="py-1 font-medium text-center">สถานะ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {enabledSvcs.map((s) => (
+                          <tr key={s.key} className="border-t theme-border">
+                            <td className="py-1 pr-2">{SERVICE_TYPES.find((t) => t.key === s.key)?.label || s.key}</td>
+                            <td className="py-1 pr-2 text-right font-mono">{formatTHB(s.monthlyFee)}</td>
+                            <td className="py-1 text-center">
+                              <span className={`inline-block px-1.5 py-0.5 rounded-full text-[11px] font-medium border ${statusOpt.color}`}>
+                                {statusOpt.label}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      <tfoot>
+                        <tr className="border-t theme-border font-bold">
+                          <td className="py-1 pr-2">รวมต่อเดือน</td>
+                          <td className="py-1 pr-2 text-right font-mono text-emerald-400">{formatTHB(totalFee)}</td>
+                          <td />
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-[13px] theme-text-muted">
+                    <span>📅 สิ้นปีบัญชี: {fyDay} {THAI_MONTHS[(fyMonth || 12) - 1]}</span>
+                    {svcDoc.assignedStaffName && <span>👤 ผู้ดูแล: {svcDoc.assignedStaffName}</span>}
+                  </div>
+                  {svcDoc.notes && <p className="text-[13px] theme-text-muted">💬 {svcDoc.notes}</p>}
+                </div>
+              );
+            })()}
+          </div>
 
           {/* Channel IDs Section */}
           <div className="mt-6 pt-4 border-t theme-border">

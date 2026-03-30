@@ -2,13 +2,13 @@
 
 ## Architecture
 ```
-LINE / Facebook / Instagram
+LINE (DM + Group)
   ↓ webhook
-Nginx (SSL + rate limit)
+Caddy (SSL + reverse proxy)
   ↓
-Agent (Docker) → AI + RAG + MCP → reply
+Agent (Docker) → AI + RAG + MCP → reply (DM only, group = เก็บข้อมูลเท่านั้น)
   ↓
-MongoDB Atlas (messages + users + teams)
+MongoDB (messages + customers + groups)
   ↓
 OpenClaw (แกนหลัก) ← cron ทุก 1 ชม. → วิเคราะห์ → เก็บ advice
   ↓
@@ -17,49 +17,46 @@ Dashboard (Docker) → Google Login → แสดงสนทนา + CRM + KPI 
 
 ## Brand
 - **ชื่อ:** OpenClaw Mini CRM
-- **Tagline:** AI Chat Intelligence — LINE · Facebook · Instagram
+- **Tagline:** AI Chat Intelligence — LINE
 - **Domain:** seaandhill.satistang.com (production)
 - **Deploy:** Hetzner VPS + Docker Compose
 
 ## Core Principle — OpenClaw เป็นแกนหลัก
 - **OpenClaw** = สมองกลาง (AI Advisor) — gateway + cron + multi-channel
-- **Agent** = หูและปาก (LINE/FB/IG webhook + RAG + AI reply + MCP)
-- **Dashboard** = ตา (แสดงข้อมูลจาก MongoDB + Google Login + multi-tenant)
+- **Agent** = หูและปาก (LINE webhook + RAG + AI reply + MCP)
+- **Dashboard** = ตา (แสดงข้อมูลจาก MongoDB + Google Login)
 
 ## Services
 | Service | Role | Port | Folder |
 |---------|------|------|--------|
 | **Nginx** | Reverse proxy + SSL | 80/443 | `nginx/` |
 | **OpenClaw** | AI Advisor (แกนหลัก) | 18789 | `openclaw/` |
-| **Agent** | LINE/FB/IG + RAG + MCP | 3000 | `proxy/` |
+| **Agent** | LINE webhook + RAG + MCP | 3000 | `proxy/` |
 | **Dashboard** | Web UI + Auth | 3001 | `seaandhilldashboard/` |
 
 ## URLs
 - **Production:** `https://seaandhill.satistang.com/dashboard`
 - **LINE webhook:** `https://seaandhill.satistang.com/webhook`
-- **Meta webhook:** `https://seaandhill.satistang.com/webhook/meta`
 - **OpenClaw:** `http://localhost:18789` (internal)
 
-## Multi-Platform (LINE + Facebook + Instagram)
-- **messages.platform:** `"line"` | `"facebook"` | `"instagram"`
-- **sourceId format:** LINE=`Cxxx`/`Uxxx`, Facebook=`fb_xxx`, Instagram=`ig_xxx`
-- **Dashboard:** tab filter แยกแต่ละ platform
-- **Webhook:** `/webhook` (LINE), `/webhook/meta` (FB+IG — shared Meta API)
+## Platform — LINE Only
+- **sourceId format:** DM=`Uxxx`, Group=`Cxxx`
+- **Customer match:** ด้วย `lineUserId` (unique per bot)
+- **Group:** เก็บข้อมูล + วิเคราะห์เท่านั้น ไม่ตอบ AI ในกลุ่ม
+- **ลูกค้าคนเดียวกัน:** DM + กลุ่ม = auto merge ด้วย lineUserId
 
 ## Authentication (Google OAuth)
 - **NextAuth** + Google Provider
 - **Login page:** `/dashboard/login`
 - **Dev mode:** ไม่มี GOOGLE_CLIENT_ID → ข้ามไป ไม่ต้อง login
 
-## Multi-Tenant Database Schema
+## Database Schema
 ```
-users           { _id: GUID, name, image, plan }
-user_emails     { email, userId, isPrimary }
-teams           { _id: GUID, name, ownerId }
-team_members    { teamId, userId, role: admin|responder|reviewer|viewer }
-platform_tokens { teamId, platform, pageId, accessToken, active }
-messages        { sourceId, platform, teamId, text, ... }
-groups_meta     { sourceId, groupName, platform, teamId }
+customers       { lineUserId (unique), name, rooms[], groups[], tags[], pipelineStage, sentiment }
+messages        { sourceId, userId, role, content, messageType, ... }
+groups_meta     { sourceId, groupName, sourceType, members[], memberCount }
+user_skills     { sourceId, userId, sentiment, purchaseIntent, tags }
+chat_analytics  { sourceId, sentiment, purchaseIntent }
 ```
 
 ## Advisor API (Agent ให้บริการ)
@@ -76,16 +73,14 @@ groups_meta     { sourceId, groupName, platform, teamId }
 1. OpenRouter (free) → 2. SambaNova → 3. Groq → 4. Cerebras → 5. Gemini
 
 ## Database
-- **MongoDB Atlas M0** (free)
+- **MongoDB** (local Docker)
 - **แยกคน/กลุ่ม:** ใช้ `sourceId` field
-- **แยก platform:** ใช้ `platform` field
-- **แยก tenant:** ใช้ `teamId` field
+- **ลูกค้า:** match ด้วย `lineUserId` (ไม่ใช่ชื่อ)
 - **อย่าแยก collection ตามคน/กลุ่ม** — ใช้ collection เดียวเสมอ
 
 ## Env vars (.env)
 - `MONGODB_URI` — MongoDB Atlas
 - `LINE_CHANNEL_ACCESS_TOKEN`, `LINE_CHANNEL_SECRET`
-- `FB_PAGE_ACCESS_TOKEN`, `FB_APP_SECRET`, `FB_VERIFY_TOKEN`
 - `SAMBANOVA_API_KEY`, `GROQ_API_KEY`, `CEREBRAS_API_KEY`, `OPENROUTER_API_KEY`, `GOOGLE_API_KEY`
 - `MCP_ERP_API_KEY` — bc-erp MCP auth
 - `OPENCLAW_GATEWAY_TOKEN` — OpenClaw gateway

@@ -32,6 +32,7 @@ interface Conversation {
   id: string;
   name: string;
   platform: string;
+  sourceType?: string;
   messageCount: number;
   lastMessage: string;
   lastActivity: string | null;
@@ -358,22 +359,25 @@ function ChatPanel({
 
   const platform = conv.platform || "line";
   const cfg = PLATFORM_CONFIG[platform] || PLATFORM_CONFIG.line;
+  const isGroup = conv.sourceType === "group";
 
   return (
-    <div className={`flex flex-col h-full min-w-0 border-t-3 theme-bg ${cfg.borderColor}`}>
-      {/* ── Header — สีตาม platform ── */}
-      <div className={`flex items-center gap-2 px-3 py-2 border-b theme-border shrink-0 ${cfg.headerBg}`}>
-        <div className={`w-8 h-8 rounded-full ${avatarBg(platform)} flex items-center justify-center text-xs font-bold text-white shrink-0`}>
+    <div className="flex flex-col h-full min-w-0 border-t-3 theme-bg border-indigo-500">
+      {/* ── Header ── */}
+      <div className="flex items-center gap-2 px-3 py-2 border-b theme-border shrink-0 bg-indigo-950/40">
+        <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white shrink-0">
           {getInitials(conv.name)}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
             <span className="text-sm font-semibold theme-text truncate">
-              {conv.name !== conv.id ? conv.name : conv.id.substring(0, 12) + "…"}
+              {conv.name !== conv.id ? conv.name : conv.id.substring(0, 12) + "..."}
             </span>
-            <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded ${cfg.badgeBg} text-white leading-none`}>
-              {cfg.icon} {cfg.label}
-            </span>
+            {isGroup ? (
+              <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-orange-600 text-white leading-none">กลุ่ม</span>
+            ) : (
+              <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white leading-none">DM</span>
+            )}
           </div>
           <div className="flex items-center gap-1.5 mt-0.5">
             <span className="text-[10px] theme-text-muted">{conv.messageCount} ข้อความ</span>
@@ -385,8 +389,6 @@ function ChatPanel({
               </span>
             )}
           </div>
-          {/* Platform capabilities */}
-          <p className={`text-[9px] mt-0.5 ${cfg.color} opacity-60`}>{cfg.capabilities}</p>
         </div>
         <button
           onClick={onClose}
@@ -761,7 +763,7 @@ function ChatPanel({
             className={`p-1 rounded transition text-sm ${showMemory ? "bg-purple-500/20 text-purple-400 ring-1 ring-purple-500/30" : "theme-text-secondary hover:theme-text"}`}
             title="🧠 Memory + Skills ของลูกค้า"
           >🧠</button>
-          <span className={`ml-auto text-[9px] ${cfg.color} opacity-50`}>{cfg.label}</span>
+          <span className="ml-auto text-[9px] theme-text-muted opacity-50">LINE</span>
         </div>
         {/* แถว 2: Input เต็มความกว้าง + ปุ่มส่ง */}
         <div className="flex items-end gap-1.5">
@@ -922,7 +924,6 @@ export default function ChatPage() {
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [openPanels, setOpenPanels] = useState<string[]>([]);
-  // platformFilter removed — now uses chatPlatform (API-level filter)
   const [searchQuery, setSearchQuery] = useState("");
 
   // Auth guard
@@ -931,34 +932,20 @@ export default function ChatPage() {
   }, [authStatus, router]);
 
   // Fetch ALL conversations — fast API (1 query, ไม่ดึง messages array)
-  const [chatPlatform, setChatPlatform] = useState("");
-  const [totalPlatformCounts, setTotalPlatformCounts] = useState<Record<string, number>>({});
-
-  const fetchConversations = useCallback(async (_p = 0, _a = false, platform = "") => {
+  const fetchConversations = useCallback(async () => {
     try {
-      const pfParam = platform ? `?platform=${platform}` : "";
-      const res = await fetch(`/dashboard/api/chat-list${pfParam}`);
+      const res = await fetch("/dashboard/api/chat-list");
       const raw = await res.json();
       const data = raw.conversations || raw.groups || (Array.isArray(raw) ? raw : []);
       setConversations(data);
-
-      // ดึง counts รวมครั้งเดียว (ตอนไม่มี filter)
-      if (!platform) {
-        const counts: Record<string, number> = { all: data.length };
-        for (const c of data) {
-          const p = c.platform || "line";
-          counts[p] = (counts[p] || 0) + 1;
-        }
-        setTotalPlatformCounts(counts);
-      }
     } catch {}
   }, []);
 
   useEffect(() => {
-    fetchConversations(0, false, chatPlatform);
-    const iv = setInterval(() => fetchConversations(0, false, chatPlatform), 15000);
+    fetchConversations();
+    const iv = setInterval(fetchConversations, 15000);
     return () => clearInterval(iv);
-  }, [fetchConversations, chatPlatform]);
+  }, [fetchConversations]);
 
   const { markSeen } = useNotificationContext();
 
@@ -986,14 +973,6 @@ export default function ChatPage() {
     return true;
   });
 
-  // ใช้ counts จากตอนโหลดครั้งแรก (ไม่เปลี่ยนตาม filter)
-  const platformCounts = {
-    all: totalPlatformCounts.all || conversations.length,
-    line: totalPlatformCounts.line || 0,
-    facebook: totalPlatformCounts.facebook || 0,
-    instagram: totalPlatformCounts.instagram || 0,
-  };
-
   return (
     <div className="flex h-[calc(100dvh-4rem)] md:h-screen theme-bg theme-text overflow-hidden">
       {/* ═══ LEFT — Conversation List ═══ */}
@@ -1019,28 +998,9 @@ export default function ChatPage() {
           />
         </div>
 
-        {/* Platform filter */}
-        <div className="px-2 py-1.5 border-b theme-border flex gap-1 flex-wrap">
-          {(["","line","facebook","instagram"] as const).map(p => {
-            const isActive = chatPlatform === p;
-            const labels: Record<string, string> = { "": "ทั้งหมด", line: "LINE", facebook: "FB", instagram: "IG" };
-            const activeColors: Record<string, string> = {
-              "": "bg-white text-black", line: "bg-green-600 text-white",
-              facebook: "bg-blue-600 text-white", instagram: "bg-gradient-to-r from-purple-600 to-pink-600 text-white",
-            };
-            return (
-              <button
-                key={p}
-                onClick={() => setChatPlatform(p)}
-                className={`px-2 py-0.5 rounded text-[10px] font-medium transition flex items-center gap-0.5 ${
-                  isActive ? activeColors[p] : "theme-bg-card theme-text-secondary"
-                }`}
-              >
-                {labels[p]}
-                <span className="text-[9px] px-0.5 rounded-full bg-black/20">{p === "" ? conversations.length : platformCounts[p as "line"|"facebook"|"instagram"]}</span>
-              </button>
-            );
-          })}
+        {/* Conversation count */}
+        <div className="px-2 py-1.5 border-b theme-border">
+          <span className="text-[10px] theme-text-muted">{conversations.length} สนทนา</span>
         </div>
 
         {/* Conversation list — แยกสีตาม platform */}
@@ -1052,14 +1012,8 @@ export default function ChatPage() {
             </div>
           ) : filtered.map(conv => {
             const isOpen = openPanels.includes(conv.id);
-            const platform = conv.platform || "line";
-            const pcfg = PLATFORM_CONFIG[platform] || PLATFORM_CONFIG.line;
             const sentimentLevel = conv.customerSentiment?.level || conv.sentiment?.level;
-
-            // แถบสีซ้ายตาม platform
-            const leftBorderColor = platform === "line" ? "border-l-green-500"
-              : platform === "facebook" ? "border-l-blue-500"
-              : "border-l-pink-500";
+            const isGroup = conv.sourceType === "group";
 
             // ไฮไลท์ถ้าเพิ่งมีข้อความ (<2 นาที)
             const isRecent = conv.lastActivity && (Date.now() - new Date(conv.lastActivity).getTime()) < 120000;
@@ -1069,12 +1023,12 @@ export default function ChatPage() {
                 key={conv.id}
                 onClick={() => openChat(conv.id)}
                 className={`w-full text-left px-2.5 py-2 flex items-start gap-2 transition border-b theme-border border-l-2 hover:theme-bg-hover ${
-                  isOpen ? `${leftBorderColor} bg-opacity-20 ${platform === "line" ? "bg-green-950/40" : platform === "facebook" ? "bg-blue-950/40" : "bg-pink-950/40"}`
-                    : `${leftBorderColor} border-l-opacity-30`
+                  isOpen ? "border-l-indigo-500 bg-indigo-950/40"
+                    : "border-l-gray-600 border-l-opacity-30"
                 } ${isRecent && !isOpen ? "animate-pulse-subtle" : ""}`}
               >
                 <div className="relative shrink-0">
-                  <div className={`w-8 h-8 rounded-full ${avatarBg(platform)} flex items-center justify-center text-[10px] font-bold text-white`}>
+                  <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-[10px] font-bold text-white">
                     {getInitials(conv.name)}
                   </div>
                   {sentimentLevel && (
@@ -1089,15 +1043,17 @@ export default function ChatPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1">
-                    <span className={`text-xs font-semibold truncate flex-1 ${isOpen ? pcfg.color : isRecent ? "theme-text font-bold" : "theme-text"}`}>
-                      {conv.name !== conv.id ? conv.name : conv.id.substring(0, 12) + "…"}
+                    <span className={`text-xs font-semibold truncate flex-1 ${isOpen ? "text-indigo-400" : isRecent ? "theme-text font-bold" : "theme-text"}`}>
+                      {conv.name !== conv.id ? conv.name : conv.id.substring(0, 12) + "..."}
                     </span>
-                    <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${pcfg.badgeBg} text-white leading-none`}>
-                      {pcfg.icon} {pcfg.label}
-                    </span>
+                    {isGroup ? (
+                      <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-orange-600 text-white leading-none">กลุ่ม</span>
+                    ) : (
+                      <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white leading-none">DM</span>
+                    )}
                   </div>
                   <p className={`text-[10px] truncate mt-0.5 ${isRecent ? "theme-text-secondary font-medium" : "theme-text-muted"}`}>
-                    {conv.lastMessage || "—"}
+                    {conv.lastMessage || "---"}
                   </p>
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <span className="text-[9px] theme-text-muted">{timeAgo(conv.lastActivity)}</span>
@@ -1123,40 +1079,14 @@ export default function ChatPage() {
               <p className="text-xs theme-text-muted">คลิกชื่อลูกค้าทางซ้ายเพื่อเปิดแชท — สูงสุด {MAX_PANELS} จอพร้อมกัน</p>
             </div>
 
-            {/* Platform Summary */}
-            <div className="flex gap-3 mt-2">
-              <div className="flex flex-col items-center gap-1 px-4 py-3 rounded-xl bg-green-950/30 border border-green-800/30">
-                <span className="text-2xl">💚</span>
-                <span className="text-lg font-bold text-green-400">{platformCounts.line}</span>
-                <span className="text-[10px] text-green-400/70">LINE</span>
-              </div>
-              <div className="flex flex-col items-center gap-1 px-4 py-3 rounded-xl bg-blue-950/30 border border-blue-800/30">
-                <span className="text-2xl">💙</span>
-                <span className="text-lg font-bold text-blue-400">{platformCounts.facebook}</span>
-                <span className="text-[10px] text-blue-400/70">Facebook</span>
-              </div>
-              <div className="flex flex-col items-center gap-1 px-4 py-3 rounded-xl bg-pink-950/30 border border-pink-800/30">
-                <span className="text-2xl">💜</span>
-                <span className="text-lg font-bold text-pink-400">{platformCounts.instagram}</span>
-                <span className="text-[10px] text-pink-400/70">Instagram</span>
-              </div>
-            </div>
-
             {/* Features */}
             <div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 text-[11px] theme-text-muted text-left">
-              <p>📱 <strong className="text-green-400">Reply API</strong> — ตอบ LINE ฟรี!</p>
-              <p>🤖 <strong className="text-amber-400">AI อัตโนมัติ</strong> — 5 นาที ไม่ตอบ</p>
-              <p>💡 <strong className="text-indigo-400">AI แนะนำ</strong> — คำตอบ + เหตุผล</p>
-              <p>😀 <strong className="text-green-400">Sticker</strong> — LINE สติกเกอร์ฟรี</p>
-              <p>🖼️ <strong className="theme-text">รูปภาพ</strong> — อัพโหลดและส่ง</p>
-              <p>📍 <strong className="theme-text">ตำแหน่ง</strong> — แชร์ GPS</p>
-            </div>
-
-            {/* Platform capabilities */}
-            <div className="mt-3 text-[10px] theme-text-muted space-y-1">
-              <p><span className="text-green-400">LINE:</span> ข้อความ · รูป · สติกเกอร์ · วิดีโอ · เสียง · ตำแหน่ง · Flex</p>
-              <p><span className="text-blue-400">Facebook:</span> ข้อความ · รูป (เร็วๆ นี้)</p>
-              <p><span className="text-pink-400">Instagram:</span> ข้อความ · รูป (เร็วๆ นี้)</p>
+              <p>📱 <strong className="text-green-400">Reply API</strong> --- ตอบ LINE ฟรี!</p>
+              <p>🤖 <strong className="text-amber-400">AI อัตโนมัติ</strong> --- 5 นาที ไม่ตอบ</p>
+              <p>💡 <strong className="text-indigo-400">AI แนะนำ</strong> --- คำตอบ + เหตุผล</p>
+              <p>😀 <strong className="text-green-400">Sticker</strong> --- LINE สติกเกอร์ฟรี</p>
+              <p>🖼️ <strong className="theme-text">รูปภาพ</strong> --- อัพโหลดและส่ง</p>
+              <p>📍 <strong className="theme-text">ตำแหน่ง</strong> --- แชร์ GPS</p>
             </div>
           </div>
         ) : (

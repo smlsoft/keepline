@@ -10,21 +10,12 @@ export async function GET(request: NextRequest) {
 
     const limit = parseInt(request.nextUrl.searchParams.get("limit") || "20");
     const page = parseInt(request.nextUrl.searchParams.get("page") || "0");
-    const platformFilter = request.nextUrl.searchParams.get("platform") || "";
 
-    // 1. ดึง sourceIds — ใช้ groups_meta เป็นหลัก (มี platform info)
-    let filteredMeta;
-    if (platformFilter) {
-      filteredMeta = await db.collection("groups_meta")
-        .find({ platform: platformFilter })
-        .sort({ lastMessageAt: -1 })
-        .toArray();
-    } else {
-      filteredMeta = await db.collection("groups_meta")
-        .find()
-        .sort({ lastMessageAt: -1 })
-        .toArray();
-    }
+    // 1. ดึง sourceIds — ใช้ groups_meta เป็นหลัก
+    const filteredMeta = await db.collection("groups_meta")
+      .find()
+      .sort({ lastMessageAt: -1 })
+      .toArray();
 
     // Fallback: ถ้า groups_meta ว่าง ดึงจาก messages
     let allSourceIds: string[];
@@ -44,15 +35,8 @@ export async function GET(request: NextRequest) {
         ? await db.collection("groups_meta").find({ sourceId: { $in: sourceIds } }).toArray()
         : [];
 
-    // Platform counts (สำหรับ UI badges)
-    const platformCounts = platformFilter
-      ? undefined
-      : await db.collection("groups_meta").aggregate([
-          { $group: { _id: "$platform", count: { $sum: 1 } } },
-        ]).toArray();
-
     if (sourceIds.length === 0) {
-      return NextResponse.json({ groups: [], platformCounts: platformCounts || [], pagination: { total: 0, limit, page, pages: 0, hasMore: false } });
+      return NextResponse.json({ groups: [], pagination: { total: 0, limit, page, pages: 0, hasMore: false } });
     }
 
     // 2. Batch fetch analytics + logs (simple $in queries — fast)
@@ -94,7 +78,7 @@ export async function GET(request: NextRequest) {
         id: sourceId,
         name: meta?.groupName || sourceId,
         sourceType: meta?.sourceType || "unknown",
-        platform: meta?.platform || "line",
+        memberCount: meta?.memberCount || meta?.members?.length || 0,
         messageCount: count,
         lastMessage: lastMsg?.content?.substring(0, 50) || "",
         lastActivity: lastMsg?.createdAt || meta?.lastMessageAt || null,
@@ -117,7 +101,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       groups,
-      platformCounts: platformCounts || [],
       pagination: {
         total: totalCount,
         limit,

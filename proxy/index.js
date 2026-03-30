@@ -1,7 +1,7 @@
 /**
  * OpenClaw Mini CRM — AI Agent
- * LINE/Facebook/Instagram webhook → เก็บ MongoDB → RAG → AI → ตอบ
- * All-in-One: Multi-channel + RAG + AI Agent + MCP + Analytics
+ * LINE webhook → เก็บ MongoDB → RAG → AI → ตอบ
+ * All-in-One: LINE + RAG + AI Agent + MCP + Analytics
  */
 const express = require("express");
 const http = require("http");
@@ -172,7 +172,7 @@ async function createHandoffAlert(sourceId, customerName, text) {
   });
 }
 
-async function createAiHandoffAlert(sourceId, customerName, text, platform) {
+async function createAiHandoffAlert(sourceId, customerName, text) {
   const database = await getDB();
   if (!database) return;
   await database.collection("alerts").insertOne({
@@ -184,15 +184,14 @@ async function createAiHandoffAlert(sourceId, customerName, text, platform) {
     read: false,
     createdAt: new Date(),
   });
-  const label = platform ? `${platform} ${sourceId.substring(0, 12)}` : sourceId.substring(0, 8);
-  console.log(`[Handoff] AI ส่งต่อทีมงาน → ${label}`);
+  console.log(`[Handoff] AI ส่งต่อทีมงาน → ${sourceId.substring(0, 8)}`);
 }
 
-async function logDeletionRequest(sourceId, platform) {
+async function logDeletionRequest(sourceId) {
   const database = await getDB();
   if (!database) return;
   await database.collection("data_deletion_requests").insertOne({
-    sourceId, platform, requestedAt: new Date(), status: "pending",
+    sourceId, platform: "line", requestedAt: new Date(), status: "pending",
   });
 }
 
@@ -254,7 +253,7 @@ async function doAutoReply(sourceId, userName, customerMessage) {
       messageType: "text",
       isAutoReply: true,
       abVariant: variant,
-    }, "line");
+    });
     console.log(`[Auto-Reply] ✅ AI ตอบแทนสำเร็จ → ${sourceId.substring(0, 8)}`);
   }
 }
@@ -355,7 +354,7 @@ async function auditLog(action, details = {}) {
 const PRIVACY_TEXT = `🔒 แจ้งเตือน: ระบบนี้ใช้ AI ในการวิเคราะห์และตอบกลับข้อความ ข้อมูลของคุณจะถูกเก็บรักษาตาม พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (PDPA)\n\nพิมพ์ "หยุด" เพื่อหยุดรับข้อความอัตโนมัติ\nพิมพ์ "ลบข้อมูล" เพื่อขอลบข้อมูลของคุณ`;
 const privacyNoticeSent = new Set(); // in-memory cache เพื่อไม่ต้อง query DB ทุกข้อความ
 
-async function sendPrivacyNoticeIfNeeded(sourceId, platform, sendFn) {
+async function sendPrivacyNoticeIfNeeded(sourceId, sendFn) {
   if (privacyNoticeSent.has(sourceId)) return;
   const database = await getDB();
   if (!database) return;
@@ -367,12 +366,12 @@ async function sendPrivacyNoticeIfNeeded(sourceId, platform, sendFn) {
   await sendFn().catch(() => {});
   await database.collection("privacy_consent").insertOne({
     sourceId,
-    platform,
+    platform: "line",
     noticeSentAt: new Date(),
     optedOut: false,
   }).catch(() => {});
   privacyNoticeSent.add(sourceId);
-  console.log(`[Privacy] ส่งแจ้งเตือน PDPA → ${platform}:${sourceId.substring(0, 12)}`);
+  console.log(`[Privacy] ส่งแจ้งเตือน PDPA → line:${sourceId.substring(0, 12)}`);
 }
 
 // === AI Cost Tracking ===
@@ -721,11 +720,11 @@ async function getEmbedding(text) {
 }
 
 // === Save message to MongoDB (collection เดียว + embedding non-blocking) ===
-async function saveMsg(sourceId, msg, platform = "line") {
+async function saveMsg(sourceId, msg) {
   const database = await getDB();
   if (!database) return;
   try {
-    const doc = { ...msg, sourceId, platform, createdAt: new Date() };
+    const doc = { ...msg, sourceId, platform: "line", createdAt: new Date() };
     const result = await database.collection(MESSAGES_COLL).insertOne(doc);
 
     // Embed แบบ non-blocking
@@ -741,7 +740,7 @@ async function saveMsg(sourceId, msg, platform = "line") {
       }).catch(() => {});
     }
     // ตรวจจับการชำระเงิน (non-blocking)
-    detectPayment(sourceId, msg, platform, result.insertedId).catch(() => {});
+    detectPayment(sourceId, msg, "line", result.insertedId).catch(() => {});
   } catch (e) {
     console.error("[DB] Save error:", e.message);
   }
@@ -807,16 +806,13 @@ async function ensureIndexes() {
     await msgColl.createIndex({ sourceId: 1, createdAt: -1 });  // ดึงข้อความตาม source เรียงเวลา
     await msgColl.createIndex({ sourceId: 1, content: "text" }); // keyword search
     await msgColl.createIndex({ sourceId: 1, role: 1, createdAt: -1 }); // กรองเฉพาะ user/assistant
-    await msgColl.createIndex({ platform: 1, createdAt: -1 });  // กรองตาม platform
     await msgColl.createIndex({ createdAt: -1 });               // เรียงตามเวลา (global)
 
     // ── Customers (ค้นหาบ่อย) ──
     const custColl = database.collection("customers");
-    await custColl.createIndex({ name: 1 });                     // upsert by name
+    await custColl.createIndex({ lineUserId: 1 }, { unique: true });
+    await custColl.createIndex({ name: 1 });                     // ค้นหาจากชื่อ
     await custColl.createIndex({ rooms: 1 });                    // ค้นหาจาก sourceId
-    await custColl.createIndex({ "platformIds.line": 1 }, { sparse: true });
-    await custColl.createIndex({ "platformIds.facebook": 1 }, { sparse: true });
-    await custColl.createIndex({ "platformIds.instagram": 1 }, { sparse: true });
     await custColl.createIndex({ phone: 1 }, { sparse: true }); // ค้นหาเบอร์โทร
     await custColl.createIndex({ email: 1 }, { sparse: true }); // ค้นหา email
     await custColl.createIndex({ pipelineStage: 1, updatedAt: -1 }); // CRM pipeline
@@ -826,7 +822,7 @@ async function ensureIndexes() {
     // ── Groups Meta (รายชื่อสนทนา) ──
     const groupsColl = database.collection("groups_meta");
     await groupsColl.createIndex({ sourceId: 1 }, { unique: true });
-    await groupsColl.createIndex({ platform: 1, updatedAt: -1 });
+    await groupsColl.createIndex({ updatedAt: -1 });
 
     // ── Chat Analytics ──
     await database.collection("chat_analytics").createIndex({ sourceId: 1 }, { unique: true });
@@ -966,24 +962,35 @@ async function getGroupName(groupId) {
 }
 
 // === Save/update group metadata ===
-async function saveGroupMeta(sourceId, groupName, source, platform = "line") {
+async function saveGroupMeta(sourceId, groupName, source, lineUserId) {
   const database = await getDB();
   if (!database) return;
   try {
+    const updateOps = {
+      $set: {
+        sourceId,
+        groupName: groupName || sourceId,
+        sourceType: source.type,
+        updatedAt: new Date(),
+      },
+      $setOnInsert: { createdAt: new Date() },
+    };
+    // Track member in group
+    if (lineUserId) {
+      updateOps.$addToSet = { members: lineUserId };
+    }
     await database.collection("groups_meta").updateOne(
       { sourceId },
-      {
-        $set: {
-          sourceId,
-          groupName: groupName || sourceId,
-          sourceType: source.type,
-          platform,
-          updatedAt: new Date(),
-        },
-        $setOnInsert: { createdAt: new Date() },
-      },
+      updateOps,
       { upsert: true }
     );
+    // Update memberCount after upsert
+    if (lineUserId) {
+      const meta = await database.collection("groups_meta").findOne({ sourceId });
+      if (meta?.members) {
+        await database.collection("groups_meta").updateOne({ sourceId }, { $set: { memberCount: meta.members.length } });
+      }
+    }
   } catch (e) {}
 }
 
@@ -1030,7 +1037,7 @@ async function processEvent(event) {
 
   // Save group metadata — ใช้ชื่อ group สำหรับ group, ชื่อ user สำหรับ DM
   const displayName = groupName || (source.type === "user" ? userName : null);
-  saveGroupMeta(sourceId, displayName, source, "line").catch(() => {});
+  saveGroupMeta(sourceId, displayName, source, source.userId).catch(() => {});
 
   // === เตรียม fields สำหรับเก็บ ===
   let imageData = null;
@@ -1192,7 +1199,7 @@ async function processEvent(event) {
     groupId: source.groupId || source.roomId,
     messageId: msg.id,
     timestamp: event.timestamp,
-  }, "line");
+  });
 
   console.log(
     `[MSG] ${userName}: ${msgContent.substring(0, 60)} ${extras.join(" ")}`
@@ -1919,49 +1926,11 @@ async function aiReplyToLine(event, sourceId, userName, text, config) {
       messageType: "text",
       isAiReply: true,
       abVariant: variant,
-    }, "line");
+    });
 
     // Track cost
     const elapsed = Date.now() - startTime;
     console.log(`[AI-Reply] ✅ ตอบใน ${elapsed}ms: ${reply.substring(0, 50)}`);
-  }
-}
-
-// === น้องกุ้งตอบแทนใน Facebook/Instagram (Send API — ฟรี!) ===
-async function aiReplyToMeta(senderId, text, sourceId, platform) {
-  const contextDocs = await searchMessages(sourceId, text).catch(() => []);
-  const contextStr = contextDocs.slice(0, 5)
-    .map((d) => `[${d.role === "assistant" ? "น้องกุ้ง" : d.userName || "User"}] ${d.content}`)
-    .join("\n");
-
-  // [A/B] Append A/B variant instruction
-  const variant = getABVariant(sourceId);
-  const abInstruction = AB_PROMPTS[variant];
-
-  const messages = [
-    { role: "system", content: `${DEFAULT_PROMPT}\n\nสไตล์การตอบ: ${abInstruction}\n\nประวัติสนทนา:\n${contextStr || "(ไม่มี)"}` },
-    { role: "user", content: cleanForAI(text) },
-  ];
-
-  const reply = await callLightAI(messages, { maxTokens: 300, timeout: 15000 }).catch(() => null);
-  if (!reply) return;
-
-  // AI บอก "รอทีมงาน" → สร้าง alert ให้ dashboard
-  if (/รอทีมงาน/.test(reply)) {
-    await createAiHandoffAlert(sourceId, senderId, text, platform);
-  }
-
-  const sent = await sendMetaMessage(senderId, reply);
-  if (sent) {
-    await saveMsg(sourceId, {
-      role: "assistant",
-      userName: "น้องกุ้ง",
-      content: reply,
-      messageType: "text",
-      isAiReply: true,
-      abVariant: variant,
-    }, platform);
-    console.log(`[AI-Reply] ✅ ${platform}: ${reply.substring(0, 50)}`);
   }
 }
 
@@ -2129,72 +2098,72 @@ pipelineStage: new=ใหม่, interested=สนใจ, quoting=เสนอ�
     );
 
     // 4. Auto-create/update ลูกค้าใน CRM + ดึง LINE profile อัตโนมัติ
-    if (!isStaff) {
+    if (!isStaff && lineUserId) {
       // ดึง LINE profile (รูป, ชื่อ, status)
       let lineProfile = {};
-      if (lineUserId) {
-        try {
-          const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
-          let profileUrl;
-          if (source?.type === "group" && source?.groupId) {
-            profileUrl = `https://api.line.me/v2/bot/group/${source.groupId}/member/${lineUserId}`;
-          } else {
-            profileUrl = `https://api.line.me/v2/bot/profile/${lineUserId}`;
-          }
-          const pRes = await fetch(profileUrl, { headers: { Authorization: `Bearer ${token}` } });
-          if (pRes.ok) {
-            const p = await pRes.json();
-            lineProfile = {
-              avatarUrl: p.pictureUrl || "",
-              lineId: lineUserId,
-              statusMessage: p.statusMessage || "",
-            };
-          }
-        } catch {}
-      }
-
-      // platformIds — เก็บ ID ของแต่ละ platform เป็น array (รองรับหลาย ID ต่อ platform)
-      const addToSetOps = { tags: { $each: tags }, rooms: sourceId };
-      if (platform === "line" && lineUserId) {
-        addToSetOps["platformIds.line"] = lineUserId;
-      } else if (platform === "facebook" && userId) {
-        addToSetOps["platformIds.facebook"] = userId;
-      } else if (platform === "instagram" && userId) {
-        addToSetOps["platformIds.instagram"] = userId;
-      }
-
-      // ตรวจว่า platformIds เดิมเป็น string หรือ array — ถ้าเป็น string ต้อง convert ก่อน
-      const existingCust = await database.collection("customers").findOne({ name: userName });
-      if (existingCust?.platformIds) {
-        const pids = existingCust.platformIds;
-        for (const k of ["line", "facebook", "instagram"]) {
-          if (pids[k] && !Array.isArray(pids[k])) {
-            // Convert string → array ก่อน addToSet
-            await database.collection("customers").updateOne(
-              { name: userName },
-              { $set: { [`platformIds.${k}`]: [pids[k]] } }
-            );
-          }
+      try {
+        const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+        let profileUrl;
+        if (source?.type === "group" && source?.groupId) {
+          profileUrl = `https://api.line.me/v2/bot/group/${source.groupId}/member/${lineUserId}`;
+        } else {
+          profileUrl = `https://api.line.me/v2/bot/profile/${lineUserId}`;
         }
-      }
+        const pRes = await fetch(profileUrl, { headers: { Authorization: `Bearer ${token}` } });
+        if (pRes.ok) {
+          const p = await pRes.json();
+          lineProfile = {
+            avatarUrl: p.pictureUrl || "",
+            statusMessage: p.statusMessage || "",
+          };
+        }
+      } catch {}
 
       await database.collection("customers").updateOne(
-        { name: userName },
+        { lineUserId },
         {
           $set: {
+            lineUserId,
             name: userName,
+            ...lineProfile,
+            updatedAt: new Date(),
             lastSentiment: skill.sentiment,
             lastPurchaseIntent: skill.purchaseIntent,
             pipelineStage,
-            ...lineProfile,
-            updatedAt: new Date(),
           },
-          $addToSet: addToSetOps,
+          $addToSet: {
+            rooms: sourceId,
+            tags: { $each: tags },
+          },
           $inc: { totalMessages: 1 },
-          $setOnInsert: { createdAt: new Date(), firstName: "", lastName: "", company: "", position: "", phone: "", email: "", address: "", notes: "", customTags: [], platformIds: { line: [], facebook: [], instagram: [] } },
+          $setOnInsert: {
+            createdAt: new Date(),
+            firstName: "", lastName: "",
+            company: "", position: "",
+            phone: "", email: "", address: "",
+            notes: "", customTags: [],
+            groups: [],
+            dealValue: 0, expectedCloseDate: null,
+            assignedTo: [],
+          },
         },
         { upsert: true }
       );
+
+      // Track group membership
+      if (source.type === "group" || source.type === "room") {
+        const custGroupName = await getGroupName(source.groupId || source.roomId);
+        // Update group entry in customer's groups array
+        await database.collection("customers").updateOne(
+          { lineUserId, "groups.sourceId": sourceId },
+          { $set: { "groups.$.groupName": custGroupName, "groups.$.lastActiveAt": new Date() }, $inc: { "groups.$.messageCount": 1 } }
+        );
+        // If group entry doesn't exist yet, add it
+        await database.collection("customers").updateOne(
+          { lineUserId, "groups.sourceId": { $ne: sourceId } },
+          { $addToSet: { groups: { sourceId, groupName: custGroupName, messageCount: 1, lastActiveAt: new Date() } } }
+        );
+      }
     }
 
     console.log(`[Skill] ${userName}@${sourceId.substring(0, 8)}: sentiment=${skill.sentiment?.level}(${skill.sentiment?.score}) purchase=${skill.purchaseIntent?.level}(${skill.purchaseIntent?.score}) tags=[${tags.join(",")}] stage=${pipelineStage}`);
@@ -2357,314 +2326,6 @@ async function analyzeImage(imageBuffer) {
   return null;
 }
 
-// === Meta (Facebook/Instagram) helpers ===
-
-// Verify X-Hub-Signature-256
-function verifyMetaSignature(rawBody, signature) {
-  if (!signature) return false;
-  const hmac = require("crypto").createHmac("sha256", process.env.FB_APP_SECRET || "")
-  const digest = "sha256=" + hmac.update(rawBody).digest("hex")
-  return digest === signature
-}
-
-// Cache โปรไฟล์ผู้ใช้ Meta (ไม่เรียก Graph API ซ้ำ)
-const metaProfileCache = {} // userId → { name, profilePic, _ts }
-const META_PROFILE_TTL = 3600000 // 1 ชม.
-
-async function getMetaUserProfile(userId) {
-  const cached = metaProfileCache[userId]
-  if (cached && Date.now() - cached._ts < META_PROFILE_TTL) return cached
-
-  const token = process.env.FB_PAGE_ACCESS_TOKEN
-  if (!token) return { name: userId, profilePic: null }
-
-  try {
-    const res = await fetch(
-      `https://graph.facebook.com/v19.0/${userId}?fields=name,profile_pic&access_token=${token}`,
-      { signal: AbortSignal.timeout(5000) }
-    )
-    if (!res.ok) return { name: userId, profilePic: null }
-    const data = await res.json()
-    const profile = { name: data.name || userId, profilePic: data.profile_pic || null, _ts: Date.now() }
-    metaProfileCache[userId] = profile
-    return profile
-  } catch (e) {
-    return { name: userId, profilePic: null }
-  }
-}
-
-// ส่งข้อความกลับ Meta (สำรองไว้ — ระบบนี้ listen-only, ยังไม่เรียก)
-async function sendMetaMessage(recipientId, text) {
-  const token = process.env.FB_PAGE_ACCESS_TOKEN
-  if (!token) return false
-  try {
-    const res = await fetch("https://graph.facebook.com/v19.0/me/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        recipient: { id: recipientId },
-        message: { text },
-      }),
-    })
-    return res.ok
-  } catch (e) {
-    console.error("[Meta] sendMetaMessage error:", e.message)
-    return false
-  }
-}
-
-// === Meta Webhook: Verification (GET) ===
-app.get("/webhook/meta", (req, res) => {
-  const mode = req.query["hub.mode"]
-  const token = req.query["hub.verify_token"]
-  const challenge = req.query["hub.challenge"]
-
-  if (mode === "subscribe" && token === (process.env.FB_VERIFY_TOKEN || "")) {
-    console.log("[Meta] Webhook verified ✅")
-    return res.status(200).send(challenge)
-  }
-  console.log("[Meta] Webhook verification failed ❌")
-  return res.status(403).send("Forbidden")
-})
-
-// === Meta Webhook: Messages (POST) ===
-app.post("/webhook/meta", express.raw({ type: "*/*" }), async (req, res) => {
-  const rawBody = req.body
-  const signature = req.headers["x-hub-signature-256"]
-
-  // Verify signature
-  if (!verifyMetaSignature(rawBody, signature)) {
-    console.log("[Meta] Invalid signature ❌")
-    return res.status(403).json({ error: "Invalid signature" })
-  }
-
-  let parsed
-  try {
-    parsed = JSON.parse(rawBody.toString("utf-8"))
-  } catch {
-    return res.status(200).json({ status: "ok" })
-  }
-
-  // ตอบ Meta ทันที (ต้องตอบภายใน 20 วินาที)
-  res.status(200).json({ status: "ok" })
-
-  const object = parsed.object // "page" = Facebook, "instagram" = Instagram
-  const platform = object === "instagram" ? "instagram" : "facebook"
-
-  const entries = parsed.entry || []
-  for (const entry of entries) {
-    const messagingEvents = entry.messaging || []
-    for (const event of messagingEvents) {
-      const sender = event.sender
-      const recipient = event.recipient
-      if (!sender?.id) continue
-
-      // ข้ามข้อความที่ Bot ส่งเอง
-      if (event.message?.is_echo) continue
-
-      const senderId = sender.id
-      const sourceId = platform === "facebook" ? `fb_${senderId}` : `ig_${senderId}`
-
-      // ดึง user profile (cached)
-      const profile = await getMetaUserProfile(senderId).catch(() => ({ name: senderId, profilePic: null }))
-      const userName = profile.name
-
-      // Save group meta
-      saveGroupMeta(sourceId, userName, { type: "user" }, platform).catch(() => {})
-
-      // === Opt-out / Opt-in / PDPA / Human Handoff Detection (Meta) ===
-      const metaLowerText = (event.message?.text || "").toLowerCase().trim();
-
-      if (OPT_OUT_KEYWORDS.includes(metaLowerText)) {
-        await setOptOut(sourceId, true);
-        await sendMetaMessage(senderId, "✅ หยุดส่งข้อความอัตโนมัติแล้วค่ะ\nพิมพ์ \"เปิด\" เพื่อรับข้อความอีกครั้ง");
-        console.log(`[Opt-out] ${sourceId.substring(0, 12)} opted out (${platform})`);
-        continue;
-      }
-
-      if (OPT_IN_KEYWORDS.includes(metaLowerText)) {
-        await setOptOut(sourceId, false);
-        await sendMetaMessage(senderId, "✅ เปิดรับข้อความอัตโนมัติแล้วค่ะ");
-        console.log(`[Opt-in] ${sourceId.substring(0, 12)} opted in (${platform})`);
-        continue;
-      }
-
-      if (DELETE_KEYWORDS.includes(metaLowerText)) {
-        await sendMetaMessage(senderId, "📩 ได้รับคำขอลบข้อมูลแล้วค่ะ ทีมงานจะดำเนินการภายใน 30 วันตาม PDPA\n\nหากมีคำถามเพิ่มเติม สามารถติดต่อทีมงานได้ค่ะ");
-        await logDeletionRequest(sourceId, platform);
-        console.log(`[PDPA] ขอลบข้อมูล: ${sourceId.substring(0, 12)} (${platform})`);
-        continue;
-      }
-
-      if (HANDOFF_REGEX.test(metaLowerText)) {
-        await sendMetaMessage(senderId, "🙋 ส่งต่อให้ทีมงานแล้วค่ะ กรุณารอสักครู่ ทีมงานจะตอบกลับเร็วที่สุดค่ะ");
-        await createHandoffAlert(sourceId, userName, event.message?.text);
-        console.log(`[Handoff] ${sourceId.substring(0, 12)} ขอคุยกับพนักงาน (${platform})`);
-        if (event.message?.text) {
-          await saveMsg(sourceId, {
-            role: "user", userName, userId: senderId,
-            content: event.message.text, messageType: "text",
-            messageId: event.message.mid || null, timestamp: event.timestamp || null,
-            recipientId: recipient?.id || null,
-          }, platform);
-        }
-        continue;
-      }
-
-      // handle text message
-      if (event.message?.text) {
-        const msgText = event.message.text
-        const topic = detectMessageTopic(msgText)
-        await saveMsg(sourceId, {
-          role: "user",
-          userName,
-          userId: senderId,
-          content: msgText,
-          messageType: "text",
-          topic,
-          messageId: event.message.mid || null,
-          timestamp: event.timestamp || null,
-          recipientId: recipient?.id || null,
-        }, platform)
-
-        console.log(`[Meta/${platform}] ${userName}@${sourceId.substring(0, 12)}: ${msgText.substring(0, 60)}`)
-
-        // === [Privacy] แจ้ง PDPA ข้อความแรก (Meta) ===
-        sendPrivacyNoticeIfNeeded(sourceId, platform, () =>
-          sendMetaMessage(senderId, PRIVACY_TEXT)
-        ).catch(() => {})
-
-        analyzeChat(sourceId, userName, msgText, senderId, { type: "user" }).catch((e) => console.error("[Meta/Skill] Catch:", e.message))
-        learnFromMessage(sourceId, userName, msgText, "text", "user").catch(() => {})
-
-        // น้องกุ้งตอบแทนใน Facebook/Instagram (Send API — ฟรี!)
-        const metaIsOptedOut = await checkOptedOut(sourceId).catch(() => false);
-        if (!metaIsOptedOut) {
-          const metaConfig = await getBotConfig(sourceId)
-          const metaShouldReply = await shouldAiReply(metaConfig, msgText, userName, { type: "user" })
-          if (metaShouldReply) {
-            console.log(`[AI-Reply] น้องกุ้งตอบแทน → ${platform} ${sourceId.substring(0, 12)}`)
-            aiReplyToMeta(senderId, msgText, sourceId, platform).catch((e) =>
-              console.error(`[AI-Reply] ${platform} error:`, e.message)
-            )
-          }
-        }
-      }
-
-      // handle ALL attachment types (image, video, audio, file, location, sticker)
-      const attachments = event.message?.attachments || []
-      for (const att of attachments) {
-        const attUrl = att.payload?.url || null
-        const baseMsgFields = {
-          role: "user",
-          userName,
-          userId: senderId,
-          messageId: event.message?.mid || null,
-          timestamp: event.timestamp || null,
-          recipientId: recipient?.id || null,
-        }
-
-        if (att.type === "image") {
-          await saveMsg(sourceId, {
-            ...baseMsgFields,
-            content: `[รูปภาพ]`,
-            messageType: "image",
-            imageUrl: attUrl,
-            hasImage: true,
-          }, platform)
-          console.log(`[Meta/${platform}] ${userName}: [image]`)
-
-        } else if (att.type === "video") {
-          await saveMsg(sourceId, {
-            ...baseMsgFields,
-            content: "[วิดีโอ]",
-            messageType: "video",
-            videoUrl: attUrl,
-            hasVideo: true,
-          }, platform)
-          console.log(`[Meta/${platform}] ${userName}: [video]`)
-
-        } else if (att.type === "audio") {
-          await saveMsg(sourceId, {
-            ...baseMsgFields,
-            content: "[เสียง]",
-            messageType: "audio",
-            audioUrl: attUrl,
-            hasAudio: true,
-          }, platform)
-          console.log(`[Meta/${platform}] ${userName}: [audio]`)
-
-        } else if (att.type === "file") {
-          await saveMsg(sourceId, {
-            ...baseMsgFields,
-            content: `[ไฟล์: ${att.payload?.name || "unknown"}]`,
-            messageType: "file",
-            file: {
-              fileName: att.payload?.name || "file",
-              fileSize: att.payload?.size || null,
-              url: attUrl,
-            },
-            hasFile: true,
-          }, platform)
-          console.log(`[Meta/${platform}] ${userName}: [file]`)
-
-        } else if (att.type === "location") {
-          const coords = att.payload?.coordinates || {}
-          await saveMsg(sourceId, {
-            ...baseMsgFields,
-            content: `[ตำแหน่ง: ${coords.lat || 0}, ${coords.long || 0}]`,
-            messageType: "location",
-            location: {
-              title: att.title || "ตำแหน่งที่ตั้ง",
-              address: "",
-              latitude: coords.lat || 0,
-              longitude: coords.long || 0,
-            },
-            hasLocation: true,
-          }, platform)
-          console.log(`[Meta/${platform}] ${userName}: [location]`)
-
-        } else if (att.type === "fallback") {
-          // sticker หรือ attachment ที่ Meta ส่งมาแบบ fallback
-          await saveMsg(sourceId, {
-            ...baseMsgFields,
-            content: att.payload?.title || `[${att.type}]`,
-            messageType: att.type,
-            attachmentUrl: attUrl,
-          }, platform)
-          console.log(`[Meta/${platform}] ${userName}: [${att.type}]`)
-        }
-
-        // Analyze ทุก attachment
-        const attContent = `[${att.type}]`
-        analyzeChat(sourceId, userName, attContent, senderId, { type: "user" }).catch(() => {})
-      }
-
-      // handle sticker (Meta ส่ง sticker_id แยก)
-      if (event.message?.sticker_id) {
-        await saveMsg(sourceId, {
-          role: "user",
-          userName,
-          userId: senderId,
-          content: `[sticker:${event.message.sticker_id}]`,
-          messageType: "sticker",
-          sticker: {
-            stickerId: String(event.message.sticker_id),
-            stickerUrl: `https://graph.facebook.com/v19.0/${event.message.sticker_id}/picture`,
-          },
-          hasSticker: true,
-          messageId: event.message?.mid || null,
-          timestamp: event.timestamp || null,
-        }, platform)
-        console.log(`[Meta/${platform}] ${userName}: [sticker]`)
-      }
-    }
-  }
-})
-
 // === LINE Webhook endpoint ===
 app.post("/webhook", express.raw({ type: "*/*" }), async (req, res) => {
   const rawBody = req.body;
@@ -2730,7 +2391,7 @@ app.post("/webhook", express.raw({ type: "*/*" }), async (req, res) => {
       if (event.replyToken) {
         await replyToLine(event.replyToken, "📩 ได้รับคำขอลบข้อมูลแล้วค่ะ ทีมงานจะดำเนินการภายใน 30 วันตาม PDPA\n\nหากมีคำถามเพิ่มเติม สามารถติดต่อทีมงานได้ค่ะ");
       }
-      await logDeletionRequest(sourceId, "line");
+      await logDeletionRequest(sourceId);
       console.log(`[PDPA] ขอลบข้อมูล: ${sourceId.substring(0, 8)}`);
       continue;
     }
@@ -2758,7 +2419,7 @@ app.post("/webhook", express.raw({ type: "*/*" }), async (req, res) => {
 
       // === [Privacy] แจ้ง PDPA ข้อความแรก (เฉพาะ 1-on-1) ===
       if (source.type === "user") {
-        sendPrivacyNoticeIfNeeded(sourceId, "line", () =>
+        sendPrivacyNoticeIfNeeded(sourceId, () =>
           sendLinePush(sourceId, [{ type: "text", text: PRIVACY_TEXT }])
         ).catch(() => {});
       }
@@ -2776,6 +2437,12 @@ app.post("/webhook", express.raw({ type: "*/*" }), async (req, res) => {
 
       // AI Learning: อัพเดท memory + ตรวจจับ signals
       learnFromMessage(sourceId, userName, messageText, msg.type, source.type).catch(() => {});
+
+      // === Group chat: เก็บข้อมูลเท่านั้น ไม่ตอบ ===
+      if (source.type === "group" || source.type === "room") {
+        console.log(`[Group] ${sourceId.substring(0, 8)}: เก็บข้อมูลเท่านั้น ไม่ตอบ`);
+        continue;
+      }
 
       // === น้องกุ้งตอบแทน (LINE Reply API — ฟรี!) ===
       const isOptedOut = await checkOptedOut(sourceId).catch(() => false);
@@ -3984,8 +3651,8 @@ app.post("/api/inbox/send", sendLimiter, express.json(), async (req, res) => {
     location, sticker, template, flex, quickReply, staffName
   } = req.body;
 
-  if (!sourceId || !platform) {
-    return res.status(400).json({ error: "sourceId and platform required" });
+  if (!sourceId) {
+    return res.status(400).json({ error: "sourceId required" });
   }
   const hasContent = text || imageUrl || videoUrl || audioUrl || location || sticker || template || flex;
   if (!hasContent) {
@@ -4000,20 +3667,10 @@ app.post("/api/inbox/send", sendLimiter, express.json(), async (req, res) => {
   cancelAutoReply(sourceId);
 
   try {
-    if (platform === "line") {
-      const payload = { text, imageUrl, videoUrl, audioUrl, audioDuration, location, sticker, template, flex, quickReply };
-      const result = await sendLineMessage(sourceId, payload);
-      sent = result.sent;
-      method = result.method;
-    } else if (platform === "facebook" || platform === "instagram") {
-      const recipientId = sourceId.replace(/^(fb_|ig_)/, "");
-      if (text) {
-        sent = await sendMetaMessage(recipientId, text);
-        method = "push";
-      }
-    } else {
-      return res.status(400).json({ error: `platform '${platform}' not supported` });
-    }
+    const payload = { text, imageUrl, videoUrl, audioUrl, audioDuration, location, sticker, template, flex, quickReply };
+    const result = await sendLineMessage(sourceId, payload);
+    sent = result.sent;
+    method = result.method;
 
     if (!sent) {
       return res.status(502).json({ error: "ส่งข้อความไม่สำเร็จ — ตรวจสอบ token และการตั้งค่า" });
@@ -4044,12 +3701,11 @@ app.post("/api/inbox/send", sendLimiter, express.json(), async (req, res) => {
         location: location || null,
         sticker: sticker || null,
         sendMethod: method,
-      },
-      platform
+      }
     );
 
-    auditLog("send_message", { sourceId, platform, staffName: senderName, messageType }).catch(() => {});
-    console.log(`[Inbox] ✅ ส่ง${method === "reply" ? "(ฟรี)" : "(push)"} → ${platform}:${sourceId.substring(0, 8)} โดย ${senderName}`);
+    auditLog("send_message", { sourceId, platform: "line", staffName: senderName, messageType }).catch(() => {});
+    console.log(`[Inbox] ✅ ส่ง${method === "reply" ? "(ฟรี)" : "(push)"} → line:${sourceId.substring(0, 8)} โดย ${senderName}`);
     res.json({ ok: true, method });
   } catch (e) {
     console.error("[Inbox] /api/inbox/send error:", e.message);
@@ -4554,17 +4210,9 @@ app.get("/api/customers/duplicates", async (req, res) => {
       }
     }
 
-    // แยกลูกค้า multi-platform ที่มีแค่ 1 platform (อาจมี account อื่นอีก)
-    function hasAnyId(val) { return Array.isArray(val) ? val.filter(Boolean).length > 0 : !!val; }
-    const singlePlatform = customers.filter(c => {
-      const pids = c.platformIds || {};
-      const count = [pids.line, pids.facebook, pids.instagram].filter(v => hasAnyId(v)).length;
-      return count === 1 && !used.has(c._id.toString());
-    });
-
     res.json({
       groups,
-      singlePlatform: singlePlatform.length,
+      singlePlatform: 0,
       totalCustomers: customers.length,
       duplicateGroups: groups.length,
     });

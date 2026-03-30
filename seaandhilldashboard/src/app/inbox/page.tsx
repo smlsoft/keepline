@@ -131,8 +131,6 @@ function ConversationItem({
   isSelected: boolean;
   onClick: () => void;
 }) {
-  const platform = conv.platform || "line";
-  const cfg = PLATFORM_CONFIG[platform] || PLATFORM_CONFIG.line;
   const sentimentLevel = conv.customerSentiment?.level || conv.sentiment?.level;
   const sentimentDot =
     sentimentLevel === "red" ? "bg-red-500" :
@@ -148,25 +146,26 @@ function ConversationItem({
     >
       {/* Avatar */}
       <div className="relative shrink-0">
-        <div className={`w-10 h-10 rounded-full ${avatarBg(platform)} flex items-center justify-center text-sm font-bold text-white`}>
+        <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-bold text-white">
           {getInitials(conv.name)}
         </div>
-        <span className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 ${cfg.dot}`} style={{ borderColor: 'var(--bg-secondary)' }} />
+        {sentimentLevel && (
+          <span className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 ${sentimentDot}`} style={{ borderColor: 'var(--bg-secondary)' }} />
+        )}
       </div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5 mb-0.5">
           <span className={`text-sm font-semibold truncate flex-1 ${isSelected ? "text-white" : "theme-text"}`}>
-            {conv.name !== conv.id ? conv.name : conv.id.substring(0, 16) + "…"}
+            {conv.name !== conv.id ? conv.name : conv.id.substring(0, 16) + "..."}
           </span>
           {sentimentLevel && (
             <span className={`w-2 h-2 rounded-full shrink-0 ${sentimentDot}`} title={SENTIMENT_LABELS[sentimentLevel]} />
           )}
         </div>
         <div className="flex items-center gap-1.5">
-          {platformBadge(platform)}
-          <span className="text-sm theme-text-muted truncate flex-1">{conv.lastMessage || "—"}</span>
+          <span className="text-sm theme-text-muted truncate flex-1">{conv.lastMessage || "---"}</span>
         </div>
         <span className="text-[10px] theme-text-muted mt-0.5 block">{timeAgo(conv.lastActivity)}</span>
       </div>
@@ -299,7 +298,6 @@ export default function InboxPage() {
   // State: conversation list
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [platformFilter, setPlatformFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
   // State: messages for selected conversation
@@ -468,7 +466,6 @@ export default function InboxPage() {
   // ─── Filtered conversations ───────────────────────────────────────────────
 
   const filtered = conversations.filter((c) => {
-    if (platformFilter !== "all" && (c.platform || "line") !== platformFilter) return false;
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       return (
@@ -479,13 +476,6 @@ export default function InboxPage() {
     }
     return true;
   });
-
-  const platformCounts = {
-    all: conversations.length,
-    line: conversations.filter((c) => (c.platform || "line") === "line").length,
-    facebook: conversations.filter((c) => c.platform === "facebook").length,
-    instagram: conversations.filter((c) => c.platform === "instagram").length,
-  };
 
   // ─── Render ───────────────────────────────────────────────────────────────
 
@@ -532,36 +522,9 @@ export default function InboxPage() {
           </div>
         </div>
 
-        {/* Platform Filter Tabs */}
-        <div className="px-3 py-2 border-b theme-border flex gap-1 flex-wrap">
-          {(["all", "line", "facebook", "instagram"] as const).map((p) => {
-            const isActive = platformFilter === p;
-            const labels: Record<string, string> = { all: "ทั้งหมด", line: "LINE", facebook: "FB", instagram: "IG" };
-            const activeColors: Record<string, string> = {
-              all: "bg-white text-black",
-              line: "bg-green-600 text-white",
-              facebook: "bg-blue-600 text-white",
-              instagram: "bg-gradient-to-r from-purple-600 to-pink-600 text-white",
-            };
-            const inactiveColors: Record<string, string> = {
-              all: "theme-bg-card theme-text-secondary",
-              line: "bg-green-900/30 text-green-400",
-              facebook: "bg-blue-900/30 text-blue-400",
-              instagram: "bg-pink-900/30 text-pink-400",
-            };
-            return (
-              <button
-                key={p}
-                onClick={() => setPlatformFilter(p)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition flex items-center gap-1 ${isActive ? activeColors[p] : inactiveColors[p]}`}
-              >
-                {labels[p]}
-                <span className={`text-[10px] px-1 rounded-full ${isActive ? "bg-white/20" : "bg-gray-700/60"}`}>
-                  {platformCounts[p]}
-                </span>
-              </button>
-            );
-          })}
+        {/* Conversation count */}
+        <div className="px-3 py-2 border-b theme-border">
+          <span className="text-xs theme-text-muted">{conversations.length} สนทนา</span>
         </div>
 
         {/* Conversation List */}
@@ -614,7 +577,7 @@ export default function InboxPage() {
                 onClick={() => setSelectedId(null)}
               >←</button>
 
-              <div className={`w-9 h-9 rounded-full ${avatarBg(selectedConv?.platform || "line")} flex items-center justify-center text-sm font-bold text-white shrink-0`}>
+              <div className="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-bold text-white shrink-0">
                 {getInitials(selectedConv?.name || "")}
               </div>
 
@@ -623,9 +586,8 @@ export default function InboxPage() {
                   <span className="font-semibold theme-text truncate">
                     {selectedConv?.name !== selectedConv?.id
                       ? selectedConv?.name
-                      : (selectedConv?.id.substring(0, 20) + "…")}
+                      : (selectedConv?.id.substring(0, 20) + "...")}
                   </span>
-                  {selectedConv?.platform && platformBadge(selectedConv.platform)}
                 </div>
                 <div className="flex items-center gap-2 mt-0.5">
                   <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
@@ -842,8 +804,6 @@ function CustomerInfoPanel({
   conv: Conversation;
   onClose: () => void;
 }) {
-  const platform = conv.platform || "line";
-  const cfg = PLATFORM_CONFIG[platform] || PLATFORM_CONFIG.line;
   const sentimentData = conv.customerSentiment || conv.sentiment;
   const purchaseData = conv.purchaseIntent;
 
@@ -859,16 +819,13 @@ function CustomerInfoPanel({
 
         {/* Profile Card */}
         <div className="flex flex-col items-center text-center gap-2">
-          <div className={`w-16 h-16 rounded-2xl ${avatarBg(platform)} flex items-center justify-center text-2xl font-bold text-white`}>
+          <div className="w-16 h-16 rounded-2xl bg-indigo-600 flex items-center justify-center text-2xl font-bold text-white">
             {getInitials(conv.name)}
           </div>
           <div>
             <p className="font-semibold theme-text text-sm">
               {conv.name !== conv.id ? conv.name : conv.id.substring(0, 20)}
             </p>
-            <div className="flex items-center justify-center gap-1.5 mt-1">
-              {platformBadge(platform)}
-            </div>
             <p className="text-xs theme-text-muted mt-1 font-mono break-all">{conv.id}</p>
           </div>
         </div>
@@ -975,14 +932,10 @@ function CustomerInfoPanel({
           </div>
         </div>
 
-        {/* Platform source info */}
+        {/* Source ID */}
         <div className="space-y-1.5">
-          <p className="text-xs font-bold theme-text-secondary uppercase tracking-wider">แหล่งที่มา</p>
+          <p className="text-xs font-bold theme-text-secondary uppercase tracking-wider">รหัสห้อง</p>
           <div className="theme-bg-card rounded-xl p-3">
-            <div className="flex items-center gap-2 mb-1.5">
-              {platformBadge(platform)}
-              <span className={`text-xs font-medium ${cfg.color}`}>{cfg.label}</span>
-            </div>
             <p className="text-xs theme-text-muted font-mono break-all">{conv.id}</p>
           </div>
         </div>

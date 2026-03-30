@@ -12,15 +12,11 @@ export async function GET(request: NextRequest) {
   const t0 = Date.now();
   try {
     const db = await getDB();
-    const platform = request.nextUrl.searchParams.get("platform") || "";
 
     // 1. ดึง groups_meta ทั้งหมด (เรียงตาม lastMessageAt)
-    const filter: any = {};
-    if (platform) filter.platform = platform;
-
     const [allMeta, allAnalytics] = await Promise.all([
       db.collection("groups_meta")
-        .find(filter, { projection: { sourceId: 1, groupName: 1, platform: 1, sourceType: 1, messageCount: 1, lastMessageAt: 1 } })
+        .find({}, { projection: { sourceId: 1, groupName: 1, sourceType: 1, messageCount: 1, lastMessageAt: 1 } })
         .sort({ lastMessageAt: -1 })
         .toArray(),
       db.collection("chat_analytics")
@@ -38,7 +34,6 @@ export async function GET(request: NextRequest) {
         content: { $first: "$content" },
         userName: { $first: "$userName" },
         createdAt: { $first: "$createdAt" },
-        platform: { $first: "$platform" },
       }},
     ]).toArray();
 
@@ -54,7 +49,6 @@ export async function GET(request: NextRequest) {
         id: meta.sourceId,
         name: meta.groupName || meta.sourceId,
         sourceType: meta.sourceType || "unknown",
-        platform: meta.platform || "line",
         messageCount: meta.messageCount || 0,
         lastMessage: lastMsg?.content?.substring(0, 60) || "",
         lastUser: lastMsg?.userName || "",
@@ -66,7 +60,7 @@ export async function GET(request: NextRequest) {
     });
 
     const tEnd = Date.now();
-    console.log(`[/api/chat-list] ${conversations.length} convs, platform=${platform || "all"}, ${tEnd - t0}ms`);
+    console.log(`[/api/chat-list] ${conversations.length} convs, ${tEnd - t0}ms`);
 
     return NextResponse.json({
       conversations,

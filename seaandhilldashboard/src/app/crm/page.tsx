@@ -26,6 +26,8 @@ interface Customer {
   dealValue?: number;
   expectedCloseDate?: string;
   assignedTo?: string[];
+  lineUserId?: string;
+  groups?: { sourceId: string; groupName: string; messageCount: number; lastActiveAt: string }[];
   createdAt: string;
   updatedAt: string;
 }
@@ -219,6 +221,7 @@ export default function CrmPage() {
                   <th className="pb-3 px-2 text-center">🛒 โอกาสซื้อ</th>
                   <th className="pb-3 px-2 text-center">📨 ข้อความ</th>
                   <th className="pb-3 px-2">Tags</th>
+                  <th className="pb-3 px-2">กลุ่ม</th>
                   <th className="pb-3 px-2 text-center">ห้อง</th>
                   <th className="pb-3 pl-2">อัปเดต</th>
                 </tr>
@@ -264,6 +267,20 @@ export default function CrmPage() {
                           {(c.tags || []).slice(0, 5).map((t) => (
                             <span key={t} className="text-[9px] px-1.5 py-0.5 rounded theme-bg-card border theme-border theme-text-secondary">{t}</span>
                           ))}
+                        </div>
+                      </td>
+                      <td className="py-3 px-2">
+                        <div className="flex flex-wrap gap-1 max-w-[180px]">
+                          {(c.groups || []).slice(0, 3).map((g) => (
+                            <Link key={g.sourceId} href={`/dashboard/group/${g.sourceId}`}
+                              className="text-[9px] px-1.5 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/30 hover:bg-cyan-800/50 transition truncate max-w-[120px]"
+                              title={`${g.groupName} (${g.messageCount} ข้อความ)`}>
+                              {g.groupName}
+                            </Link>
+                          ))}
+                          {(c.groups || []).length > 3 && (
+                            <span className="text-[9px] px-1.5 py-0.5 rounded-full theme-bg-card theme-text-muted">+{c.groups!.length - 3}</span>
+                          )}
                         </div>
                       </td>
                       <td className="py-3 px-2 text-center text-xs theme-text-muted">{(c.rooms || []).length}</td>

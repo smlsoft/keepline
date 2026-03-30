@@ -54,8 +54,6 @@ export default function ConnectionsPage() {
   };
 
   const lineOk = account?.lineConfig?.configured ?? false;
-  const fbOk = account?.fbConfig?.configured ?? false;
-  const igOk = account?.fbConfig?.configured ?? false;
   const telegramOk = !!account?.telegramChatId;
 
   if (loading) {
@@ -81,11 +79,9 @@ export default function ConnectionsPage() {
       <main className="max-w-2xl mx-auto p-3 md:p-6 pb-24 md:pb-6 space-y-4">
 
         {/* Summary row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-2">
+        <div className="grid grid-cols-2 gap-3 mb-2">
           {[
             { label: "LINE", ok: lineOk, icon: "💬" },
-            { label: "Facebook", ok: fbOk, icon: "📘" },
-            { label: "Instagram", ok: igOk, icon: "📸" },
             { label: "Telegram", ok: telegramOk, icon: "✈️" },
           ].map(({ label, ok, icon }) => (
             <div key={label} className={`rounded-xl p-3 border text-center ${ok ? "bg-green-950/30 border-green-800/40" : "theme-bg-secondary theme-border"}`}>
@@ -184,67 +180,6 @@ export default function ConnectionsPage() {
               </Link>
             </div>
           )}
-        </section>
-
-        {/* Facebook */}
-        <section className="theme-bg-secondary border theme-border rounded-2xl p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-900/40 rounded-2xl flex items-center justify-center text-2xl">📘</div>
-              <div>
-                <h2 className="font-semibold">Facebook Messenger</h2>
-                <p className="text-xs theme-text-muted mt-0.5">รับข้อความจาก Facebook Page</p>
-              </div>
-            </div>
-            <StatusBadge ok={fbOk} label={fbOk ? "เชื่อมต่อแล้ว" : "ยังไม่เชื่อมต่อ"} />
-          </div>
-
-          {fbOk ? (
-            <div className="space-y-3">
-              <div className="bg-blue-950/30 border border-blue-800/40 rounded-xl p-4">
-                <p className="text-sm text-blue-300">Facebook Page ตั้งค่าแล้ว</p>
-                <p className="text-xs theme-text-muted mt-1">Page Access Token และ App Secret ถูกตั้งค่าแล้ว</p>
-              </div>
-              <Link
-                href="/dashboard/settings"
-                className="inline-block px-4 py-2 theme-bg-card hover:theme-bg-hover border theme-border rounded-lg text-xs theme-text-secondary hover:theme-text transition"
-              >
-                แก้ไขการตั้งค่า
-              </Link>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              <p className="text-sm theme-text-secondary">ยังไม่ได้เชื่อมต่อ Facebook</p>
-              <Link
-                href="/dashboard/settings"
-                className="inline-block px-5 py-2.5 bg-blue-800 hover:bg-blue-700 rounded-xl text-sm font-medium text-white transition"
-              >
-                ตั้งค่า Facebook →
-              </Link>
-            </div>
-          )}
-        </section>
-
-        {/* Instagram */}
-        <section className="theme-bg-secondary border theme-border rounded-2xl p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-pink-900/40 rounded-2xl flex items-center justify-center text-2xl">📸</div>
-              <div>
-                <h2 className="font-semibold">Instagram Direct</h2>
-                <p className="text-xs theme-text-muted mt-0.5">ใช้ Facebook token เดียวกัน</p>
-              </div>
-            </div>
-            <StatusBadge ok={igOk} label={igOk ? "เชื่อมต่อแล้ว" : "ยังไม่เชื่อมต่อ"} />
-          </div>
-
-          <div className={`p-4 rounded-xl border text-sm ${igOk ? "bg-pink-950/30 border-pink-800/40 text-pink-200" : "theme-bg-card theme-border theme-text-secondary"}`}>
-            {igOk ? (
-              <p>Instagram ใช้ Page Access Token เดียวกับ Facebook — เชื่อมต่อแล้วอัตโนมัติ</p>
-            ) : (
-              <p>เชื่อมต่อ Facebook ก่อน แล้ว Instagram จะเชื่อมต่ออัตโนมัติ</p>
-            )}
-          </div>
         </section>
 
         {/* Telegram */}

@@ -19,7 +19,7 @@ const SECTIONS: Section[] = [
     id: "setup",
     icon: "🚀",
     title: "เริ่มต้นใช้งาน",
-    desc: "ตั้งค่าระบบ 5 ขั้นตอน",
+    desc: "ตั้งค่าระบบ 4 ขั้นตอน",
     items: [
       {
         title: "1. เชื่อม MongoDB",
@@ -61,26 +61,7 @@ const SECTIONS: Section[] = [
 9. ทดสอบ: ส่งข้อความใน LINE OA → ดูใน Dashboard ถ้าขึ้นแสดงว่าสำเร็จ`,
       },
       {
-        title: "4. เชื่อม Facebook + Instagram",
-        content: `Facebook:
-1. ไปที่ developers.facebook.com → สร้าง App (Business type)
-2. เพิ่ม Product "Messenger" → ตั้งค่า Webhook
-3. Webhook URL: https://seaandhill.satistang.com/webhook/meta
-4. Verify Token: ใส่ค่าเดียวกับ FB_VERIFY_TOKEN ใน .env
-5. Subscribe: messages, messaging_postbacks
-6. คัดลอก Page Access Token → ใส่ใน .env ที่ FB_PAGE_ACCESS_TOKEN=
-
-Instagram:
-1. Facebook Page ต้องเชื่อมกับ Instagram Business/Creator Account
-2. ไปที่ Facebook Page Settings → Instagram → Connect Account
-3. ไปที่ App Dashboard → Messenger → Instagram
-4. Subscribe: messages
-5. Instagram จะใช้ Webhook เดียวกับ Facebook (/webhook/meta)
-
-ทดสอบ: ส่งข้อความใน Facebook Messenger หรือ Instagram DM → ดูใน Dashboard`,
-      },
-      {
-        title: "5. เชื่อม Telegram",
+        title: "4. เชื่อม Telegram",
         content: `สำหรับรับ AI Advice ส่วนตัวจาก "น้องกุ้ง":
 
 1. เปิด Telegram → ค้นหา @BotFather → พิมพ์ /newbot
@@ -99,7 +80,7 @@ Instagram:
     id: "chat",
     icon: "💬",
     title: "แชท Multi-Panel",
-    desc: "เปิดได้ 4 จอพร้อมกัน LINE/FB/IG",
+    desc: "เปิดได้ 4 จอพร้อมกัน",
     items: [
       {
         title: "วิธีใช้งานแชท",
@@ -108,7 +89,6 @@ Instagram:
 • คลิกชื่อลูกค้าทางซ้าย → เปิดแชทด้านขวา
 • กดเพิ่มได้ถึง 4 จอ → เปรียบเทียบสนทนาข้างกัน
 • กด X ปิดแต่ละจอได้
-• มีแถบ platform filter: LINE / FB / IG กรองเฉพาะช่องทาง
 • ค้นหาชื่อลูกค้า หรือข้อความได้
 • Auto-refresh ทุก 15 วินาที`,
       },
@@ -816,15 +796,13 @@ Role ที่มี:
     id: "connections",
     icon: "🔗",
     title: "เชื่อมต่อช่องทาง & ตั้งค่าบอท",
-    desc: "ทดสอบเชื่อมต่อ LINE/FB/IG + ตั้งค่า prompt/mode ต่อห้อง",
+    desc: "ทดสอบเชื่อมต่อ LINE + ตั้งค่า prompt/mode ต่อห้อง",
     items: [
       {
         title: "ตรวจสอบช่องทาง",
-        content: `หน้า "🔗 ช่องทาง" แสดงสถานะเชื่อมต่อทุก platform:
+        content: `หน้า "🔗 ช่องทาง" แสดงสถานะเชื่อมต่อ:
 
 • LINE OA — ✅ เชื่อมแล้ว / ❌ ยังไม่เชื่อม
-• Facebook — ✅ / ❌
-• Instagram — ✅ / ❌
 • Telegram — ✅ / ❌
 
 กดปุ่ม "ทดสอบ" เพื่อเช็คว่าเชื่อมต่อถูกต้อง

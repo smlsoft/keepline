@@ -30,6 +30,7 @@ interface Customer {
   lastName?: string;
   avatarUrl?: string;
   rooms: string[];
+  groups?: { sourceId: string; groupName: string; messageCount: number; lastActiveAt: string }[];
 }
 
 const PLATFORM_CFG: Record<string, { label: string; icon: string; color: string; bgLight: string; border: string }> = {
@@ -156,14 +157,6 @@ export default function CustomerConversationPage({ params }: { params: Promise<{
               <div className="min-w-0">
                 <h1 className="text-base font-bold truncate">{displayName}</h1>
                 <div className="flex items-center gap-2 flex-wrap mt-0.5">
-                  {Array.from(platformSet).map((p) => {
-                    const cfg = PLATFORM_CFG[p] || PLATFORM_CFG.line;
-                    return (
-                      <span key={p} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border ${cfg.bgLight} ${cfg.color} ${cfg.border}`}>
-                        {cfg.icon} {cfg.label}
-                      </span>
-                    );
-                  })}
                   <span className="text-sm theme-text-muted">{messages.length} ข้อความ</span>
                   <span className="text-sm theme-text-muted">{roomCount} ห้อง</span>
                 </div>
@@ -174,6 +167,29 @@ export default function CustomerConversationPage({ params }: { params: Promise<{
       </header>
 
       <main className="max-w-3xl mx-auto p-3 md:p-6 pb-24 md:pb-6">
+        {/* กลุ่มที่อยู่ */}
+        {customer.groups && customer.groups.length > 0 && (
+          <div className="mb-6 theme-bg-card rounded-xl border theme-border p-4">
+            <h3 className="text-sm font-bold theme-text mb-3">👥 กลุ่มที่อยู่</h3>
+            <div className="space-y-2">
+              {customer.groups.map((g) => (
+                <Link key={g.sourceId} href={`/dashboard/group/${g.sourceId}`}
+                  className="flex items-center justify-between px-3 py-2 rounded-lg theme-bg-secondary hover:theme-bg-hover transition border theme-border">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/30 font-medium">
+                      {g.groupName}
+                    </span>
+                    <span className="text-[10px] theme-text-muted">{g.messageCount} ข้อความ</span>
+                  </div>
+                  <span className="text-[10px] theme-text-muted">
+                    {g.lastActiveAt ? new Date(g.lastActiveAt).toLocaleString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : ""}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
         {messages.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <p className="theme-text-muted text-sm">ยังไม่มีข้อความ</p>
@@ -185,8 +201,6 @@ export default function CustomerConversationPage({ params }: { params: Promise<{
                 messages[i - 1]?.createdAt && msg.createdAt &&
                 new Date(messages[i - 1].createdAt!).toDateString() !== new Date(msg.createdAt!).toDateString()
               );
-              const platform = msgPlatform(msg);
-              const cfg = PLATFORM_CFG[platform] || PLATFORM_CFG.line;
               const isStaff = msg.role === "assistant";
 
               return (
@@ -208,8 +222,12 @@ export default function CustomerConversationPage({ params }: { params: Promise<{
                         : "theme-bg-card theme-text rounded-bl-sm"
                     }`}>
                       <div className="flex items-center gap-1.5 mb-0.5">
-                        <span className={`text-xs font-medium ${cfg.color}`}>{cfg.icon}</span>
-                        <span className={`text-xs ${cfg.color} opacity-80`}>[{cfg.label}]</span>
+                        {(() => {
+                          const groupMatch = msg.sourceId && customer.groups?.find(g => g.sourceId === msg.sourceId);
+                          return groupMatch
+                            ? <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/30">{groupMatch.groupName}</span>
+                            : <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-blue-900/40 text-blue-300 border border-blue-700/30">DM</span>;
+                        })()}
                         {msg.userName && (
                           <span className={`text-xs font-semibold ${isStaff ? (msg.isAutoReply ? "text-amber-200" : "text-indigo-200") : "text-sky-400"}`}>
                             {msg.userName}

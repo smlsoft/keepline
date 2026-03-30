@@ -78,6 +78,13 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
+    groupLabel: "บัญชี",
+    items: [
+      { href: "/tax-calendar", icon: "📅", label: "ปฏิทินภาษี" },
+      { href: "/staff", icon: "👔", label: "พนักงาน" },
+    ],
+  },
+  {
     groupLabel: "ตั้งค่า",
     items: [
       { href: "/connections", icon: "🔗", label: "ช่องทาง" },

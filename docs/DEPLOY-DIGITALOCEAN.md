@@ -60,7 +60,7 @@ nano .env
 ### 5. DNS --- ชี้ domain
 
 ที่ Cloudflare DNS (หรือ registrar อื่น):
-- เพิ่ม A record: `crm.satistang.com` --> IP ของ DigitalOcean
+- เพิ่ม A record: `seaandhill.satistang.com` --> IP ของ DigitalOcean
 - **DNS only (grey cloud)** --- ให้ Caddy จัดการ SSL เอง
 
 ### 6. Deploy
@@ -78,19 +78,19 @@ docker compose -f docker-compose.caddy.yml ps
 ต้องเห็น containers:
 
 ```
-smltrack-caddy        Up
-smltrack-agent        Up
-smltrack-dashboard    Up
-smltrack-openclaw     Up
-smltrack-mongodb      Up
+seaandhill-caddy        Up
+seaandhill-agent        Up
+seaandhill-dashboard    Up
+seaandhill-openclaw     Up
+seaandhill-mongodb      Up
 ```
 
-ทดสอบ: https://crm.satistang.com/dashboard
+ทดสอบ: https://seaandhill.satistang.com/dashboard
 
 ### 8. Seed ข้อมูลตัวอย่าง
 
 ```bash
-curl -s -X POST "https://crm.satistang.com/dashboard/api/seed"
+curl -s -X POST "https://seaandhill.satistang.com/dashboard/api/seed"
 ```
 
 ---
@@ -152,7 +152,7 @@ MongoDB อยู่บน server เดียวกัน (Docker volume):
 
 ```bash
 # Backup ทุกวัน (ใส่ใน crontab)
-0 3 * * * docker exec smltrack-mongodb mongodump --out=/data/backup/$(date +\%Y\%m\%d)
+0 3 * * * docker exec seaandhill-mongodb mongodump --out=/data/backup/$(date +\%Y\%m\%d)
 ```
 
 ---

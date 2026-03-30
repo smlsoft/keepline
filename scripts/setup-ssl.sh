@@ -5,13 +5,13 @@
 # ==============================================
 set -e
 
-DOMAIN="${1:-smlclaw.satistang.com}"
+DOMAIN="${1:-seaandhill.satistang.com}"
 EMAIL="${2:-admin@satistang.com}"
 
 echo "=== Setting up SSL for ${DOMAIN} ==="
 
 # Step 1: ใช้ nginx config แบบ HTTP-only ก่อน (ยังไม่มี cert)
-cat > /opt/smltrack/nginx/conf.d/default.conf << 'HTTPCONF'
+cat > /opt/seaandhilllinegroup/nginx/conf.d/default.conf << 'HTTPCONF'
 server {
     listen 80;
     server_name _;

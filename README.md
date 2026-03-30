@@ -15,7 +15,7 @@
 [![Facebook](https://img.shields.io/badge/Facebook-Graph_API-1877F2?logo=facebook&logoColor=white)](#multi-platform)
 [![Instagram](https://img.shields.io/badge/Instagram-Graph_API-E4405F?logo=instagram&logoColor=white)](#multi-platform)
 
-[Demo](https://crm.satistang.com/dashboard) · [คู่มือ](https://crm.satistang.com/dashboard/guide) · [ห้องน้องกุ้ง 3D](https://crm.satistang.com/dashboard/kung-room) · [แจ้งปัญหา](https://github.com/smlsoft/openclawminicrm/issues)
+[Demo](https://seaandhill.satistang.com/dashboard) · [คู่มือ](https://seaandhill.satistang.com/dashboard/guide) · [ห้องน้องกุ้ง 3D](https://seaandhill.satistang.com/dashboard/kung-room) · [แจ้งปัญหา](https://github.com/smlsoft/openclawminicrm/issues)
 
 </div>
 
@@ -233,7 +233,7 @@ Qdrant Cloud (Knowledge Base vector search)
 | MongoDB | Database (local Docker) | 27017 | volume |
 | OpenClaw | AI Advisor (แกนหลัก) | 18789 | `openclaw/` |
 | Agent | LINE/FB/IG + RAG + MCP | 3000 | `proxy/` |
-| Dashboard | Web UI + Auth + 3D Office | 3001 | `smltrackdashboard/` |
+| Dashboard | Web UI + Auth + 3D Office | 3001 | `seaandhilldashboard/` |
 
 ---
 
@@ -321,7 +321,7 @@ docker compose -f docker-compose.caddy.yml up -d --build
 
 น้องกุ้ง 14 ตัว (13 + CEO) ทำงานให้คุณ 24/7 --- ฟรี 100% --- ข้อมูลเป็นของคุณ
 
-[crm.satistang.com](https://crm.satistang.com) · [GitHub](https://github.com/smlsoft/openclawminicrm)
+[seaandhill.satistang.com](https://seaandhill.satistang.com) · [GitHub](https://github.com/smlsoft/openclawminicrm)
 
 Made with love for Thai SMEs
 

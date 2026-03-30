@@ -50,8 +50,8 @@
 ### Step 1 — Clone โปรเจค
 
 ```bash
-git clone https://github.com/smlsoft/smltrack.git
-cd smltrack
+git clone https://github.com/smlsoft/openclawminicrm.git
+cd openclawminicrm
 ```
 
 ### Step 2 — สร้างไฟล์ `.env`
@@ -112,10 +112,10 @@ docker compose ps
 
 ```
 NAME                  STATUS
-smltrack-openclaw     Up (healthy)    <- AI Advisor (แกนหลัก)
-smltrack-agent        Up (healthy)
-smltrack-dashboard    Up
-smltrack-tunnel       Up
+seaandhill-openclaw     Up (healthy)    <- AI Advisor (แกนหลัก)
+seaandhill-agent        Up (healthy)
+seaandhill-dashboard    Up
+seaandhill-tunnel       Up
 ```
 
 ### Step 5 — ทดสอบเข้าใช้งาน
@@ -125,7 +125,7 @@ smltrack-tunnel       Up
 | Agent ทำงาน | http://localhost:3000/ | แสดงข้อความ OK |
 | OpenClaw | http://localhost:18789/ | Control UI |
 | Dashboard | http://localhost:3002/dashboard | เห็นหน้า Dashboard |
-| ผ่าน Internet | https://smlclaw.satistang.com/dashboard | เข้าได้จากข้างนอก |
+| ผ่าน Internet | https://seaandhill.satistang.com/dashboard | เข้าได้จากข้างนอก |
 
 ---
 
@@ -135,7 +135,7 @@ smltrack-tunnel       Up
 LINE OA
   |
   v
-Cloudflare Tunnel (smlclaw.satistang.com)
+Cloudflare Tunnel (seaandhill.satistang.com)
   |
   v
 +------------------ Docker Desktop --------------------+
@@ -169,10 +169,10 @@ Cloudflare Tunnel (smlclaw.satistang.com)
 
 | Container | Folder | Port | หน้าที่ |
 |-----------|--------|------|---------|
-| smltrack-openclaw | `openclaw/` | 18789 | **AI Advisor** — cron ทุก 1 ชม., cost tracking |
-| smltrack-agent | `proxy/` | 3000 | LINE webhook, AI chatbot, RAG, MCP, Advisor API |
-| smltrack-dashboard | `smltrackdashboard/` | 3002 | Web Dashboard (แชท, CRM, KPI, Advice, Cost) |
-| smltrack-tunnel | cloudflare image | — | เปิดให้เข้าจาก Internet |
+| seaandhill-openclaw | `openclaw/` | 18789 | **AI Advisor** — cron ทุก 1 ชม., cost tracking |
+| seaandhill-agent | `proxy/` | 3000 | LINE webhook, AI chatbot, RAG, MCP, Advisor API |
+| seaandhill-dashboard | `seaandhilldashboard/` | 3002 | Web Dashboard (แชท, CRM, KPI, Advice, Cost) |
+| seaandhill-tunnel | cloudflare image | — | เปิดให้เข้าจาก Internet |
 
 ---
 
@@ -207,8 +207,8 @@ docker compose up -d --build
 
 - [ ] ติดตั้ง Docker Desktop แล้วเปิดใช้งาน
 - [ ] ติดตั้ง Git
-- [ ] `git clone https://github.com/smlsoft/smltrack.git`
-- [ ] `cd smltrack`
+- [ ] `git clone https://github.com/smlsoft/openclawminicrm.git`
+- [ ] `cd openclawminicrm`
 - [ ] สร้างไฟล์ `.env` พร้อมใส่ค่าทั้งหมด
 - [ ] `docker compose up -d --build`
 - [ ] `docker compose ps` → 4 containers running

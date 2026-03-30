@@ -1,5 +1,5 @@
 ---
-name: smltrack-advisor
+name: seaandhill-advisor
 description: |
   น้องกุ้ง — AI Advisor สำหรับ OpenClaw Mini CRM Mini CRM
   มี 5 บทบาท: Problem Solver, Sales Hunter, Team Coach, Weekly Strategist, Health Monitor

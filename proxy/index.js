@@ -322,7 +322,7 @@ async function getDB() {
   try {
     const client = new MongoClient(uri, { serverSelectionTimeoutMS: 3000 });
     await client.connect();
-    db = client.db(process.env.MONGODB_DB || "smltrack");
+    db = client.db(process.env.MONGODB_DB || "seaandhill");
     console.log("[DB] MongoDB connected");
     return db;
   } catch (e) {
@@ -4044,7 +4044,7 @@ app.post("/api/inbox/upload", uploadLimiter, upload.single("image"), (req, res) 
     return res.status(400).json({ error: "ไฟล์ไม่ใช่รูปภาพที่รองรับ (JPEG/PNG/GIF/WebP)" });
   }
   // สร้าง public URL (ผ่าน nginx/proxy)
-  const baseUrl = process.env.BASE_URL || `https://crm.satistang.com`;
+  const baseUrl = process.env.BASE_URL || `https://seaandhill.satistang.com`;
   const imageUrl = `${baseUrl}/uploads/${req.file.filename}`;
   auditLog("upload_image", { filename: req.file.filename }).catch(() => {});
   res.json({ ok: true, imageUrl, filename: req.file.filename });
@@ -5022,7 +5022,7 @@ async function handleTelegramQuery(chatId, question, account) {
     const mongoUri = account.mongodbUri || process.env.MONGODB_URI;
     const client = new MongoClient(mongoUri, { serverSelectionTimeoutMS: 5000 });
     await client.connect();
-    userDb = client.db(process.env.MONGODB_DB || "smltrack");
+    userDb = client.db(process.env.MONGODB_DB || "seaandhill");
   } catch (e) {
     await sendTelegram(chatId, "❌ เชื่อมต่อฐานข้อมูลไม่ได้ กรุณาตรวจสอบ MongoDB URI ใน Dashboard");
     return;
@@ -5098,7 +5098,7 @@ app.get("/setup-telegram-webhook", async (req, res) => {
   if (!TELEGRAM_BOT_TOKEN) {
     return res.status(400).json({ error: "TELEGRAM_BOT_TOKEN not set" });
   }
-  const webhookUrl = `https://crm.satistang.com/webhook/telegram`;
+  const webhookUrl = `https://seaandhill.satistang.com/webhook/telegram`;
   try {
     const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook`, {
       method: "POST",

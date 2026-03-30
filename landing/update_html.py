@@ -1,6 +1,6 @@
 import os
 
-html_path = 'd:\\code\\smltrack\\landing\\index.html'
+html_path = 'd:\\code\\seaandhilllinegroup\\landing\\index.html'
 
 with open(html_path, 'r', encoding='utf-8') as f:
     content = f.read()

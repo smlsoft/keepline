@@ -5,6 +5,6 @@ services:
       - "3001:3001"
     environment:
       - MONGODB_URI=${MONGODB_URI}
-      - MONGODB_DB=smltrack
+      - MONGODB_DB=seaandhill
       - PORT=3001
     restart: unless-stopped

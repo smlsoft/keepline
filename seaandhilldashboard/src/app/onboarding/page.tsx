@@ -253,7 +253,7 @@ export default function OnboardingPage() {
                     type="text"
                     value={mongoUri}
                     onChange={(e) => { setMongoUri(e.target.value); setMongoTest(null); }}
-                    placeholder="mongodb+srv://user:password@cluster.mongodb.net/smltrack"
+                    placeholder="mongodb+srv://user:password@cluster.mongodb.net/seaandhill"
                     className="w-full px-4 py-2.5 theme-input border rounded-xl text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition font-mono"
                     autoComplete="off"
                   />

@@ -21,7 +21,7 @@ apt-get install -y docker-compose-plugin
 
 # 4. Create project directory
 echo "[4/6] Creating project directory..."
-mkdir -p /opt/smltrack
+mkdir -p /opt/seaandhilllinegroup
 
 # 5. Setup firewall
 echo "[5/6] Configuring firewall..."
@@ -42,6 +42,6 @@ echo ""
 echo "=== Server setup complete! ==="
 echo ""
 echo "Next steps:"
-echo "  1. Copy .env to server: scp .env root@SERVER_IP:/opt/smltrack/"
+echo "  1. Copy .env to server: scp .env root@SERVER_IP:/opt/seaandhilllinegroup/"
 echo "  2. Deploy: DEPLOY_HOST=SERVER_IP ./scripts/deploy.sh"
-echo "  3. Setup SSL: ssh root@SERVER_IP 'cd /opt/smltrack && ./scripts/setup-ssl.sh'"
+echo "  3. Setup SSL: ssh root@SERVER_IP 'cd /opt/seaandhilllinegroup && ./scripts/setup-ssl.sh'"

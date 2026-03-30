@@ -27,7 +27,7 @@ const SECTIONS: Section[] = [
 • สร้าง Cluster ชนิด M0 (Free) เลือก Region: Singapore หรือ Hong Kong
 • ไปที่ Database Access → สร้าง user + password (จดไว้)
 • ไปที่ Network Access → เพิ่ม 0.0.0.0/0 (Allow from anywhere)
-• คัดลอก Connection String: mongodb+srv://user:pass@cluster.mongodb.net/smltrack
+• คัดลอก Connection String: mongodb+srv://user:pass@cluster.mongodb.net/seaandhill
 • วางใน .env ที่ MONGODB_URI= แล้ว docker compose up -d --build
 • หรือใช้ MongoDB Docker บน server เดียวกัน (เร็วกว่า Atlas 100x)`,
       },
@@ -55,7 +55,7 @@ const SECTIONS: Section[] = [
 3. ไปที่ tab "Basic settings" → คัดลอก Channel Secret
 4. ใส่ใน .env: LINE_CHANNEL_ACCESS_TOKEN= และ LINE_CHANNEL_SECRET=
 5. กลับไปที่ LINE Developer → Messaging API tab
-6. ตั้ง Webhook URL: https://crm.satistang.com/webhook
+6. ตั้ง Webhook URL: https://seaandhill.satistang.com/webhook
 7. เปิด "Use webhook" = Enabled
 8. ปิด "Auto-reply messages" (ให้ AI ตอบแทน)
 9. ทดสอบ: ส่งข้อความใน LINE OA → ดูใน Dashboard ถ้าขึ้นแสดงว่าสำเร็จ`,
@@ -65,7 +65,7 @@ const SECTIONS: Section[] = [
         content: `Facebook:
 1. ไปที่ developers.facebook.com → สร้าง App (Business type)
 2. เพิ่ม Product "Messenger" → ตั้งค่า Webhook
-3. Webhook URL: https://crm.satistang.com/webhook/meta
+3. Webhook URL: https://seaandhill.satistang.com/webhook/meta
 4. Verify Token: ใส่ค่าเดียวกับ FB_VERIFY_TOKEN ใน .env
 5. Subscribe: messages, messaging_postbacks
 6. คัดลอก Page Access Token → ใส่ใน .env ที่ FB_PAGE_ACCESS_TOKEN=
@@ -87,7 +87,7 @@ Instagram:
 2. ตั้งชื่อ bot เช่น "SML น้องกุ้ง" → ตั้ง username เช่น sml_kung_bot
 3. BotFather จะส่ง Bot Token มา (รูปแบบ 123456:ABC-DEF...)
 4. ใส่ใน .env ที่ TELEGRAM_BOT_TOKEN=
-5. Restart Docker → เปิดเบราว์เซอร์ไปที่: https://crm.satistang.com/setup-telegram-webhook
+5. Restart Docker → เปิดเบราว์เซอร์ไปที่: https://seaandhill.satistang.com/setup-telegram-webhook
 6. ถ้าขึ้น {"ok":true} = สำเร็จ
 7. เปิด Telegram bot → ส่ง /start → น้องกุ้งตอบทันที
 8. ลอง: "สรุปแชทวันนี้" → น้องกุ้งวิเคราะห์ให้`,

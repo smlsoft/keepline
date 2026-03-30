@@ -12,7 +12,7 @@ export default function ConfigPage() {
 
   // MongoDB
   const [mongoUri, setMongoUri] = useState("");
-  const [mongoDb, setMongoDb] = useState("smlclaw");
+  const [mongoDb, setMongoDb] = useState("seaandhill");
   const [mongoResult, setMongoResult] = useState<TestResult | null>(null);
   const [mongoLoading, setMongoLoading] = useState(false);
 
@@ -151,7 +151,7 @@ export default function ConfigPage() {
                 type="text"
                 value={mongoDb}
                 onChange={(e) => setMongoDb(e.target.value)}
-                placeholder="smlclaw"
+                placeholder="seaandhill"
                 className="w-full px-4 py-2.5 theme-input border theme-border rounded-xl text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition font-mono"
               />
             </div>

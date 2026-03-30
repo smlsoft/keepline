@@ -7,7 +7,7 @@ set -e
 
 REMOTE_USER="${DEPLOY_USER:-root}"
 REMOTE_HOST="${DEPLOY_HOST}"
-REMOTE_DIR="/opt/smltrack"
+REMOTE_DIR="/opt/seaandhilllinegroup"
 COMPOSE_FILE="docker-compose.prod.yml"
 
 if [ -z "$REMOTE_HOST" ]; then
@@ -51,4 +51,4 @@ ssh "${REMOTE_USER}@${REMOTE_HOST}" "cd ${REMOTE_DIR} && docker compose -f ${COM
 
 echo ""
 echo "=== Deploy complete! ==="
-echo "Dashboard: https://smlclaw.satistang.com/dashboard"
+echo "Dashboard: https://seaandhill.satistang.com/dashboard"

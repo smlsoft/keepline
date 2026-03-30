@@ -18,7 +18,7 @@ Dashboard (Docker) → Google Login → แสดงสนทนา + CRM + KPI 
 ## Brand
 - **ชื่อ:** OpenClaw Mini CRM
 - **Tagline:** AI Chat Intelligence — LINE · Facebook · Instagram
-- **Domain:** crm.satistang.com (production) / smlclaw.satistang.com (legacy)
+- **Domain:** seaandhill.satistang.com (production)
 - **Deploy:** Hetzner VPS + Docker Compose
 
 ## Core Principle — OpenClaw เป็นแกนหลัก
@@ -32,12 +32,12 @@ Dashboard (Docker) → Google Login → แสดงสนทนา + CRM + KPI 
 | **Nginx** | Reverse proxy + SSL | 80/443 | `nginx/` |
 | **OpenClaw** | AI Advisor (แกนหลัก) | 18789 | `openclaw/` |
 | **Agent** | LINE/FB/IG + RAG + MCP | 3000 | `proxy/` |
-| **Dashboard** | Web UI + Auth | 3001 | `smltrackdashboard/` |
+| **Dashboard** | Web UI + Auth | 3001 | `seaandhilldashboard/` |
 
 ## URLs
-- **Production:** `https://crm.satistang.com/dashboard`
-- **LINE webhook:** `https://crm.satistang.com/webhook`
-- **Meta webhook:** `https://crm.satistang.com/webhook/meta`
+- **Production:** `https://seaandhill.satistang.com/dashboard`
+- **LINE webhook:** `https://seaandhill.satistang.com/webhook`
+- **Meta webhook:** `https://seaandhill.satistang.com/webhook/meta`
 - **OpenClaw:** `http://localhost:18789` (internal)
 
 ## Multi-Platform (LINE + Facebook + Instagram)

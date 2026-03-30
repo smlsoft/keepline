@@ -3,8 +3,8 @@ dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 import { MongoClient } from "mongodb";
 
-const MONGODB_URI = "mongodb+srv://jaturapornchai_db_user:tcitJz3xz3KLHKb6@cluster0.rl6qbcz.mongodb.net/smlclaw?appName=Cluster0";
-const DB_NAME = "smlclaw";
+const MONGODB_URI = "mongodb+srv://jaturapornchai_db_user:tcitJz3xz3KLHKb6@cluster0.rl6qbcz.mongodb.net/seaandhill?appName=Cluster0";
+const DB_NAME = "seaandhill";
 
 // ============ ข้อมูลหมวดหมู่วัสดุก่อสร้าง ============
 

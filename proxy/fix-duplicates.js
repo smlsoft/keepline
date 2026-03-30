@@ -2,7 +2,7 @@ const { MongoClient } = require("mongodb");
 async function fix() {
   const client = new MongoClient(process.env.MONGODB_URI);
   await client.connect();
-  const db = client.db("smltrack");
+  const db = client.db("seaandhill");
   const coll = db.collection("messages");
 
   const ids = await coll.distinct("sourceId");

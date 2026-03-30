@@ -4,8 +4,8 @@ import dns from "node:dns/promises";
 // Fix Node.js v22+ Windows DNS SRV issue
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
-const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/smltrack";
-const dbName = process.env.MONGODB_DB || "smltrack";
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/seaandhill";
+const dbName = process.env.MONGODB_DB || "seaandhill";
 
 let client: MongoClient;
 let db: Db;

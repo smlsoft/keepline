@@ -158,7 +158,7 @@ AI เรียกใช้อัตโนมัติเมื่อลูก�
 ## เริ่มใช้งาน — 5 นาที
 
 ```
-1. เปิด crm.satistang.com
+1. เปิด seaandhill.satistang.com
 2. Login ด้วย Google
 3. ทำตาม setup wizard (ใส่ MongoDB URI + AI key)
 4. เชื่อม LINE OA / Facebook / Instagram
@@ -198,8 +198,8 @@ AI เรียกใช้อัตโนมัติเมื่อลูก�
 
 ## ติดต่อ
 
-- Web: [crm.satistang.com](https://crm.satistang.com)
-- GitHub: [github.com/smlsoft/smltrack](https://github.com/smlsoft/smltrack)
+- Web: [seaandhill.satistang.com](https://seaandhill.satistang.com)
+- GitHub: [github.com/smlsoft/openclawminicrm](https://github.com/smlsoft/openclawminicrm)
 
 ---
 

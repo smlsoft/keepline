@@ -7,7 +7,7 @@ services:
   # === Nginx Reverse Proxy + SSL ===
   nginx:
     image: nginx:alpine
-    container_name: smltrack-nginx
+    container_name: seaandhill-nginx
     restart: always
     ports:
       - "80:80"
@@ -29,7 +29,7 @@ services:
   # === SSL Certificate (Let's Encrypt) ===
   certbot:
     image: certbot/certbot:latest
-    container_name: smltrack-certbot
+    container_name: seaandhill-certbot
     volumes:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
@@ -39,7 +39,7 @@ services:
   # === OpenClaw — AI Advisor (แกนหลัก) ===
   openclaw:
     image: ghcr.io/openclaw/openclaw:latest
-    container_name: smltrack-openclaw
+    container_name: seaandhill-openclaw
     restart: always
     volumes:
       - ./openclaw:/home/node/.openclaw
@@ -76,7 +76,7 @@ services:
     build:
       context: ./proxy
       dockerfile: Dockerfile
-    container_name: smltrack-agent
+    container_name: seaandhill-agent
     restart: always
     env_file:
       - .env
@@ -97,9 +97,9 @@ services:
   # === Dashboard (Next.js) ===
   dashboard:
     build:
-      context: ./smltrackdashboard
+      context: ./seaandhilldashboard
       dockerfile: Dockerfile.prod
-    container_name: smltrack-dashboard
+    container_name: seaandhill-dashboard
     restart: always
     env_file:
       - .env
@@ -123,7 +123,7 @@ services:
   # === Edge TTS — เสียงไทย Neural ฟรี ===
   edge-tts:
     image: travisvn/openai-edge-tts:latest
-    container_name: smltrack-edge-tts
+    container_name: seaandhill-edge-tts
     restart: always
     environment:
       - PORT=5050
@@ -137,7 +137,7 @@ services:
   # === Watchtower — Auto-update images ===
   watchtower:
     image: containrrr/watchtower:latest
-    container_name: smltrack-watchtower
+    container_name: seaandhill-watchtower
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -146,7 +146,7 @@ services:
       - WATCHTOWER_POLL_INTERVAL=86400
       - WATCHTOWER_LABEL_ENABLE=false
       - TZ=Asia/Bangkok
-    command: smltrack-openclaw smltrack-nginx
+    command: seaandhill-openclaw seaandhill-nginx
 
 volumes:
   certbot-etc:

@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
     const res = await fetch(`${EDGE_TTS_URL}/v1/audio/speech`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      cache: "no-store",
       body: JSON.stringify({
         model: "tts-1",
         input: text.substring(0, 200), // จำกัดความยาว

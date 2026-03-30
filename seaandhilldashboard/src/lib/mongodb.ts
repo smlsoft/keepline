@@ -35,6 +35,7 @@ export async function getDB(): Promise<Db> {
       db.collection("documents").createIndex({ status: 1, createdAt: -1 }),
       db.collection("appointments").createIndex({ date: 1, status: 1 }),
       db.collection("appointments").createIndex({ staffNames: 1, date: 1 }),
+      db.collection("customer_services").createIndex({ customerId: 1 }, { unique: true }),
     ]);
     console.log("[MongoDB] Indexes ensured");
   } catch (e) {

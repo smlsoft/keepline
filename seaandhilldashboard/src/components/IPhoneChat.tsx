@@ -53,6 +53,7 @@ interface Group {
   purchaseIntent?: ScoreData | null;
   analysisLogsCount?: number;
   platform?: string;
+  sourceType?: string;
 }
 
 interface ReplyTemplate {
@@ -421,8 +422,13 @@ export default function IPhoneChat({
           </div>
         )}
 
-        {/* Quick Reply Button Bar */}
-        <div className="iphone-home px-4 py-1.5 flex items-center justify-between shrink-0">
+        {/* Quick Reply Button Bar (ซ่อนถ้าเป็นกลุ่ม) */}
+        {group.sourceType === "group" ? (
+          <div className="iphone-home px-4 py-2 shrink-0 text-center">
+            <p className="text-sm theme-text-muted">👥 ดูข้อความเท่านั้น</p>
+            <div className="iphone-home-bar w-24 h-1 rounded-full mx-auto mt-1" />
+          </div>
+        ) : <div className="iphone-home px-4 py-1.5 flex items-center justify-between shrink-0">
           <button
             onClick={() => {
               setShowTemplates((prev) => !prev);
@@ -439,7 +445,7 @@ export default function IPhoneChat({
           </button>
           <div className="iphone-home-bar w-24 h-1 rounded-full" />
           <div className="w-[80px]" />
-        </div>
+        </div>}
       </div>
     </div>
   );

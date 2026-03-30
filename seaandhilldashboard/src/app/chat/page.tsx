@@ -717,8 +717,13 @@ function ChatPanel({
         </div>
       )}
 
-      {/* ── Input Bar (2 แถว: toolbar + input เต็มจอ) ── */}
-      <div className="border-t theme-border theme-bg-secondary px-2 py-1.5 shrink-0">
+      {/* ── Input Bar (ซ่อนถ้าเป็นกลุ่ม — กลุ่มเก็บข้อมูลเท่านั้น ไม่ push) ── */}
+      {isGroup && (
+        <div className="border-t theme-border theme-bg-secondary px-4 py-3 shrink-0 text-center">
+          <p className="text-sm theme-text-muted">👥 กลุ่ม — ดูข้อความเท่านั้น ไม่สามารถส่งข้อความได้</p>
+        </div>
+      )}
+      {!isGroup && <div className="border-t theme-border theme-bg-secondary px-2 py-1.5 shrink-0">
         {/* แถว 1: Toolbar */}
         <div className="flex items-center gap-1 mb-1">
           <button
@@ -783,7 +788,7 @@ function ChatPanel({
             )}
           </button>
         </div>
-      </div>
+      </div>}
 
       {/* Hidden file input */}
       <input

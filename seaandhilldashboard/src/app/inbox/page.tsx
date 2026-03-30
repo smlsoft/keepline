@@ -49,6 +49,7 @@ interface Conversation {
   staffSentiment?: ScoreData | null;
   purchaseIntent?: ScoreData | null;
   analysisLogsCount?: number;
+  sourceType?: string;
 }
 
 interface ReplyTemplate {
@@ -706,8 +707,12 @@ export default function InboxPage() {
               </div>
             )}
 
-            {/* ── Input Bar ── */}
-            <div className="border-t theme-border theme-bg-secondary px-3 py-3 shrink-0">
+            {/* ── Input Bar (ซ่อนถ้าเป็นกลุ่ม) ── */}
+            {selectedConv?.sourceType === "group" ? (
+              <div className="border-t theme-border theme-bg-secondary px-4 py-3 shrink-0 text-center">
+                <p className="text-sm theme-text-muted">👥 กลุ่ม — ดูข้อความเท่านั้น</p>
+              </div>
+            ) : <div className="border-t theme-border theme-bg-secondary px-3 py-3 shrink-0">
               <div className="flex items-end gap-2">
                 {/* Quick Reply toggle */}
                 <button
@@ -767,7 +772,7 @@ export default function InboxPage() {
               <p className="text-[13px] theme-text-muted mt-1.5 px-1">
                 Enter = ส่ง · Shift+Enter = ขึ้นบรรทัด · ⚡ = ข้อความสำเร็จรูป
               </p>
-            </div>
+            </div>}
           </>
         )}
       </div>

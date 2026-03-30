@@ -69,7 +69,7 @@ export default function ConnectionsPage() {
       {/* Header */}
       <header className="border-b theme-border px-3 md:px-6 py-4 sticky top-0 theme-bg backdrop-blur z-10">
         <div className="flex items-center gap-3">
-          <Link href="/dashboard" className="theme-text-secondary hover:theme-text transition text-sm">&larr; Dashboard</Link>
+          <Link href="/" className="theme-text-secondary hover:theme-text transition text-sm">&larr; Dashboard</Link>
           <div className="w-px h-5 theme-border" />
           <div className="w-7 h-7 bg-gradient-to-br from-indigo-500 to-cyan-500 rounded-lg flex items-center justify-center text-sm">🔗</div>
           <h1 className="text-lg font-bold">เชื่อมต่อช่องทาง</h1>

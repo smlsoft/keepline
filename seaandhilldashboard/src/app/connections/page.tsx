@@ -143,7 +143,7 @@ export default function ConnectionsPage() {
                   {lineTesting ? "กำลังตรวจสอบ..." : "ตรวจสอบสถานะ"}
                 </button>
                 <Link
-                  href="/dashboard/settings"
+                  href="/settings"
                   className="px-4 py-2 theme-bg-card hover:theme-bg-hover border theme-border rounded-lg text-xs theme-text-secondary hover:theme-text transition"
                 >
                   แก้ไข Token
@@ -173,7 +173,7 @@ export default function ConnectionsPage() {
                 </ol>
               </div>
               <Link
-                href="/dashboard/settings"
+                href="/settings"
                 className="inline-block px-5 py-2.5 bg-green-800 hover:bg-green-700 rounded-xl text-sm font-medium text-white transition"
               >
                 ตั้งค่า LINE OA →

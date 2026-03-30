@@ -80,9 +80,9 @@ export default function UserMenu() {
             {/* Nav links */}
             <div className="border-t theme-border">
               {[
-                { href: "/dashboard/settings", icon: "⚙️", label: "Settings" },
-                { href: "/dashboard/connections", icon: "🔗", label: "Connections" },
-                { href: "/dashboard/team", icon: "👥", label: "ทีม" },
+                { href: "/settings", icon: "⚙️", label: "Settings" },
+                { href: "/connections", icon: "🔗", label: "Connections" },
+                { href: "/team", icon: "👥", label: "ทีม" },
               ].map(({ href, icon, label }) => (
                 <Link
                   key={href}

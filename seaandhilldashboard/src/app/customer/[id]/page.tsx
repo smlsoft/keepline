@@ -15,6 +15,7 @@ interface Message {
   location?: { title?: string; address?: string; latitude: number; longitude: number } | null;
   sticker?: { packageId: string; stickerId: string } | null;
   hasImage?: boolean;
+  file?: { fileName: string; fileSize: number; r2Key?: string; fileUrl?: string } | null;
   createdAt?: string;
   platform?: string;
   sourceId?: string;

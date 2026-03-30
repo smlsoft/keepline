@@ -10,6 +10,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const rateLimit = require("express-rate-limit");
+const { uploadToR2, getR2SignedUrl, isR2Ready } = require("./r2");
 const app = express();
 
 // === Rate Limiters (Security) ===
@@ -1050,12 +1051,19 @@ async function processEvent(event) {
     msgContent = msg.text || "";
   }
 
-  // 🖼️ Image → download เก็บ base64 + Vision AI
+  // 🖼️ Image → download → upload R2 + Vision AI
   if (msg.type === "image") {
     const imgBuffer = await downloadLineImage(msg.id);
     if (imgBuffer) {
-      imageData = `data:image/jpeg;base64,${imgBuffer.toString("base64")}`;
-      extras.push(`+img(${(imgBuffer.length / 1024).toFixed(0)}KB)`);
+      // Upload R2 แทน base64
+      const r2Key = await uploadToR2(sourceId, `${msg.id}.jpg`, imgBuffer, "image/jpeg");
+      if (r2Key) {
+        imageData = `r2://${r2Key}`;
+        extras.push(`+img(R2,${(imgBuffer.length / 1024).toFixed(0)}KB)`);
+      } else {
+        imageData = `line-content://${msg.id}`;
+        extras.push(`+img(no-r2,${(imgBuffer.length / 1024).toFixed(0)}KB)`);
+      }
 
       // Vision AI — วิเคราะห์รูปเป็นข้อความเก็บไว้สำหรับ RAG/analytics
       imageDescription = await analyzeImage(imgBuffer);
@@ -1066,27 +1074,38 @@ async function processEvent(event) {
     msgContent = imageDescription || "[รูปภาพ]";
   }
 
-  // 🎥 Video → download เก็บ base64 (ถ้าไม่ใหญ่เกิน) หรือเก็บ messageId
+  // 🎥 Video → download → upload R2
   if (msg.type === "video") {
-    const vidBuffer = await downloadLineImage(msg.id); // LINE Data API ใช้ endpoint เดียวกัน
-    if (vidBuffer && vidBuffer.length < 5 * 1024 * 1024) { // < 5MB → เก็บ base64
-      videoUrl = `data:video/mp4;base64,${vidBuffer.toString("base64")}`;
-      extras.push(`+vid(${(vidBuffer.length / 1024).toFixed(0)}KB)`);
+    const vidBuffer = await downloadLineImage(msg.id);
+    if (vidBuffer && vidBuffer.length < 50 * 1024 * 1024) { // < 50MB
+      const r2Key = await uploadToR2(sourceId, `${msg.id}.mp4`, vidBuffer, "video/mp4");
+      if (r2Key) {
+        videoUrl = `r2://${r2Key}`;
+        extras.push(`+vid(R2,${(vidBuffer.length / 1024 / 1024).toFixed(1)}MB)`);
+      } else {
+        videoUrl = `line-content://${msg.id}`;
+        extras.push(`+vid(no-r2)`);
+      }
     } else if (vidBuffer) {
-      extras.push(`+vid(${(vidBuffer.length / 1024 / 1024).toFixed(1)}MB, too large for base64)`);
-      // เก็บ marker ว่ามีวิดีโอ แต่ไม่เก็บ base64 (ใหญ่เกิน)
       videoUrl = `line-content://${msg.id}`;
+      extras.push(`+vid(${(vidBuffer.length / 1024 / 1024).toFixed(1)}MB, too large)`);
     }
     msgContent = "[วิดีโอ]";
     audioDuration = msg.duration || null;
   }
 
-  // 🎵 Audio → download เก็บ base64
+  // 🎵 Audio → download → upload R2
   if (msg.type === "audio") {
     const audBuffer = await downloadLineImage(msg.id);
-    if (audBuffer && audBuffer.length < 5 * 1024 * 1024) { // < 5MB
-      audioUrl = `data:audio/m4a;base64,${audBuffer.toString("base64")}`;
-      extras.push(`+aud(${(audBuffer.length / 1024).toFixed(0)}KB)`);
+    if (audBuffer && audBuffer.length < 50 * 1024 * 1024) { // < 50MB
+      const r2Key = await uploadToR2(sourceId, `${msg.id}.m4a`, audBuffer, "audio/m4a");
+      if (r2Key) {
+        audioUrl = `r2://${r2Key}`;
+        extras.push(`+aud(R2,${(audBuffer.length / 1024).toFixed(0)}KB)`);
+      } else {
+        audioUrl = `line-content://${msg.id}`;
+        extras.push(`+aud(no-r2)`);
+      }
     } else if (audBuffer) {
       audioUrl = `line-content://${msg.id}`;
       extras.push(`+aud(too large)`);
@@ -1119,19 +1138,24 @@ async function processEvent(event) {
     extras.push("+loc");
   }
 
-  // 📎 File → download + เก็บข้อมูลไฟล์
+  // 📎 File → download → upload R2
   if (msg.type === "file") {
     const fileBuffer = await downloadLineImage(msg.id);
-    if (fileBuffer && fileBuffer.length < 5 * 1024 * 1024) {
-      const ext = (msg.fileName || "").split(".").pop() || "bin";
+    const fileName = msg.fileName || "file";
+    if (fileBuffer && fileBuffer.length < 50 * 1024 * 1024) { // < 50MB
+      const mimeType = fileName.endsWith(".pdf") ? "application/pdf"
+        : fileName.endsWith(".doc") || fileName.endsWith(".docx") ? "application/msword"
+        : fileName.endsWith(".xls") || fileName.endsWith(".xlsx") ? "application/vnd.ms-excel"
+        : "application/octet-stream";
+      const r2Key = await uploadToR2(sourceId, `${msg.id}-${fileName}`, fileBuffer, mimeType);
       fileData = {
-        fileName: msg.fileName || "file",
+        fileName,
         fileSize: msg.fileSize || fileBuffer.length,
-        data: `data:application/octet-stream;base64,${fileBuffer.toString("base64")}`,
+        r2Key: r2Key || null,
       };
-      extras.push(`+file(${msg.fileName})`);
+      extras.push(`+file(${r2Key ? "R2" : "no-r2"},${fileName})`);
     }
-    msgContent = `[ไฟล์: ${msg.fileName || "unknown"}]`;
+    msgContent = `[ไฟล์: ${fileName}]`;
   }
 
   // Fallback content
@@ -4052,6 +4076,17 @@ app.post("/api/inbox/upload", uploadLimiter, upload.single("image"), (req, res) 
 
 // Serve uploaded images
 app.use("/uploads", express.static(UPLOAD_DIR, { maxAge: "7d" }));
+
+// R2 media — redirect ไป signed URL
+app.get("/api/media/:key(*)", async (req, res) => {
+  try {
+    const url = await getR2SignedUrl(req.params.key);
+    if (!url) return res.status(404).json({ error: "R2 not configured" });
+    res.redirect(url);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 // === AI Suggest Reply — แนะนำคำตอบ + เหตุผลให้ Admin ===
 app.post("/api/inbox/suggest", aiLimiter, express.json(), async (req, res) => {

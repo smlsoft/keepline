@@ -11,9 +11,11 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1019.0",
+    "@aws-sdk/s3-request-presigner": "^3.1019.0",
     "express": "^5.2.1",
-    "mongodb": "^7.1.0",
     "express-rate-limit": "^7.5.0",
+    "mongodb": "^7.1.0",
     "multer": "^1.4.5-lts.2"
   }
 }

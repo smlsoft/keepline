@@ -1058,7 +1058,7 @@ async function processEvent(event) {
       // Upload R2 แทน base64
       const r2Key = await uploadToR2(sourceId, `${msg.id}.jpg`, imgBuffer, "image/jpeg");
       if (r2Key) {
-        imageData = `r2://${r2Key}`;
+        imageData = `/api/media/${r2Key}`;
         extras.push(`+img(R2,${(imgBuffer.length / 1024).toFixed(0)}KB)`);
       } else {
         imageData = `line-content://${msg.id}`;
@@ -1080,7 +1080,7 @@ async function processEvent(event) {
     if (vidBuffer && vidBuffer.length < 50 * 1024 * 1024) { // < 50MB
       const r2Key = await uploadToR2(sourceId, `${msg.id}.mp4`, vidBuffer, "video/mp4");
       if (r2Key) {
-        videoUrl = `r2://${r2Key}`;
+        videoUrl = `/api/media/${r2Key}`;
         extras.push(`+vid(R2,${(vidBuffer.length / 1024 / 1024).toFixed(1)}MB)`);
       } else {
         videoUrl = `line-content://${msg.id}`;
@@ -1100,7 +1100,7 @@ async function processEvent(event) {
     if (audBuffer && audBuffer.length < 50 * 1024 * 1024) { // < 50MB
       const r2Key = await uploadToR2(sourceId, `${msg.id}.m4a`, audBuffer, "audio/m4a");
       if (r2Key) {
-        audioUrl = `r2://${r2Key}`;
+        audioUrl = `/api/media/${r2Key}`;
         extras.push(`+aud(R2,${(audBuffer.length / 1024).toFixed(0)}KB)`);
       } else {
         audioUrl = `line-content://${msg.id}`;
@@ -1152,6 +1152,7 @@ async function processEvent(event) {
         fileName,
         fileSize: msg.fileSize || fileBuffer.length,
         r2Key: r2Key || null,
+        fileUrl: r2Key ? `/api/media/${r2Key}` : null,
       };
       extras.push(`+file(${r2Key ? "R2" : "no-r2"},${fileName})`);
     }

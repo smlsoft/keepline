@@ -272,7 +272,7 @@ export default function CrmPage() {
                       <td className="py-3 px-2">
                         <div className="flex flex-wrap gap-1 max-w-[180px]">
                           {(c.groups || []).slice(0, 3).map((g) => (
-                            <Link key={g.sourceId} href={`/dashboard/group/${g.sourceId}`}
+                            <Link key={g.sourceId} href={`/group/${g.sourceId}`}
                               className="text-[12px] px-1.5 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/30 hover:bg-cyan-800/50 transition truncate max-w-[120px]"
                               title={`${g.groupName} (${g.messageCount} ข้อความ)`}>
                               {g.groupName}

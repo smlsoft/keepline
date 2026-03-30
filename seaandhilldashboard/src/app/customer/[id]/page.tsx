@@ -169,7 +169,7 @@ export default function CustomerConversationPage({ params }: { params: Promise<{
             <h3 className="text-sm font-bold theme-text mb-3">👥 กลุ่มที่อยู่</h3>
             <div className="space-y-2">
               {customer.groups.map((g) => (
-                <Link key={g.sourceId} href={`/dashboard/group/${g.sourceId}`}
+                <Link key={g.sourceId} href={`/group/${g.sourceId}`}
                   className="flex items-center justify-between px-3 py-2 rounded-lg theme-bg-secondary hover:theme-bg-hover transition border theme-border">
                   <div className="flex items-center gap-2">
                     <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/30 font-medium">

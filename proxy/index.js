@@ -4081,7 +4081,9 @@ app.use("/uploads", express.static(UPLOAD_DIR, { maxAge: "7d" }));
 // R2 media — redirect ไป signed URL
 app.get("/api/media/*key", async (req, res) => {
   try {
-    const url = await getR2SignedUrl(req.params.key);
+    // Express 5 wildcard returns array → join กลับเป็น path
+    const key = Array.isArray(req.params.key) ? req.params.key.join("/") : req.params.key;
+    const url = await getR2SignedUrl(key);
     if (!url) return res.status(404).json({ error: "R2 not configured" });
     res.redirect(url);
   } catch (e) {

@@ -4078,14 +4078,18 @@ app.post("/api/inbox/upload", uploadLimiter, upload.single("image"), (req, res) 
 // Serve uploaded images
 app.use("/uploads", express.static(UPLOAD_DIR, { maxAge: "7d" }));
 
-// R2 media — redirect ไป signed URL
+// R2 media — proxy ไฟล์จาก R2 (ไม่ redirect เพราะ signed URL ผูก IP)
 app.get("/api/media/*key", async (req, res) => {
   try {
-    // Express 5 wildcard returns array → join กลับเป็น path
     const key = Array.isArray(req.params.key) ? req.params.key.join("/") : req.params.key;
     const url = await getR2SignedUrl(key);
     if (!url) return res.status(404).json({ error: "R2 not configured" });
-    res.redirect(url);
+    const r2Res = await fetch(url);
+    if (!r2Res.ok) return res.status(r2Res.status).end();
+    res.set("Content-Type", r2Res.headers.get("content-type") || "application/octet-stream");
+    res.set("Cache-Control", "public, max-age=86400"); // cache 1 วัน
+    const buf = Buffer.from(await r2Res.arrayBuffer());
+    res.send(buf);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

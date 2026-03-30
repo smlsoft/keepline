@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const [staffDocs, customers] = await Promise.all([
       db.collection("staff").find().sort({ name: 1 }).toArray(),
       withAvailable
-        ? db.collection("customers").find({ lineUserId: { $ne: null } }).project({ name: 1, lineUserId: 1, avatarUrl: 1 }).sort({ name: 1 }).toArray()
+        ? db.collection("customers").find({ lineUserId: { $exists: true, $nin: [null, ""] } }).project({ name: 1, lineUserId: 1, avatarUrl: 1 }).sort({ name: 1 }).toArray()
         : Promise.resolve(null),
     ]);
 

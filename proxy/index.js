@@ -332,6 +332,28 @@ async function getDB() {
 }
 
 
+// === Staff Detection — lookup จาก staff collection (cache 5 นาที) ===
+let staffUserIdCache = null;
+let staffCacheTime = 0;
+async function getStaffUserIds() {
+  if (staffUserIdCache && Date.now() - staffCacheTime < 300000) return staffUserIdCache;
+  try {
+    const db = await getDB();
+    if (!db) return new Set();
+    const docs = await db.collection("staff").find({ active: true, lineUserId: { $ne: null } }).project({ lineUserId: 1 }).toArray();
+    staffUserIdCache = new Set(docs.map(s => s.lineUserId));
+    staffCacheTime = Date.now();
+    return staffUserIdCache;
+  } catch { return staffUserIdCache || new Set(); }
+}
+async function isStaffByLineUserId(lineUserId) {
+  if (!lineUserId) return false;
+  const ids = await getStaffUserIds();
+  return ids.has(lineUserId);
+}
+// เคลียร์ cache เมื่อ staff collection เปลี่ยน (เรียกจาก dashboard API)
+function clearStaffCache() { staffUserIdCache = null; staffCacheTime = 0; }
+
 // === Collection เดียว: messages (แยกด้วย sourceId field) ===
 const MESSAGES_COLL = "messages";
 
@@ -753,8 +775,9 @@ const PAYMENT_KEYWORDS = [
 ];
 
 async function detectPayment(sourceId, msg, platform, messageId) {
-  // ข้ามข้อความ staff/bot
-  if ((msg.userName || "").toUpperCase().startsWith("SML")) return;
+  // ข้ามข้อความ staff/bot — ตรวจจาก staff collection + fallback SML prefix
+  const isStaff = await isStaffByLineUserId(msg.userId) || (msg.userName || "").toUpperCase().startsWith("SML");
+  if (isStaff) return;
   if (msg.role === "assistant") return;
 
   const text = (msg.content || "").toLowerCase();
@@ -1855,12 +1878,13 @@ async function replyToLine(replyToken, text, quickReplies) {
 }
 
 // === น้องกุ้งตอบแทน — ตรวจสอบว่าควรตอบหรือไม่ ===
-async function shouldAiReply(config, text, userName, source) {
+async function shouldAiReply(config, text, userName, source, lineUserId) {
   const mode = config.aiReplyMode || "off";
   if (mode === "off") return false;
 
-  // ไม่ตอบข้อความจากพนักงาน SML
-  if (userName && userName.startsWith("SML")) return false;
+  // ไม่ตอบข้อความจากพนักงาน — ตรวจจาก staff collection + fallback SML prefix
+  const isStaff = await isStaffByLineUserId(lineUserId) || (userName && userName.startsWith("SML"));
+  if (isStaff) return false;
 
   // mode: auto → ตอบทุกข้อความ (ยกเว้นพนักงาน)
   if (mode === "auto") return true;
@@ -1968,9 +1992,12 @@ async function pushToLine(to, text, quickReplies) {
 // === Slow Response Detection — เตือนตอบช้าเกิน 1 นาที ===
 const SLOW_THRESHOLD_MS = 60000; // 1 นาที
 
-async function checkSlowResponse(sourceId, staffName) {
+async function checkSlowResponse(sourceId, staffName, lineUserId) {
   const nameUpper = (staffName || "").toUpperCase();
-  if (!nameUpper.startsWith("SML")) return; // เฉพาะพนักงาน
+  // เฉพาะพนักงาน — ตรวจจาก staff collection + fallback SML prefix
+  const staffIds = await getStaffUserIds();
+  const isStaff = (lineUserId && staffIds.has(lineUserId)) || nameUpper.startsWith("SML");
+  if (!isStaff) return;
 
   const database = await getDB();
   if (!database) return;
@@ -1980,7 +2007,7 @@ async function checkSlowResponse(sourceId, staffName) {
     .find({ sourceId })
     .sort({ createdAt: -1 })
     .limit(5)
-    .project({ userName: 1, createdAt: 1 })
+    .project({ userName: 1, userId: 1, createdAt: 1 })
     .toArray();
 
   if (lastMsgs.length < 2) return;
@@ -1990,7 +2017,8 @@ async function checkSlowResponse(sourceId, staffName) {
   const customerMsg = lastMsgs.find((m, i) => {
     if (i === 0) return false;
     const n = (m.userName || "").toUpperCase();
-    return !n.startsWith("SML") && !n.includes("น้องกุ้ง");
+    const msgIsStaff = staffIds.has(m.userId) || n.startsWith("SML");
+    return !msgIsStaff && !n.includes("น้องกุ้ง");
   });
 
   if (!customerMsg || !customerMsg.createdAt || !staffMsg.createdAt) return;
@@ -2025,8 +2053,9 @@ async function upsertCustomer(sourceId, userName, lineUserId, source) {
   const database = await getDB();
   if (!database || !lineUserId) return;
 
+  // ข้ามพนักงาน — ตรวจจาก staff collection + fallback SML prefix
   const nameUpper = (userName || "").toUpperCase();
-  const isStaff = nameUpper.startsWith("SML") || nameUpper.startsWith("SML-");
+  const isStaff = await isStaffByLineUserId(lineUserId) || nameUpper.startsWith("SML");
   if (isStaff) return;
 
   // ดึง LINE profile
@@ -2090,8 +2119,9 @@ async function analyzeChat(sourceId, userName, messageText, lineUserId, source) 
   const database = await getDB();
   if (!database) return;
 
+  // ตรวจพนักงานจาก staff collection + fallback SML prefix
   const nameUpper = (userName || "").toUpperCase();
-  const isStaff = nameUpper.startsWith("SML") || nameUpper.startsWith("SML-");
+  const isStaff = await isStaffByLineUserId(lineUserId) || nameUpper.startsWith("SML");
   const isBot = nameUpper.includes("น้องกุ้ง") || nameUpper === "น้องกุ้ง";
   if (isBot) return; // ข้ามข้อความจาก bot เก่า
   const userId = userName || "Unknown";
@@ -2445,7 +2475,7 @@ app.post("/webhook", express.raw({ type: "*/*" }), async (req, res) => {
       console.log(`[Listen] ${userName}@${sourceId.substring(0, 8)}: ${messageText.substring(0, 40)}`);
 
       // ตรวจจับตอบช้า
-      checkSlowResponse(sourceId, userName).catch(() => {});
+      checkSlowResponse(sourceId, userName, lineUserId).catch(() => {});
 
       // Skill-Based Analytics
       analyzeChat(sourceId, userName, messageText, lineUserId, source).catch((e) => console.error("[Skill] Catch:", e.message));
@@ -2463,7 +2493,7 @@ app.post("/webhook", express.raw({ type: "*/*" }), async (req, res) => {
       const isOptedOut = await checkOptedOut(sourceId).catch(() => false);
       if (msg.text && event.replyToken && !isOptedOut) {
         const config = await getBotConfig(sourceId);
-        const shouldReply = await shouldAiReply(config, msg.text, userName, source);
+        const shouldReply = await shouldAiReply(config, msg.text, userName, source, lineUserId);
         if (shouldReply) {
           console.log(`[AI-Reply] น้องกุ้งตอบแทน → ${sourceId.substring(0, 8)}`);
           aiReplyToLine(event, sourceId, userName, msg.text, config).catch((e) =>
@@ -3071,6 +3101,12 @@ app.post("/api/advisor/update-pulled", express.json(), async (req, res) => {
     console.error("[Advisor API] update-pulled error:", e.message);
     res.status(500).json({ error: e.message });
   }
+});
+
+// === Staff Cache API — เคลียร์ cache เมื่อ staff เปลี่ยน ===
+app.post("/api/staff/clear-cache", (req, res) => {
+  clearStaffCache();
+  res.json({ ok: true });
 });
 
 // === Cost Tracking API ===

@@ -2020,6 +2020,69 @@ async function checkSlowResponse(sourceId, staffName) {
 // === Skill-Based Analytics — แยกคน แยกห้อง ประหยัด token ===
 // แต่ละข้อความ → ดึง skill เดิมของคนนั้น + ข้อความใหม่ → AI อัปเดต skill → รวมเป็นห้อง
 
+// === Auto-create/update ลูกค้า — ไม่พึ่ง AI ทำเสมอทุกข้อความ ===
+async function upsertCustomer(sourceId, userName, lineUserId, source) {
+  const database = await getDB();
+  if (!database || !lineUserId) return;
+
+  const nameUpper = (userName || "").toUpperCase();
+  const isStaff = nameUpper.startsWith("SML") || nameUpper.startsWith("SML-");
+  if (isStaff) return;
+
+  // ดึง LINE profile
+  let lineProfile = {};
+  try {
+    const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+    let profileUrl;
+    if (source?.type === "group" && source?.groupId) {
+      profileUrl = `https://api.line.me/v2/bot/group/${source.groupId}/member/${lineUserId}`;
+    } else {
+      profileUrl = `https://api.line.me/v2/bot/profile/${lineUserId}`;
+    }
+    const pRes = await fetch(profileUrl, { headers: { Authorization: `Bearer ${token}` } });
+    if (pRes.ok) {
+      const p = await pRes.json();
+      lineProfile = { avatarUrl: p.pictureUrl || "", statusMessage: p.statusMessage || "" };
+    }
+  } catch {}
+
+  await database.collection("customers").updateOne(
+    { lineUserId },
+    {
+      $set: { lineUserId, name: userName, ...lineProfile, updatedAt: new Date() },
+      $addToSet: { rooms: sourceId },
+      $inc: { totalMessages: 1 },
+      $setOnInsert: {
+        createdAt: new Date(),
+        firstName: "", lastName: "",
+        company: "", position: "",
+        phone: "", email: "", address: "",
+        notes: "", customTags: [], tags: [],
+        groups: [],
+        pipelineStage: "new",
+        lastSentiment: null, lastPurchaseIntent: null,
+        dealValue: 0, expectedCloseDate: null, assignedTo: [],
+      },
+    },
+    { upsert: true }
+  );
+
+  // Track group membership
+  if (source.type === "group" || source.type === "room") {
+    const groupName = await getGroupName(source.groupId || source.roomId);
+    await database.collection("customers").updateOne(
+      { lineUserId, "groups.sourceId": sourceId },
+      { $set: { "groups.$.groupName": groupName, "groups.$.lastActiveAt": new Date() }, $inc: { "groups.$.messageCount": 1 } }
+    );
+    await database.collection("customers").updateOne(
+      { lineUserId, "groups.sourceId": { $ne: sourceId } },
+      { $addToSet: { groups: { sourceId, groupName, messageCount: 1, lastActiveAt: new Date() } } }
+    );
+  }
+
+  console.log(`[Customer] ${userName}@${sourceId.substring(0, 8)}: upserted (${source.type})`);
+}
+
 async function analyzeChat(sourceId, userName, messageText, lineUserId, source) {
   if (!messageText || messageText === "undefined") return;
   if (messageText.trim().length < 2) return;
@@ -2097,73 +2160,20 @@ pipelineStage: new=ใหม่, interested=สนใจ, quoting=เสนอ�
       { upsert: true }
     );
 
-    // 4. Auto-create/update ลูกค้าใน CRM + ดึง LINE profile อัตโนมัติ
+    // 4. อัพเดต sentiment/tags ใน customer (customer ถูกสร้างใน upsertCustomer แล้ว)
     if (!isStaff && lineUserId) {
-      // ดึง LINE profile (รูป, ชื่อ, status)
-      let lineProfile = {};
-      try {
-        const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
-        let profileUrl;
-        if (source?.type === "group" && source?.groupId) {
-          profileUrl = `https://api.line.me/v2/bot/group/${source.groupId}/member/${lineUserId}`;
-        } else {
-          profileUrl = `https://api.line.me/v2/bot/profile/${lineUserId}`;
-        }
-        const pRes = await fetch(profileUrl, { headers: { Authorization: `Bearer ${token}` } });
-        if (pRes.ok) {
-          const p = await pRes.json();
-          lineProfile = {
-            avatarUrl: p.pictureUrl || "",
-            statusMessage: p.statusMessage || "",
-          };
-        }
-      } catch {}
-
       await database.collection("customers").updateOne(
         { lineUserId },
         {
           $set: {
-            lineUserId,
-            name: userName,
-            ...lineProfile,
-            updatedAt: new Date(),
             lastSentiment: skill.sentiment,
             lastPurchaseIntent: skill.purchaseIntent,
             pipelineStage,
+            updatedAt: new Date(),
           },
-          $addToSet: {
-            rooms: sourceId,
-            tags: { $each: tags },
-          },
-          $inc: { totalMessages: 1 },
-          $setOnInsert: {
-            createdAt: new Date(),
-            firstName: "", lastName: "",
-            company: "", position: "",
-            phone: "", email: "", address: "",
-            notes: "", customTags: [],
-            groups: [],
-            dealValue: 0, expectedCloseDate: null,
-            assignedTo: [],
-          },
-        },
-        { upsert: true }
+          $addToSet: { tags: { $each: tags } },
+        }
       );
-
-      // Track group membership
-      if (source.type === "group" || source.type === "room") {
-        const custGroupName = await getGroupName(source.groupId || source.roomId);
-        // Update group entry in customer's groups array
-        await database.collection("customers").updateOne(
-          { lineUserId, "groups.sourceId": sourceId },
-          { $set: { "groups.$.groupName": custGroupName, "groups.$.lastActiveAt": new Date() }, $inc: { "groups.$.messageCount": 1 } }
-        );
-        // If group entry doesn't exist yet, add it
-        await database.collection("customers").updateOne(
-          { lineUserId, "groups.sourceId": { $ne: sourceId } },
-          { $addToSet: { groups: { sourceId, groupName: custGroupName, messageCount: 1, lastActiveAt: new Date() } } }
-        );
-      }
     }
 
     console.log(`[Skill] ${userName}@${sourceId.substring(0, 8)}: sentiment=${skill.sentiment?.level}(${skill.sentiment?.score}) purchase=${skill.purchaseIntent?.level}(${skill.purchaseIntent?.score}) tags=[${tags.join(",")}] stage=${pipelineStage}`);
@@ -2427,6 +2437,11 @@ app.post("/webhook", express.raw({ type: "*/*" }), async (req, res) => {
       const userName = await getUserName(source).catch(() => "User");
       const messageText = msg.text || `[${msg.type}]`;
       const lineUserId = source.userId || null;
+
+      // === Auto-create/update ลูกค้า (ไม่พึ่ง AI — ทำเสมอ) ===
+      if (lineUserId) {
+        upsertCustomer(sourceId, userName, lineUserId, source).catch(e => console.error("[Customer]", e.message));
+      }
       console.log(`[Listen] ${userName}@${sourceId.substring(0, 8)}: ${messageText.substring(0, 40)}`);
 
       // ตรวจจับตอบช้า

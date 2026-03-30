@@ -82,37 +82,7 @@ if (typeof window !== "undefined") {
   window.addEventListener("click", unlock, { once: true });
 }
 
-// ─── นิทานสั้น — CEO ว่างเล่าให้พนักงานฟัง ───
-let ceoStories: string[] = [];
-let lastStoryFetch = 0;
-let storyIdx = 0;
-
-async function fetchCeoStories() {
-  if (typeof window === "undefined") return;
-  if (Date.now() - lastStoryFetch < 300000 && ceoStories.length > 0) return; // ดึงทุก 5 นาที
-  try {
-    const r = await fetch("/dashboard/api/ceo-review?" + new URLSearchParams({ story: "1" }));
-    const d = await r.json();
-    if (d.stories && Array.isArray(d.stories) && d.stories.length > 0) {
-      ceoStories = d.stories;
-      lastStoryFetch = Date.now();
-      storyIdx = 0;
-    }
-  } catch { /* keep existing */ }
-}
-
-function getNextStory(): string | null {
-  if (ceoStories.length === 0) return null;
-  const s = ceoStories[storyIdx % ceoStories.length];
-  storyIdx++;
-  return s;
-}
-
-// โหลดนิทานเริ่มต้น
-if (typeof window !== "undefined") {
-  setTimeout(fetchCeoStories, 5000); // รอ 5 วิ หลังโหลดหน้า
-  setInterval(fetchCeoStories, 300000);
-}
+// CEO balloon — แสดงข้อความจาก ceoPlan (ข้อมูลจริง)
 
 // Edge TTS (Neural voice) → fallback Web Speech API
 async function edgeTTS(text: string, voice: string, speed: number): Promise<boolean> {
@@ -536,16 +506,19 @@ function Floor() {
 }
 
 // ─── CEO Quote (แสดงคำบ่น) ───
-function CEOQuote({ quotes, stateRef }: { quotes: string[]; stateRef: React.RefObject<{ quoteIdx: number; quoteTime: number }> }) {
-  const [text, setText] = useState(quotes[0]);
-  useFrame((s) => {
+function CEOQuote({ stateRef }: { stateRef: React.RefObject<{ currentAgentName: string; quoteTime: number }> }) {
+  const [text, setText] = useState("...");
+  useFrame(() => {
     const st = stateRef.current;
     if (!st) return;
-    const newText = quotes[st.quoteIdx % quotes.length];
+    const name = st.currentAgentName;
+    // แสดงข้อความจาก ceoPlan (ข้อมูลจริง)
+    const plan = name ? (ceoPlan[name] || ceoPlan[name.replace("น้องกุ้ง", "")]) : null;
+    const newText = plan?.ceo ? `→ ${name}: ${plan.ceo.substring(0, 30)}` : (name ? `→ ${name}` : "...");
     if (newText !== text) setText(newText);
   });
   return (
-    <div style={{ marginTop: 3, fontSize: 9, color: "#fff", background: "rgba(0,0,0,0.5)", borderRadius: 5, padding: "2px 6px", whiteSpace: "nowrap" }}>
+    <div style={{ marginTop: 3, fontSize: 9, color: "#fff", background: "rgba(0,0,0,0.5)", borderRadius: 5, padding: "2px 6px", whiteSpace: "nowrap", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>
       {text}
     </div>
   );
@@ -561,14 +534,9 @@ function CEOShrimp({ agents, deskPositions, ttsEnabled = true }: { agents: Agent
   const waypointsRef = useRef<[number, number][]>([[0.5, 0]]);
   const lastPlanCheck = useRef("");
 
-  // คำพูด CEO สำหรับ balloon text (แสดงระหว่างเดิน)
-  // CEO balloon text จาก plan (AI สร้าง) ไม่ hardcode
-  const CEO_QUOTES = useMemo(() => {
-    const quotes = Object.values(ceoPlan).map(p => p.ceo).filter(Boolean);
-    return quotes.length > 0 ? quotes : ["..."];
-  }, []);
+  // CEO balloon text อัปเดตจาก ceoPlan (global) realtime ผ่าน CEOQuote component
   const flagRef = useRef<THREE.Mesh>(null!);
-  const state = useRef({ wpIdx: 0, x: 0.5, z: 0, vx: 0, vz: 0, facingAngle: 0, legPhase: 0, pauseUntil: 0, quoteIdx: 0, quoteTime: 0, flagWave: 0, targetAngleAtPause: 0, currentAgentName: "" });
+  const state = useRef({ wpIdx: 0, x: 0.5, z: 0, vx: 0, vz: 0, facingAngle: 0, legPhase: 0, pauseUntil: 0, quoteTime: 0, flagWave: 0, targetAngleAtPause: 0, currentAgentName: "" });
 
   useFrame((s, delta) => {
     if (!ref.current) return;
@@ -639,8 +607,7 @@ function CEOShrimp({ agents, deskPositions, ttsEnabled = true }: { agents: Agent
         st.currentAgentName = agents[st.wpIdx % agents.length]?.name || "";
       }
       st.wpIdx = (st.wpIdx + 1) % waypoints.length;
-      // พูดทุก waypoint
-      st.quoteIdx = (st.quoteIdx + 1) % CEO_QUOTES.length;
+      // พูดทุก waypoint — ใช้ข้อมูลจริงจาก ceoPlan
       st.quoteTime = now;
       ceoSpeak(st.currentAgentName, ttsEnabled);
       return;
@@ -717,7 +684,7 @@ function CEOShrimp({ agents, deskPositions, ttsEnabled = true }: { agents: Agent
           <div style={{ background: "linear-gradient(135deg, #ffd700, #ff8c00)", color: "#000", padding: "2px 10px", borderRadius: 6, fontSize: 10, fontWeight: 800, whiteSpace: "nowrap", boxShadow: "0 2px 12px rgba(255,215,0,0.5)" }}>
             👑 น้องกุ้ง CEO
           </div>
-          <CEOQuote quotes={CEO_QUOTES} stateRef={state} />
+          <CEOQuote stateRef={state} />
         </div>
       </Html>
       {/* Glow */}

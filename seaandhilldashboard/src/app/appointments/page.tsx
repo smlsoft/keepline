@@ -162,20 +162,20 @@ export default function AppointmentsPage() {
 
             <div className="space-y-3">
               <div>
-                <label className="block text-[11px] mb-1" style={{ color: "var(--text-muted)" }}>หัวข้อ *</label>
+                <label className="block text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>หัวข้อ *</label>
                 <input value={form.title} onChange={e => setForm({ ...form, title: e.target.value })}
                   placeholder="เช่น นัดดูหน้างาน, ส่งสินค้า..."
                   className="w-full px-3 py-2 rounded-lg border text-sm" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] mb-1" style={{ color: "var(--text-muted)" }}>ลูกค้า</label>
+                  <label className="block text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>ลูกค้า</label>
                   <input value={form.customerName} onChange={e => setForm({ ...form, customerName: e.target.value })}
                     placeholder="ชื่อลูกค้า"
                     className="w-full px-3 py-2 rounded-lg border text-sm" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
                 </div>
                 <div>
-                  <label className="block text-[11px] mb-1" style={{ color: "var(--text-muted)" }}>เบอร์โทร</label>
+                  <label className="block text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>เบอร์โทร</label>
                   <input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })}
                     placeholder="08x-xxx-xxxx"
                     className="w-full px-3 py-2 rounded-lg border text-sm" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
@@ -183,13 +183,13 @@ export default function AppointmentsPage() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] mb-1" style={{ color: "var(--text-muted)" }}>ผู้รับผิดชอบ</label>
+                  <label className="block text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>ผู้รับผิดชอบ</label>
                   <input value={form.staffName} onChange={e => setForm({ ...form, staffName: e.target.value })}
                     placeholder="ชื่อพนักงาน"
                     className="w-full px-3 py-2 rounded-lg border text-sm" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
                 </div>
                 <div>
-                  <label className="block text-[11px] mb-1" style={{ color: "var(--text-muted)" }}>ประเภท</label>
+                  <label className="block text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>ประเภท</label>
                   <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}
                     className="w-full px-3 py-2 rounded-lg border text-sm" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }}>
                     {Object.entries(TYPES).map(([k, v]) => <option key={k} value={k}>{v.icon} {v.label}</option>)}
@@ -198,30 +198,30 @@ export default function AppointmentsPage() {
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-[11px] mb-1" style={{ color: "var(--text-muted)" }}>วันที่ *</label>
+                  <label className="block text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>วันที่ *</label>
                   <input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })}
                     className="w-full px-3 py-2 rounded-lg border text-sm" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
                 </div>
                 <div>
-                  <label className="block text-[11px] mb-1" style={{ color: "var(--text-muted)" }}>เวลาเริ่ม</label>
+                  <label className="block text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>เวลาเริ่ม</label>
                   <input type="time" value={form.startTime} onChange={e => setForm({ ...form, startTime: e.target.value })}
                     className="w-full px-3 py-2 rounded-lg border text-sm" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
                 </div>
                 <div>
-                  <label className="block text-[11px] mb-1" style={{ color: "var(--text-muted)" }}>เวลาสิ้นสุด</label>
+                  <label className="block text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>เวลาสิ้นสุด</label>
                   <input type="time" value={form.endTime} onChange={e => setForm({ ...form, endTime: e.target.value })}
                     className="w-full px-3 py-2 rounded-lg border text-sm" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] mb-1" style={{ color: "var(--text-muted)" }}>สถานที่</label>
+                  <label className="block text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>สถานที่</label>
                   <input value={form.location} onChange={e => setForm({ ...form, location: e.target.value })}
                     placeholder="ที่อยู่ / สถานที่นัด"
                     className="w-full px-3 py-2 rounded-lg border text-sm" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
                 </div>
                 <div>
-                  <label className="block text-[11px] mb-1" style={{ color: "var(--text-muted)" }}>ความสำคัญ</label>
+                  <label className="block text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>ความสำคัญ</label>
                   <select value={form.priority} onChange={e => setForm({ ...form, priority: e.target.value })}
                     className="w-full px-3 py-2 rounded-lg border text-sm" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }}>
                     <option value="high">🔴 ด่วน</option>
@@ -231,7 +231,7 @@ export default function AppointmentsPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-[11px] mb-1" style={{ color: "var(--text-muted)" }}>หมายเหตุ</label>
+                <label className="block text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>หมายเหตุ</label>
                 <textarea value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} rows={2}
                   placeholder="รายละเอียดเพิ่มเติม..."
                   className="w-full px-3 py-2 rounded-lg border text-sm resize-none" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
@@ -285,19 +285,19 @@ export default function AppointmentsPage() {
         {stats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
             <div className="stat-card">
-              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>วันนี้</p>
+              <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>วันนี้</p>
               <p className="text-2xl font-bold text-indigo-400">{stats.today}</p>
             </div>
             <div className="stat-card">
-              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>สัปดาห์นี้</p>
+              <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>สัปดาห์นี้</p>
               <p className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>{stats.thisWeek}</p>
             </div>
             <div className="stat-card">
-              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>รอดำเนินการ</p>
+              <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>รอดำเนินการ</p>
               <p className="text-2xl font-bold text-amber-400">{stats.upcoming}</p>
             </div>
             <div className="stat-card">
-              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>เลยกำหนด</p>
+              <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>เลยกำหนด</p>
               <p className="text-2xl font-bold text-red-400">{stats.overdue}</p>
             </div>
           </div>
@@ -349,8 +349,8 @@ export default function AppointmentsPage() {
                   <span className={`text-xs font-bold ${isToday(dateKey) ? "px-2 py-0.5 rounded-lg gradient-bg text-white" : ""}`}>
                     {isToday(dateKey) ? "วันนี้" : formatDate(dateKey)}
                   </span>
-                  <span className="text-[10px]">{formatDateFull(dateKey)}</span>
-                  <span className="text-[10px] px-1.5 rounded-full" style={{ background: "var(--primary-bg)", color: "var(--primary)" }}>{apts.length}</span>
+                  <span className="text-[13px]">{formatDateFull(dateKey)}</span>
+                  <span className="text-[13px] px-1.5 rounded-full" style={{ background: "var(--primary-bg)", color: "var(--primary)" }}>{apts.length}</span>
                 </div>
                 <div className="space-y-2 ml-4 border-l-2 pl-4" style={{ borderColor: isToday(dateKey) ? "var(--primary)" : "var(--border)" }}>
                   {apts.map(apt => <AppointmentCard key={apt._id} apt={apt} onStatus={updateStatus} onDelete={deleteAppointment} />)}
@@ -388,8 +388,8 @@ function AppointmentCard({ apt, onStatus, onDelete }: {
           <div className={`w-10 h-10 mx-auto rounded-xl ${type.color} flex items-center justify-center text-lg text-white`}>
             {type.icon}
           </div>
-          <p className="text-[10px] font-bold mt-1" style={{ color: "var(--text-primary)" }}>{apt.startTime}</p>
-          <p className="text-[8px]" style={{ color: "var(--text-muted)" }}>{apt.endTime}</p>
+          <p className="text-[13px] font-bold mt-1" style={{ color: "var(--text-primary)" }}>{apt.startTime}</p>
+          <p className="text-[11px]" style={{ color: "var(--text-muted)" }}>{apt.endTime}</p>
         </div>
 
         {/* Content */}
@@ -397,11 +397,11 @@ function AppointmentCard({ apt, onStatus, onDelete }: {
           <div className="flex items-center gap-1.5 flex-wrap mb-1">
             <span className={`w-2 h-2 rounded-full ${priority.dot}`} />
             <span className="text-sm font-bold truncate" style={{ color: "var(--text-primary)" }}>{apt.title}</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full border font-medium ${status.bg} ${status.color}`}>{status.label}</span>
-            {past && <span className="text-[9px] px-1.5 py-0.5 rounded bg-red-500/15 text-red-400 border border-red-500/20">เลยกำหนด!</span>}
+            <span className={`text-[13px] px-2 py-0.5 rounded-full border font-medium ${status.bg} ${status.color}`}>{status.label}</span>
+            {past && <span className="text-[12px] px-1.5 py-0.5 rounded bg-red-500/15 text-red-400 border border-red-500/20">เลยกำหนด!</span>}
           </div>
 
-          <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px]" style={{ color: "var(--text-muted)" }}>
+          <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[13px]" style={{ color: "var(--text-muted)" }}>
             {apt.customerName && <span>👤 {apt.customerName}</span>}
             {apt.phone && <span>📱 {apt.phone}</span>}
             {apt.staffName && <span>👔 {apt.staffName}</span>}
@@ -410,31 +410,31 @@ function AppointmentCard({ apt, onStatus, onDelete }: {
             {apt.reminder && <span>🔔 {apt.reminderMinutes < 60 ? `${apt.reminderMinutes}น.` : `${apt.reminderMinutes / 60}ชม.`}</span>}
           </div>
 
-          {apt.notes && <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)" }}>📝 {apt.notes}</p>}
+          {apt.notes && <p className="text-[13px] mt-1" style={{ color: "var(--text-muted)" }}>📝 {apt.notes}</p>}
 
           {/* Actions */}
           {!["completed", "cancelled"].includes(apt.status) && (
             <div className="flex gap-1.5 mt-2 flex-wrap">
               {apt.status === "scheduled" && (
                 <button onClick={() => onStatus(apt._id, "confirmed")}
-                  className="px-2.5 py-1 text-[10px] rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition">✓ ยืนยัน</button>
+                  className="px-2.5 py-1 text-[13px] rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition">✓ ยืนยัน</button>
               )}
               {(apt.status === "confirmed" || apt.status === "scheduled") && (
                 <button onClick={() => onStatus(apt._id, "in_progress")}
-                  className="px-2.5 py-1 text-[10px] rounded-lg font-medium transition"
+                  className="px-2.5 py-1 text-[13px] rounded-lg font-medium transition"
                   style={{ background: "var(--primary-bg)", color: "var(--primary)" }}>▶ เริ่มงาน</button>
               )}
               {apt.status === "in_progress" && (
                 <button onClick={() => onStatus(apt._id, "completed")}
-                  className="px-2.5 py-1 text-[10px] rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition">✓ เสร็จแล้ว</button>
+                  className="px-2.5 py-1 text-[13px] rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition">✓ เสร็จแล้ว</button>
               )}
               <button onClick={() => onStatus(apt._id, "cancelled")}
-                className="px-2.5 py-1 text-[10px] rounded-lg text-red-400 hover:bg-red-950/30 font-medium transition">✕ ยกเลิก</button>
+                className="px-2.5 py-1 text-[13px] rounded-lg text-red-400 hover:bg-red-950/30 font-medium transition">✕ ยกเลิก</button>
               <button onClick={() => onStatus(apt._id, "no_show")}
-                className="px-2.5 py-1 text-[10px] rounded-lg font-medium transition"
+                className="px-2.5 py-1 text-[13px] rounded-lg font-medium transition"
                 style={{ color: "var(--text-muted)" }}>👻 ไม่มา</button>
               <button onClick={() => onDelete(apt._id)}
-                className="px-2.5 py-1 text-[10px] rounded-lg text-red-400 hover:bg-red-950/30 transition">🗑️</button>
+                className="px-2.5 py-1 text-[13px] rounded-lg text-red-400 hover:bg-red-950/30 transition">🗑️</button>
             </div>
           )}
         </div>

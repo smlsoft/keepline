@@ -139,7 +139,7 @@ export default function DocumentsPage() {
             <h3 className="text-sm font-bold mb-4" style={{ color: "var(--text-primary)" }}>ย้ายหมวดหมู่</h3>
             {Object.entries(GROUPS).map(([gKey, g]) => (
               <div key={gKey} className="mb-3">
-                <p className={`text-[11px] font-bold mb-1.5 ${g.color}`}>{g.icon} {g.label}</p>
+                <p className={`text-[13px] font-bold mb-1.5 ${g.color}`}>{g.icon} {g.label}</p>
                 <div className="grid grid-cols-2 gap-1.5">
                   {Object.entries(CATEGORIES).filter(([, c]) => c.group === gKey).map(([cKey, c]) => (
                     <button
@@ -170,24 +170,24 @@ export default function DocumentsPage() {
         {stats && (
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
             <div className="stat-card">
-              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>ทั้งหมด</p>
+              <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>ทั้งหมด</p>
               <p className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>{stats.total}</p>
             </div>
             <div className="stat-card">
-              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>💰 เอกสารบัญชี</p>
+              <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>💰 เอกสารบัญชี</p>
               <p className="text-2xl font-bold text-emerald-400">{stats.byGroup?.accounting || 0}</p>
-              <p className="text-[10px] text-amber-400">{stats.pendingAccounting} รอตรวจ</p>
+              <p className="text-[13px] text-amber-400">{stats.pendingAccounting} รอตรวจ</p>
             </div>
             <div className="stat-card">
-              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>📄 เอกสารอื่น</p>
+              <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>📄 เอกสารอื่น</p>
               <p className="text-2xl font-bold text-blue-400">{stats.byGroup?.other_doc || 0}</p>
             </div>
             <div className="stat-card">
-              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>🖼️ ภาพทั่วไป</p>
+              <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>🖼️ ภาพทั่วไป</p>
               <p className="text-2xl font-bold text-purple-400">{stats.byGroup?.photo || 0}</p>
             </div>
             <div className="stat-card">
-              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>ยอดยืนยัน</p>
+              <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>ยอดยืนยัน</p>
               <p className="text-lg font-bold gradient-text">{formatTHB(stats.totalConfirmedAmount)}</p>
             </div>
           </div>
@@ -236,14 +236,14 @@ export default function DocumentsPage() {
           <div className="flex gap-1.5 mb-4 flex-wrap">
             <button
               onClick={() => setCategoryFilter("")}
-              className={`px-2.5 py-1 rounded-lg text-[10px] font-medium transition ${!categoryFilter ? "bg-indigo-600/20 text-indigo-400" : ""}`}
+              className={`px-2.5 py-1 rounded-lg text-[13px] font-medium transition ${!categoryFilter ? "bg-indigo-600/20 text-indigo-400" : ""}`}
               style={categoryFilter ? { color: "var(--text-muted)" } : {}}
             >ทั้งหมด</button>
             {Object.entries(CATEGORIES).filter(([, c]) => c.group === groupFilter).map(([key, c]) => (
               <button
                 key={key}
                 onClick={() => setCategoryFilter(key)}
-                className={`px-2.5 py-1 rounded-lg text-[10px] font-medium transition ${categoryFilter === key ? "bg-indigo-600/20 text-indigo-400" : ""}`}
+                className={`px-2.5 py-1 rounded-lg text-[13px] font-medium transition ${categoryFilter === key ? "bg-indigo-600/20 text-indigo-400" : ""}`}
                 style={categoryFilter !== key ? { color: "var(--text-muted)" } : {}}
               >
                 {c.icon} {c.label} {stats?.byCategory?.[key] ? `(${stats.byCategory[key]})` : ""}
@@ -283,16 +283,16 @@ export default function DocumentsPage() {
                       <span className="text-xs font-medium px-2 py-0.5 rounded-lg" style={{ background: "var(--primary-bg)", color: "var(--primary)" }}>
                         {cat.icon} {cat.label}
                       </span>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full border font-medium ${sc.bg} ${sc.color}`}>{sc.label}</span>
-                      <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded text-white ${pb.color}`}>{pb.label}</span>
+                      <span className={`text-[13px] px-2 py-0.5 rounded-full border font-medium ${sc.bg} ${sc.color}`}>{sc.label}</span>
+                      <span className={`text-[11px] font-bold px-1.5 py-0.5 rounded text-white ${pb.color}`}>{pb.label}</span>
                       {doc.manualOverride && (
-                        <span className="text-[8px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/20">Admin แก้ไข</span>
+                        <span className="text-[11px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/20">Admin แก้ไข</span>
                       )}
                     </div>
 
                     {/* Customer + Room */}
                     <p className="text-sm font-bold truncate" style={{ color: "var(--text-primary)" }}>{doc.customerName}</p>
-                    <p className="text-[10px] truncate" style={{ color: "var(--text-muted)" }}>{doc.roomName}</p>
+                    <p className="text-[13px] truncate" style={{ color: "var(--text-muted)" }}>{doc.roomName}</p>
 
                     {/* Amount */}
                     {doc.amount != null && doc.amount > 0 && (
@@ -301,13 +301,13 @@ export default function DocumentsPage() {
 
                     {/* AI Confidence */}
                     {doc.aiConfidence > 0 && (
-                      <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)" }}>
+                      <p className="text-[13px] mt-1" style={{ color: "var(--text-muted)" }}>
                         AI ความมั่นใจ {Math.round(doc.aiConfidence * 100)}%
                         {doc.aiCategory !== doc.category && ` (AI: ${CATEGORIES[doc.aiCategory]?.label || doc.aiCategory})`}
                       </p>
                     )}
 
-                    <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)" }}>
+                    <p className="text-[13px] mt-1" style={{ color: "var(--text-muted)" }}>
                       {timeAgo(doc.createdAt)} ที่แล้ว
                       {doc.confirmedBy && ` · ${doc.confirmedBy}`}
                     </p>
@@ -316,7 +316,7 @@ export default function DocumentsPage() {
                     <div className="flex gap-1.5 mt-2 flex-wrap">
                       <button
                         onClick={() => setMovingId(doc._id)}
-                        className="px-2.5 py-1 text-[10px] rounded-lg transition font-medium"
+                        className="px-2.5 py-1 text-[13px] rounded-lg transition font-medium"
                         style={{ background: "var(--bg-hover)", color: "var(--text-secondary)" }}
                       >
                         🔀 ย้ายหมวด
@@ -325,13 +325,13 @@ export default function DocumentsPage() {
                         <>
                           <button
                             onClick={() => updateDoc(doc._id, { status: "confirmed" })}
-                            className="px-2.5 py-1 text-[10px] rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition"
+                            className="px-2.5 py-1 text-[13px] rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition"
                           >
                             ✓ ยืนยัน
                           </button>
                           <button
                             onClick={() => updateDoc(doc._id, { status: "rejected", rejectedReason: prompt("เหตุผล:") || "" })}
-                            className="px-2.5 py-1 text-[10px] rounded-lg text-red-400 hover:bg-red-950/30 font-medium transition"
+                            className="px-2.5 py-1 text-[13px] rounded-lg text-red-400 hover:bg-red-950/30 font-medium transition"
                           >
                             ✕ ปฏิเสธ
                           </button>

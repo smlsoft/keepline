@@ -109,7 +109,7 @@ function ActivityLog({ inline = false }: { inline?: boolean } = {}) {
               className={`flex items-start gap-2 transition-all duration-300 ${i === visibleLogs.length - 1 && fade ? "opacity-100 translate-y-0" : i === visibleLogs.length - 1 && !fade ? "opacity-0 translate-y-2" : ""}`}
               style={{ opacity: i === visibleLogs.length - 1 ? undefined : log.opacity }}
             >
-              <span className="text-[10px] text-gray-500 whitespace-nowrap font-mono" style={{ minWidth: 95 }}>
+              <span className="text-[13px] text-gray-500 whitespace-nowrap font-mono" style={{ minWidth: 95 }}>
                 {log.time}
               </span>
               <span className="text-xs font-bold whitespace-nowrap" style={{ color: log.color, minWidth: 80 }}>
@@ -117,7 +117,7 @@ function ActivityLog({ inline = false }: { inline?: boolean } = {}) {
               </span>
               <span className="text-xs text-gray-300 truncate">{log.msg}</span>
               {log.durationMs ? (
-                <span className="text-[10px] text-gray-500 whitespace-nowrap ml-auto">
+                <span className="text-[13px] text-gray-500 whitespace-nowrap ml-auto">
                   {(log.durationMs / 1000).toFixed(1)}s
                 </span>
               ) : null}
@@ -197,9 +197,9 @@ export default function KungRoomPage() {
 
           {/* Instructions */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
-            <div className="theme-bg-secondary/80 backdrop-blur border theme-border rounded-2xl px-4 py-2 text-[11px] theme-text-muted leading-relaxed text-center">
+            <div className="theme-bg-secondary/80 backdrop-blur border theme-border rounded-2xl px-4 py-2 text-[13px] theme-text-muted leading-relaxed text-center">
               <div>🖱️ ลากเพื่อหมุน · เลื่อนเพื่อซูม{!isFullscreen ? "" : " · กด ESC ออกเต็มจอ"}</div>
-              <div className="mt-1 text-[10px] opacity-70">🦐 กระโดด = กำลังทำงาน · 🎈 มีลูกโป่ง = มีงานรายงาน · 🪑 นั่งนิ่ง = รอคิว</div>
+              <div className="mt-1 text-[13px] opacity-70">🦐 กระโดด = กำลังทำงาน · 🎈 มีลูกโป่ง = มีงานรายงาน · 🪑 นั่งนิ่ง = รอคิว</div>
             </div>
           </div>
 
@@ -223,9 +223,9 @@ export default function KungRoomPage() {
                       </div>
                       <div className="flex-1">
                         <h3 className="text-sm font-bold">{agent.name}</h3>
-                        <p className="text-[11px] theme-text-muted">{agent.role}</p>
+                        <p className="text-[13px] theme-text-muted">{agent.role}</p>
                       </div>
-                      <div className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${si?.bgClass}`}>
+                      <div className={`px-2 py-0.5 rounded-full text-[13px] font-medium ${si?.bgClass}`}>
                         {isActive && <span className="inline-block w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse mr-1"></span>}
                         {si?.label}
                       </div>

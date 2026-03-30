@@ -127,22 +127,22 @@ export default function PaymentsPage() {
         {stats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
             <div className="stat-card">
-              <p className="text-[10px] font-medium" style={{ color: "var(--text-muted)" }}>รอตรวจสอบ</p>
+              <p className="text-[13px] font-medium" style={{ color: "var(--text-muted)" }}>รอตรวจสอบ</p>
               <p className="text-2xl font-bold text-amber-400">{stats.pending}</p>
             </div>
             <div className="stat-card">
-              <p className="text-[10px] font-medium" style={{ color: "var(--text-muted)" }}>ยืนยันแล้ว</p>
+              <p className="text-[13px] font-medium" style={{ color: "var(--text-muted)" }}>ยืนยันแล้ว</p>
               <p className="text-2xl font-bold text-emerald-400">{stats.confirmed}</p>
             </div>
             <div className="stat-card">
-              <p className="text-[10px] font-medium" style={{ color: "var(--text-muted)" }}>วันนี้</p>
+              <p className="text-[13px] font-medium" style={{ color: "var(--text-muted)" }}>วันนี้</p>
               <p className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{formatTHB(stats.todayAmount)}</p>
-              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{stats.todayCount} รายการ</p>
+              <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>{stats.todayCount} รายการ</p>
             </div>
             <div className="stat-card">
-              <p className="text-[10px] font-medium" style={{ color: "var(--text-muted)" }}>เดือนนี้</p>
+              <p className="text-[13px] font-medium" style={{ color: "var(--text-muted)" }}>เดือนนี้</p>
               <p className="text-lg font-bold gradient-text">{formatTHB(stats.monthAmount)}</p>
-              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{stats.monthCount} รายการ</p>
+              <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>{stats.monthCount} รายการ</p>
             </div>
           </div>
         )}
@@ -223,10 +223,10 @@ export default function PaymentsPage() {
                         <span className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>
                           {p.customerName}
                         </span>
-                        <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded text-white ${pb.color}`}>{pb.label}</span>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full border font-medium ${sc.bg} ${sc.color}`}>{sc.label}</span>
+                        <span className={`text-[11px] font-bold px-1.5 py-0.5 rounded text-white ${pb.color}`}>{pb.label}</span>
+                        <span className={`text-[13px] px-2 py-0.5 rounded-full border font-medium ${sc.bg} ${sc.color}`}>{sc.label}</span>
                         {p.detectionMethod && (
-                          <span className="text-[9px] px-1.5 py-0.5 rounded" style={{ background: "var(--primary-bg)", color: "var(--primary)" }}>
+                          <span className="text-[12px] px-1.5 py-0.5 rounded" style={{ background: "var(--primary-bg)", color: "var(--primary)" }}>
                             {p.detectionMethod === "keyword+image" ? "คำ+รูป" : p.detectionMethod === "image" ? "รูปสลิป" : "คำสั่งซื้อ"}
                           </span>
                         )}
@@ -242,7 +242,7 @@ export default function PaymentsPage() {
                         </p>
                       )}
 
-                      <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)" }}>
+                      <p className="text-[13px] mt-1" style={{ color: "var(--text-muted)" }}>
                         {timeAgo(p.createdAt)}
                         {p.confirmedBy && ` · ยืนยันโดย ${p.confirmedBy}`}
                         {p.rejectedBy && ` · ปฏิเสธโดย ${p.rejectedBy}`}
@@ -250,7 +250,7 @@ export default function PaymentsPage() {
                       </p>
 
                       {p.notes && (
-                        <p className="text-[10px] mt-0.5" style={{ color: "var(--text-muted)" }}>📝 {p.notes}</p>
+                        <p className="text-[13px] mt-0.5" style={{ color: "var(--text-muted)" }}>📝 {p.notes}</p>
                       )}
                     </div>
 
@@ -277,7 +277,7 @@ export default function PaymentsPage() {
                         </button>
                         <button
                           onClick={() => deletePayment(p._id)}
-                          className="px-3 py-1.5 text-[10px] rounded-lg text-red-400 hover:bg-red-950/30 transition"
+                          className="px-3 py-1.5 text-[13px] rounded-lg text-red-400 hover:bg-red-950/30 transition"
                         >
                           ลบ
                         </button>

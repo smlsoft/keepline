@@ -297,11 +297,11 @@ export default function KMPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <h3 className="text-sm font-bold theme-text">{item.title}</h3>
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded ${catCfg.color}`}>
+                        <span className={`text-[13px] px-1.5 py-0.5 rounded ${catCfg.color}`}>
                           {catCfg.icon} {catCfg.label}
                         </span>
                         {!item.active && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-900/40 text-red-400">ปิดใช้งาน</span>
+                          <span className="text-[13px] px-1.5 py-0.5 rounded bg-red-900/40 text-red-400">ปิดใช้งาน</span>
                         )}
                       </div>
                       <p className="text-xs theme-text-secondary whitespace-pre-wrap line-clamp-3 leading-relaxed mb-2">
@@ -309,11 +309,11 @@ export default function KMPage() {
                       </p>
                       <div className="flex items-center gap-2 flex-wrap">
                         {item.tags.map(tag => (
-                          <span key={tag} className="text-[10px] theme-bg-card px-1.5 py-0.5 rounded theme-text-muted">
+                          <span key={tag} className="text-[13px] theme-bg-card px-1.5 py-0.5 rounded theme-text-muted">
                             #{tag}
                           </span>
                         ))}
-                        <span className="text-[10px] theme-text-muted ml-auto">
+                        <span className="text-[13px] theme-text-muted ml-auto">
                           {new Date(item.updatedAt || item.createdAt).toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "2-digit" })}
                         </span>
                       </div>
@@ -323,7 +323,7 @@ export default function KMPage() {
                     <div className="flex flex-col gap-1 shrink-0">
                       <button
                         onClick={() => handleToggle(item._id, item.active)}
-                        className={`px-3 py-1.5 text-[11px] rounded-lg transition font-medium ${
+                        className={`px-3 py-1.5 text-[13px] rounded-lg transition font-medium ${
                           item.active
                             ? "bg-green-900/40 text-green-400 hover:bg-green-800/50"
                             : "bg-gray-700/40 text-gray-400 hover:bg-gray-600/50"
@@ -333,13 +333,13 @@ export default function KMPage() {
                       </button>
                       <button
                         onClick={() => startEdit(item)}
-                        className="px-3 py-1.5 text-[11px] rounded-lg theme-bg-card theme-text-secondary hover:theme-bg-hover transition"
+                        className="px-3 py-1.5 text-[13px] rounded-lg theme-bg-card theme-text-secondary hover:theme-bg-hover transition"
                       >
                         ✏️ แก้ไข
                       </button>
                       <button
                         onClick={() => setDeleteId(item._id)}
-                        className="px-3 py-1.5 text-[11px] rounded-lg bg-red-950/30 text-red-400 hover:bg-red-900/40 transition"
+                        className="px-3 py-1.5 text-[13px] rounded-lg bg-red-950/30 text-red-400 hover:bg-red-900/40 transition"
                       >
                         🗑️ ลบ
                       </button>

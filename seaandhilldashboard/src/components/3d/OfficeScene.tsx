@@ -204,7 +204,7 @@ function Shrimp({ agent, position, rotationY = 0 }: { agent: Agent; position: [n
       <mesh position={[0.25, 0.32, 0.08]}><sphereGeometry args={[0.07, 8, 8]} /><meshStandardMaterial color={lighter} /></mesh>
       <mesh position={[0, 0.18, -0.16]} rotation={[0.5, 0, 0]}><coneGeometry args={[0.08, 0.2, 8]} /><meshStandardMaterial color={color} /></mesh>
       <Html position={[0, 1.05, 0]} center distanceFactor={7} style={{ pointerEvents: "none" }}>
-        <div style={{ background: agent.color, color: "#fff", padding: "2px 8px", borderRadius: 6, fontSize: 10, fontWeight: 700, whiteSpace: "nowrap", fontFamily: "Prompt,sans-serif", boxShadow: "0 2px 8px rgba(0,0,0,0.4)" }}>
+        <div style={{ background: agent.color, color: "#fff", padding: "2px 8px", borderRadius: 6, fontSize: 13, fontWeight: 700, whiteSpace: "nowrap", fontFamily: "Prompt,sans-serif", boxShadow: "0 2px 8px rgba(0,0,0,0.4)" }}>
           {agent.emoji} {agent.name}
         </div>
       </Html>
@@ -276,7 +276,7 @@ function SpeechBalloon({ agent, position }: { agent: Agent; position: [number, n
           textShadow: "0 2px 6px rgba(0,0,0,0.8)",
         }}>
           <div style={{ fontSize: 12, fontWeight: 800 }}>{agent.emoji} {agent.name}</div>
-          <div style={{ fontSize: 10, fontWeight: 600, opacity: 0.9, marginTop: 2, background: "rgba(0,0,0,0.4)", borderRadius: 6, padding: "2px 8px", whiteSpace: "nowrap" }}>{agent.quote}</div>
+          <div style={{ fontSize: 13, fontWeight: 600, opacity: 0.9, marginTop: 2, background: "rgba(0,0,0,0.4)", borderRadius: 6, padding: "2px 8px", whiteSpace: "nowrap" }}>{agent.quote}</div>
         </div>
       </Html>
     </group>
@@ -382,7 +382,7 @@ function Whiteboard({ position, rotation }: { position: [number, number, number]
           fontFamily: "Prompt,sans-serif", overflow: "hidden",
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "#334155", marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#334155", marginBottom: 8 }}>
             {titles[chartType % 3]}
           </div>
 
@@ -446,7 +446,7 @@ function Whiteboard({ position, rotation }: { position: [number, number, number]
                   {Math.round(bars.slice(0, 5).reduce((a, b) => a + b, 0) / 5)}%
                 </text>
               </svg>
-              <div style={{ fontSize: 8, color: "#64748b", lineHeight: 1.8 }}>
+              <div style={{ fontSize: 13, color: "#64748b", lineHeight: 1.8 }}>
                 {["ขาย", "บริการ", "ส่งของ", "ตอบแชท", "ติดตาม"].map((l, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>
                     <span style={{ width: 6, height: 6, borderRadius: 2, background: barColors[i], display: "inline-block" }} />
@@ -518,7 +518,7 @@ function CEOQuote({ stateRef }: { stateRef: React.RefObject<{ currentAgentName: 
     if (newText !== text) setText(newText);
   });
   return (
-    <div style={{ marginTop: 3, fontSize: 9, color: "#fff", background: "rgba(0,0,0,0.5)", borderRadius: 5, padding: "2px 6px", whiteSpace: "nowrap", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>
+    <div style={{ marginTop: 3, fontSize: 12, color: "#fff", background: "rgba(0,0,0,0.5)", borderRadius: 5, padding: "2px 6px", whiteSpace: "nowrap", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>
       {text}
     </div>
   );
@@ -681,7 +681,7 @@ function CEOShrimp({ agents, deskPositions, ttsEnabled = true }: { agents: Agent
       {/* Name tag + คำบ่น */}
       <Html position={[0, 1.2, 0]} center distanceFactor={7} style={{ pointerEvents: "none" }}>
         <div style={{ textAlign: "center", fontFamily: "Prompt,sans-serif" }}>
-          <div style={{ background: "linear-gradient(135deg, #ffd700, #ff8c00)", color: "#000", padding: "2px 10px", borderRadius: 6, fontSize: 10, fontWeight: 800, whiteSpace: "nowrap", boxShadow: "0 2px 12px rgba(255,215,0,0.5)" }}>
+          <div style={{ background: "linear-gradient(135deg, #ffd700, #ff8c00)", color: "#000", padding: "2px 10px", borderRadius: 6, fontSize: 13, fontWeight: 800, whiteSpace: "nowrap", boxShadow: "0 2px 12px rgba(255,215,0,0.5)" }}>
             👑 น้องกุ้ง CEO
           </div>
           <CEOQuote stateRef={state} />
@@ -798,7 +798,7 @@ function OfficeCat({ deskPositions }: { deskPositions: { pos: [number, number, n
       <mesh position={[0.03, 0.2, 0.26]}><sphereGeometry args={[0.015, 6, 6]} /><meshStandardMaterial color="#2ecc71" emissive="#2ecc71" emissiveIntensity={0.3} /></mesh>
       <Html position={[0, 0.35, 0]} center distanceFactor={8} style={{ pointerEvents: "none" }}>
         <div style={{ textAlign: "center", fontFamily: "Prompt,sans-serif" }}>
-          <div style={{ fontSize: 8, color: "#ff9944" }}>🐱 ส้ม</div>
+          <div style={{ fontSize: 13, color: "#ff9944" }}>🐱 ส้ม</div>
           <div style={{ fontSize: 7, color: "#ccc", background: "rgba(0,0,0,0.4)", borderRadius: 4, padding: "1px 4px", whiteSpace: "nowrap" }}>{mood}</div>
         </div>
       </Html>
@@ -874,8 +874,8 @@ function StarBoard({ position, agents }: { position: [number, number, number]; a
       <Html position={[0, 0, 0.05]} transform distanceFactor={6} style={{ pointerEvents: "none" }}>
         <div style={{ textAlign: "center", fontFamily: "Prompt,sans-serif", width: 100 }}>
           <div style={{ fontSize: 16 }}>⭐</div>
-          <div style={{ fontSize: 8, color: "#ffd700", fontWeight: 700 }}>พนักงานดีเด่น</div>
-          <div style={{ fontSize: 10, color: "#fff", fontWeight: 800, marginTop: 2 }}>{best.emoji} {best.name}</div>
+          <div style={{ fontSize: 13, color: "#ffd700", fontWeight: 700 }}>พนักงานดีเด่น</div>
+          <div style={{ fontSize: 13, color: "#fff", fontWeight: 800, marginTop: 2 }}>{best.emoji} {best.name}</div>
           <div style={{ fontSize: 7, color: "#ccc" }}>{best.role}</div>
         </div>
       </Html>
@@ -1134,7 +1134,7 @@ function OfficeLayout({ agents, ttsEnabled }: Props) {
               <Html position={[dp.pos[0], 1.6, shrimpZ]} center distanceFactor={6} style={{ pointerEvents: "none" }}>
                 <div style={{ textAlign: "center", fontFamily: "Prompt,sans-serif", animation: "pulse 2s infinite" }}>
                   <div style={{ fontSize: 18 }}>🟥</div>
-                  <div style={{ fontSize: 8, color: "#f87171", fontWeight: 700, background: "rgba(0,0,0,0.6)", borderRadius: 4, padding: "1px 5px", whiteSpace: "nowrap" }}>
+                  <div style={{ fontSize: 13, color: "#f87171", fontWeight: 700, background: "rgba(0,0,0,0.6)", borderRadius: 4, padding: "1px 5px", whiteSpace: "nowrap" }}>
                     ระวังไล่ออก!
                   </div>
                 </div>

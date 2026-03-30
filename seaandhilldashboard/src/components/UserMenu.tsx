@@ -73,7 +73,7 @@ export default function UserMenu() {
                 {user?.name || "ผู้ใช้"}
               </p>
               <p className="text-xs theme-text-secondary truncate">{user?.email}</p>
-              <span className="inline-block mt-1 text-[10px] px-2 py-0.5 bg-indigo-900/60 text-indigo-300 border border-indigo-700/50 rounded-full">
+              <span className="inline-block mt-1 text-[13px] px-2 py-0.5 bg-indigo-900/60 text-indigo-300 border border-indigo-700/50 rounded-full">
                 {(user as any)?.plan === "pro" ? "Pro" : "Free"}
               </span>
             </div>

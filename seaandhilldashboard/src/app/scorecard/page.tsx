@@ -42,7 +42,7 @@ function ScoreBar({ value, label, reverse }: { value: number; label: string; rev
     : (value >= 70 ? "bg-emerald-500" : value >= 40 ? "bg-amber-500" : "bg-red-500");
   return (
     <div className="flex items-center gap-2">
-      <span className="text-[10px] w-24 shrink-0" style={{ color: "var(--text-muted)" }}>{label}</span>
+      <span className="text-[13px] w-24 shrink-0" style={{ color: "var(--text-muted)" }}>{label}</span>
       <div className="flex-1 h-2 rounded-full" style={{ background: "var(--bg-hover)" }}>
         <div className={`h-full rounded-full transition-all ${color}`} style={{ width: `${value}%` }} />
       </div>
@@ -108,8 +108,8 @@ export default function ScoreCardPage() {
                 className={`stat-card text-center transition ${tierFilter === key ? "ring-2 ring-indigo-500/50" : ""}`}>
                 <span className="text-2xl">{t.icon}</span>
                 <p className="text-xl font-bold mt-1" style={{ color: "var(--text-primary)" }}>{tc?.count || 0}</p>
-                <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{t.label}</p>
-                {tc?.avg ? <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>เฉลี่ย {tc.avg} คะแนน</p> : null}
+                <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>{t.label}</p>
+                {tc?.avg ? <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>เฉลี่ย {tc.avg} คะแนน</p> : null}
               </button>
             );
           })}
@@ -132,7 +132,7 @@ export default function ScoreCardPage() {
           <span className="text-xs" style={{ color: "var(--text-muted)" }}>เรียงตาม:</span>
           {(["overall", "engagement", "purchaseIntent", "lifetimeValue", "churnRisk"] as const).map((s) => (
             <button key={s} onClick={() => setSortBy(s)}
-              className={`px-2 py-1 rounded-lg text-[10px] font-medium transition border ${sortBy === s ? "gradient-bg text-white border-transparent" : ""}`}
+              className={`px-2 py-1 rounded-lg text-[13px] font-medium transition border ${sortBy === s ? "gradient-bg text-white border-transparent" : ""}`}
               style={sortBy !== s ? { borderColor: "var(--border)", color: "var(--text-secondary)" } : {}}>
               {SCORE_LABELS[s]}
             </button>
@@ -169,10 +169,10 @@ export default function ScoreCardPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <span className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{s.customerName}</span>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium border ${t.bg}`}>
+                        <span className={`text-[13px] px-2 py-0.5 rounded-full font-medium border ${t.bg}`}>
                           {t.icon} {t.label}
                         </span>
-                        <span className="text-[10px] px-1.5 py-0.5 rounded-full font-medium bg-green-600/20 text-green-400">
+                        <span className="text-[13px] px-1.5 py-0.5 rounded-full font-medium bg-green-600/20 text-green-400">
                           LINE
                         </span>
                       </div>

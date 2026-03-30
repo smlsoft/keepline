@@ -13,7 +13,7 @@ const tooltipStyle = {
     background: "var(--bg-elevated)",
     border: "1px solid var(--border)",
     borderRadius: "0.75rem",
-    fontSize: 11,
+    fontSize: 13,
     color: "var(--text-primary)",
     boxShadow: "var(--shadow-md)",
   },
@@ -118,7 +118,7 @@ export function ChartLegend({ items }: { items: { label: string; color: string; 
       {items.map(item => (
         <div key={item.label} className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: item.color }} />
-          <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>
+          <span className="text-[13px]" style={{ color: "var(--text-muted)" }}>
             {item.label}{item.value != null ? `: ${item.value}` : ""}
           </span>
         </div>

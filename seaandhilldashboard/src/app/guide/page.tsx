@@ -959,7 +959,7 @@ function SectionCard({ section }: { section: Section }) {
               onClick={() => toggle(i)}
               className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--bg-hover)] transition-colors"
             >
-              <span className="w-6 h-6 rounded-lg text-[11px] font-bold flex items-center justify-center shrink-0"
+              <span className="w-6 h-6 rounded-lg text-[13px] font-bold flex items-center justify-center shrink-0"
                 style={{ background: "var(--primary-bg)", color: "var(--primary)" }}>
                 {i + 1}
               </span>
@@ -1032,7 +1032,7 @@ export default function GuidePage() {
           <div className="flex flex-wrap gap-1.5 mb-8">
             {SECTIONS.map(s => (
               <a key={s.id} href={`#${s.id}`}
-                className="px-3 py-1.5 rounded-xl text-[10px] md:text-xs font-medium transition border hover:bg-[var(--bg-hover)]"
+                className="px-3 py-1.5 rounded-xl text-[13px] md:text-xs font-medium transition border hover:bg-[var(--bg-hover)]"
                 style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
                 {s.icon} {s.title}
               </a>

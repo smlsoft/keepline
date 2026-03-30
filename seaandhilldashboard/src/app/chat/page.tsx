@@ -360,15 +360,15 @@ function ChatPanel({
               {conv.name !== conv.id ? conv.name : conv.id.substring(0, 12) + "..."}
             </span>
             {isGroup ? (
-              <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-orange-600 text-white leading-none">กลุ่ม</span>
+              <span className="text-[11px] font-bold px-1.5 py-0.5 rounded bg-orange-600 text-white leading-none">กลุ่ม</span>
             ) : (
-              <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white leading-none">DM</span>
+              <span className="text-[11px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white leading-none">DM</span>
             )}
           </div>
           <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="text-[10px] theme-text-muted">{conv.messageCount} ข้อความ</span>
+            <span className="text-[13px] theme-text-muted">{conv.messageCount} ข้อความ</span>
             {lastMethod && (
-              <span className={`text-[9px] px-1 py-0.5 rounded ${
+              <span className={`text-[12px] px-1 py-0.5 rounded ${
                 lastMethod === "reply" ? "bg-green-900/50 text-green-400" : "bg-amber-900/50 text-amber-400"
               }`}>
                 {lastMethod === "reply" ? "✓ Reply (ฟรี)" : "Push"}
@@ -408,7 +408,7 @@ function ChatPanel({
                 {showDate && msg.createdAt && (
                   <div className="flex items-center gap-2 my-2">
                     <div className="flex-1 h-px theme-bg-card" />
-                    <span className="text-[10px] theme-text-muted px-2 py-0.5 theme-bg-card rounded-full">
+                    <span className="text-[13px] theme-text-muted px-2 py-0.5 theme-bg-card rounded-full">
                       {new Date(msg.createdAt).toLocaleDateString("th-TH", { day: "numeric", month: "short" })}
                     </span>
                     <div className="flex-1 h-px theme-bg-card" />
@@ -424,7 +424,7 @@ function ChatPanel({
 
       {/* ── Send Error ── */}
       {sendError && (
-        <div className="mx-2 mb-1 px-2 py-1 bg-red-950/60 border border-red-800 rounded text-[10px] text-red-400 flex items-center justify-between">
+        <div className="mx-2 mb-1 px-2 py-1 bg-red-950/60 border border-red-800 rounded text-[13px] text-red-400 flex items-center justify-between">
           <span>⚠️ {sendError}</span>
           <button onClick={() => setSendError(null)} className="text-red-600 hover:text-red-400 ml-2">✕</button>
         </div>
@@ -439,7 +439,7 @@ function ChatPanel({
               <button
                 key={pkg.id}
                 onClick={() => setStickerPkg(pkg)}
-                className={`text-[10px] px-2 py-1 rounded whitespace-nowrap transition ${
+                className={`text-[13px] px-2 py-1 rounded whitespace-nowrap transition ${
                   stickerPkg.id === pkg.id ? "bg-indigo-600 text-white" : "theme-bg-card theme-text-secondary hover:theme-text"
                 }`}
               >
@@ -476,7 +476,7 @@ function ChatPanel({
         <div className="border-t theme-border theme-bg-secondary max-h-44 overflow-y-auto">
           <div className="p-2 space-y-1">
             {templates.length === 0 ? (
-              <p className="text-[10px] text-center py-3 theme-text-muted">ยังไม่มี template</p>
+              <p className="text-[13px] text-center py-3 theme-text-muted">ยังไม่มี template</p>
             ) : templates.map(t => (
               <button
                 key={t._id}
@@ -485,7 +485,7 @@ function ChatPanel({
                   setShowTemplates(false);
                   inputRef.current?.focus();
                 }}
-                className="w-full text-left theme-bg-card hover:theme-bg-hover rounded px-2 py-1.5 text-[11px] transition"
+                className="w-full text-left theme-bg-card hover:theme-bg-hover rounded px-2 py-1.5 text-[13px] transition"
               >
                 <span className="font-medium theme-text">{t.title}</span>
                 <p className="theme-text-secondary line-clamp-1 mt-0.5">{t.content}</p>
@@ -499,9 +499,9 @@ function ChatPanel({
       {showMemory && (
         <div className="border-t theme-border theme-bg-secondary max-h-56 overflow-y-auto">
           <div className="flex items-center justify-between px-3 py-1.5 border-b theme-border">
-            <span className="text-[11px] font-bold text-purple-400">🧠 Memory + Skills</span>
+            <span className="text-[13px] font-bold text-purple-400">🧠 Memory + Skills</span>
             <div className="flex items-center gap-2">
-              <button onClick={fetchMemory} disabled={memoryLoading} className="text-[10px] text-purple-400 hover:text-purple-300 disabled:opacity-50">
+              <button onClick={fetchMemory} disabled={memoryLoading} className="text-[13px] text-purple-400 hover:text-purple-300 disabled:opacity-50">
                 {memoryLoading ? "โหลด..." : "🔄 รีเฟรช"}
               </button>
               <button onClick={() => setShowMemory(false)} className="theme-text-muted hover:theme-text text-sm">✕</button>
@@ -510,33 +510,33 @@ function ChatPanel({
 
           {memoryLoading ? (
             <div className="flex items-center justify-center py-6">
-              <span className="text-[11px] theme-text-muted">กำลังโหลด Memory...</span>
+              <span className="text-[13px] theme-text-muted">กำลังโหลด Memory...</span>
             </div>
           ) : !memoryData ? (
-            <p className="text-[11px] text-center py-4 theme-text-muted">ไม่มีข้อมูล</p>
+            <p className="text-[13px] text-center py-4 theme-text-muted">ไม่มีข้อมูล</p>
           ) : (
             <div className="p-2 space-y-2">
               {/* Customer Memory */}
               {memoryData.memory?.compactSummary && (
                 <div className="theme-bg-card rounded-lg px-3 py-2 border theme-border">
-                  <p className="text-[10px] font-bold text-purple-400 mb-1">👤 จำลูกค้า</p>
-                  <p className="text-[11px] theme-text leading-relaxed">{memoryData.memory.compactSummary}</p>
+                  <p className="text-[13px] font-bold text-purple-400 mb-1">👤 จำลูกค้า</p>
+                  <p className="text-[13px] theme-text leading-relaxed">{memoryData.memory.compactSummary}</p>
                   {memoryData.memory.personality && (
-                    <p className="text-[10px] theme-text-muted mt-1">สไตล์: <span className="text-purple-300">{memoryData.memory.personality}</span></p>
+                    <p className="text-[13px] theme-text-muted mt-1">สไตล์: <span className="text-purple-300">{memoryData.memory.personality}</span></p>
                   )}
                   {memoryData.memory.bestApproach && (
-                    <p className="text-[10px] theme-text-muted">วิธีตอบ: <span className="text-cyan-300">{memoryData.memory.bestApproach}</span></p>
+                    <p className="text-[13px] theme-text-muted">วิธีตอบ: <span className="text-cyan-300">{memoryData.memory.bestApproach}</span></p>
                   )}
                   {memoryData.memory.interests?.length > 0 && (
                     <div className="flex gap-1 mt-1 flex-wrap">
                       {memoryData.memory.interests.map((i: string, idx: number) => (
-                        <span key={idx} className="text-[9px] bg-purple-900/40 text-purple-300 px-1.5 py-0.5 rounded">
+                        <span key={idx} className="text-[12px] bg-purple-900/40 text-purple-300 px-1.5 py-0.5 rounded">
                           {i}
                         </span>
                       ))}
                     </div>
                   )}
-                  <div className="flex gap-3 mt-1.5 text-[9px] theme-text-muted">
+                  <div className="flex gap-3 mt-1.5 text-[12px] theme-text-muted">
                     <span>💬 {memoryData.memory.messageCount || 0} ข้อความ</span>
                     {memoryData.memory.purchaseCount > 0 && <span className="text-green-400">🛒 ซื้อ {memoryData.memory.purchaseCount} ครั้ง</span>}
                     {memoryData.memory.positiveCount > 0 && <span className="text-emerald-400">👍 ชม {memoryData.memory.positiveCount}</span>}
@@ -547,11 +547,11 @@ function ChatPanel({
 
               {!memoryData.memory?.compactSummary && (
                 <div className="theme-bg-card rounded-lg px-3 py-2 border theme-border">
-                  <p className="text-[10px] theme-text-muted text-center">
+                  <p className="text-[13px] theme-text-muted text-center">
                     ยังไม่มี Memory — AI จะสร้างอัตโนมัติหลังคุยครบ 10 ข้อความ
                   </p>
                   {memoryData.memory?.messageCount > 0 && (
-                    <p className="text-[9px] theme-text-muted text-center mt-1">
+                    <p className="text-[12px] theme-text-muted text-center mt-1">
                       ตอนนี้ {memoryData.memory.messageCount}/10 ข้อความ
                     </p>
                   )}
@@ -561,16 +561,16 @@ function ChatPanel({
               {/* Skill Lessons สำหรับลูกค้าคนนี้ */}
               {memoryData.lessons?.length > 0 && (
                 <div className="theme-bg-card rounded-lg px-3 py-2 border theme-border">
-                  <p className="text-[10px] font-bold text-amber-400 mb-1">📝 บทเรียน AI เฉพาะลูกค้าคนนี้</p>
+                  <p className="text-[13px] font-bold text-amber-400 mb-1">📝 บทเรียน AI เฉพาะลูกค้าคนนี้</p>
                   {memoryData.lessons.slice(0, 5).map((l: any, i: number) => (
                     <div key={i} className="flex items-start gap-1.5 mb-1">
-                      <span className="text-[9px] shrink-0">
+                      <span className="text-[12px] shrink-0">
                         {l.outcomeType === "purchase" ? "🛒" : l.outcomeType === "positive" ? "👍" : l.outcomeType === "negative" ? "👎" : "📝"}
                       </span>
                       <div>
-                        {l.rule && <p className="text-[10px] theme-text">{l.rule}</p>}
-                        {l.whatWorked && <p className="text-[9px] text-green-400">✓ {l.whatWorked}</p>}
-                        {l.whatFailed && <p className="text-[9px] text-red-400">✗ {l.whatFailed}</p>}
+                        {l.rule && <p className="text-[13px] theme-text">{l.rule}</p>}
+                        {l.whatWorked && <p className="text-[12px] text-green-400">✓ {l.whatWorked}</p>}
+                        {l.whatFailed && <p className="text-[12px] text-red-400">✗ {l.whatFailed}</p>}
                       </div>
                     </div>
                   ))}
@@ -580,13 +580,13 @@ function ChatPanel({
               {/* Global Skills */}
               {memoryData.globalLessons?.length > 0 && (
                 <div className="theme-bg-card rounded-lg px-3 py-2 border theme-border">
-                  <p className="text-[10px] font-bold text-cyan-400 mb-1">🌐 บทเรียน AI ภาพรวม (จากลูกค้าทุกคน)</p>
+                  <p className="text-[13px] font-bold text-cyan-400 mb-1">🌐 บทเรียน AI ภาพรวม (จากลูกค้าทุกคน)</p>
                   {memoryData.globalLessons.slice(0, 5).map((l: any, i: number) => (
                     <div key={i} className="flex items-start gap-1.5 mb-1">
-                      <span className="text-[9px] shrink-0">
+                      <span className="text-[12px] shrink-0">
                         {l.outcomeType === "purchase" ? "🛒" : l.outcomeType === "positive" ? "👍" : l.outcomeType === "negative" ? "👎" : "📝"}
                       </span>
-                      <p className="text-[10px] theme-text-secondary">{l.rule}</p>
+                      <p className="text-[13px] theme-text-secondary">{l.rule}</p>
                     </div>
                   ))}
                 </div>
@@ -600,12 +600,12 @@ function ChatPanel({
       {showSuggest && (
         <div className="border-t theme-border theme-bg-secondary max-h-52 overflow-y-auto">
           <div className="flex items-center justify-between px-3 py-1.5 border-b theme-border">
-            <span className="text-[11px] font-bold text-indigo-400">💡 AI แนะนำคำตอบ</span>
+            <span className="text-[13px] font-bold text-indigo-400">💡 AI แนะนำคำตอบ</span>
             <div className="flex items-center gap-2">
               <button
                 onClick={fetchSuggestions}
                 disabled={suggestLoading}
-                className="text-[10px] text-indigo-400 hover:text-indigo-300 disabled:opacity-50"
+                className="text-[13px] text-indigo-400 hover:text-indigo-300 disabled:opacity-50"
               >
                 {suggestLoading ? "กำลังวิเคราะห์..." : "🔄 วิเคราะห์ใหม่"}
               </button>
@@ -620,16 +620,16 @@ function ChatPanel({
                   <span key={i} className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: `${i*0.2}s` }} />
                 ))}
               </div>
-              <span className="text-[11px] theme-text-muted ml-3">AI กำลังวิเคราะห์บทสนทนา...</span>
+              <span className="text-[13px] theme-text-muted ml-3">AI กำลังวิเคราะห์บทสนทนา...</span>
             </div>
           ) : suggestions.length === 0 ? (
-            <p className="text-[11px] text-center py-4 theme-text-muted">กดปุ่ม "วิเคราะห์ใหม่" เพื่อรับคำแนะนำ</p>
+            <p className="text-[13px] text-center py-4 theme-text-muted">กดปุ่ม "วิเคราะห์ใหม่" เพื่อรับคำแนะนำ</p>
           ) : (
             <div className="p-2 space-y-1.5">
               {/* Analysis summary */}
               {suggestAnalysis && (
                 <div className="px-2 py-1.5 bg-indigo-950/40 border border-indigo-800/30 rounded-lg">
-                  <p className="text-[10px] text-indigo-300">📊 {suggestAnalysis}</p>
+                  <p className="text-[13px] text-indigo-300">📊 {suggestAnalysis}</p>
                 </div>
               )}
               {/* Suggestions */}
@@ -649,18 +649,18 @@ function ChatPanel({
                   <div key={i} className="theme-bg-card rounded-lg px-3 py-2 border theme-border">
                     {/* Header: tone + priority */}
                     <div className="flex items-center gap-1.5 mb-1.5">
-                      <span className="text-[10px]">{priorityIcons[s.priority] || "🟡"}</span>
-                      <span className={`text-[9px] px-1.5 py-0.5 rounded ${toneColors[s.tone] || toneColors.friendly}`}>
+                      <span className="text-[13px]">{priorityIcons[s.priority] || "🟡"}</span>
+                      <span className={`text-[12px] px-1.5 py-0.5 rounded ${toneColors[s.tone] || toneColors.friendly}`}>
                         {toneLabels[s.tone] || s.tone}
                       </span>
-                      <span className="text-[9px] theme-text-muted">ตัวเลือก {i + 1}</span>
+                      <span className="text-[12px] theme-text-muted">ตัวเลือก {i + 1}</span>
                     </div>
 
                     {/* ข้อความแนะนำ */}
                     <p className="text-[12px] theme-text leading-relaxed mb-1.5 whitespace-pre-wrap">{s.text}</p>
 
                     {/* เหตุผล */}
-                    <p className="text-[10px] theme-text-muted mb-2">💡 <em>{s.reason}</em></p>
+                    <p className="text-[13px] theme-text-muted mb-2">💡 <em>{s.reason}</em></p>
 
                     {/* ปุ่ม: ใช้เลย + Copy */}
                     <div className="flex gap-1.5">
@@ -670,7 +670,7 @@ function ChatPanel({
                           setShowSuggest(false);
                           inputRef.current?.focus();
                         }}
-                        className={`flex-1 text-center text-[11px] py-1.5 rounded-lg ${cfg.sendBg} text-white ${cfg.sendHover} transition font-medium`}
+                        className={`flex-1 text-center text-[13px] py-1.5 rounded-lg ${cfg.sendBg} text-white ${cfg.sendHover} transition font-medium`}
                       >
                         ใช้เลย →
                       </button>
@@ -682,7 +682,7 @@ function ChatPanel({
                           if (el) { el.textContent = "✓ copied!"; setTimeout(() => { el.textContent = "📋 Copy"; }, 1500); }
                         }}
                         id={`copy-${conv.id}-${i}`}
-                        className="px-3 py-1.5 text-[11px] rounded-lg theme-bg-hover theme-text-secondary hover:theme-text transition"
+                        className="px-3 py-1.5 text-[13px] rounded-lg theme-bg-hover theme-text-secondary hover:theme-text transition"
                       >
                         📋 Copy
                       </button>
@@ -704,14 +704,14 @@ function ChatPanel({
               className="flex flex-col items-center gap-1 p-2 rounded-lg hover:theme-bg-hover transition"
             >
               <span className="text-xl">🖼️</span>
-              <span className="text-[10px] theme-text-secondary">รูปภาพ</span>
+              <span className="text-[13px] theme-text-secondary">รูปภาพ</span>
             </button>
             <button
               onClick={handleSendLocation}
               className="flex flex-col items-center gap-1 p-2 rounded-lg hover:theme-bg-hover transition"
             >
               <span className="text-xl">📍</span>
-              <span className="text-[10px] theme-text-secondary">ตำแหน่ง</span>
+              <span className="text-[13px] theme-text-secondary">ตำแหน่ง</span>
             </button>
           </div>
         </div>
@@ -749,7 +749,7 @@ function ChatPanel({
             className={`p-1 rounded transition text-sm ${showMemory ? "bg-purple-500/20 text-purple-400 ring-1 ring-purple-500/30" : "theme-text-secondary hover:theme-text"}`}
             title="🧠 Memory + Skills ของลูกค้า"
           >🧠</button>
-          <span className="ml-auto text-[9px] theme-text-muted opacity-50">LINE</span>
+          <span className="ml-auto text-[12px] theme-text-muted opacity-50">LINE</span>
         </div>
         {/* แถว 2: Input เต็มความกว้าง + ปุ่มส่ง */}
         <div className="flex items-end gap-1.5">
@@ -822,7 +822,7 @@ function ChatBubble({ msg }: { msg: Message }) {
         }`}>
           {/* User name */}
           {msg.userName && (
-            <p className={`text-[10px] font-semibold mb-0.5 ${
+            <p className={`text-[13px] font-semibold mb-0.5 ${
               isStaff ? (msg.isAutoReply ? "text-amber-200" : "text-indigo-200") : "text-sky-400"
             }`}>
               {msg.userName}
@@ -865,7 +865,7 @@ function ChatBubble({ msg }: { msg: Message }) {
             >
               <span className="text-lg">📎</span>
               <span className="flex-1 truncate">{msg.file.fileName}</span>
-              <span className="text-[10px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
+              <span className="text-[13px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
             </a>
           )}
           {/* Location */}
@@ -881,17 +881,17 @@ function ChatBubble({ msg }: { msg: Message }) {
           )}
           {/* Text */}
           {msg.content && !msg.sticker && msg.messageType !== "sticker" && (
-            <p className="whitespace-pre-wrap break-words leading-relaxed text-[13px]">{msg.content}</p>
+            <p className="whitespace-pre-wrap break-words leading-relaxed text-[15px]">{msg.content}</p>
           )}
           {/* Time + send method */}
           <div className="flex items-center justify-end gap-1 mt-0.5">
             {msg.sendMethod && isStaff && (
-              <span className={`text-[8px] ${msg.sendMethod === "reply" ? "text-green-300" : "text-amber-300"}`}>
+              <span className={`text-[11px] ${msg.sendMethod === "reply" ? "text-green-300" : "text-amber-300"}`}>
                 {msg.sendMethod === "reply" ? "✓ฟรี" : "push"}
               </span>
             )}
             {msg.createdAt && (
-              <span className={`text-[9px] ${isStaff ? "text-indigo-300" : "theme-text-muted"}`}>
+              <span className={`text-[12px] ${isStaff ? "text-indigo-300" : "theme-text-muted"}`}>
                 {new Date(msg.createdAt).toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" })}
               </span>
             )}
@@ -968,9 +968,9 @@ export default function ChatPage() {
           <div className="flex items-center justify-between mb-2">
             <h1 className="text-sm font-bold theme-text flex items-center gap-1.5">
               💬 แชท
-              <span className="text-[10px] theme-text-muted font-normal">Multi-Panel</span>
+              <span className="text-[13px] theme-text-muted font-normal">Multi-Panel</span>
             </h1>
-            <span className="text-[10px] theme-text-muted theme-bg-card px-1.5 py-0.5 rounded-full">
+            <span className="text-[13px] theme-text-muted theme-bg-card px-1.5 py-0.5 rounded-full">
               เปิด {openPanels.length}/{MAX_PANELS}
             </span>
           </div>
@@ -986,7 +986,7 @@ export default function ChatPage() {
 
         {/* Conversation count */}
         <div className="px-2 py-1.5 border-b theme-border">
-          <span className="text-[10px] theme-text-muted">{conversations.length} สนทนา</span>
+          <span className="text-[13px] theme-text-muted">{conversations.length} สนทนา</span>
         </div>
 
         {/* Conversation list — แยกสีตาม platform */}
@@ -994,7 +994,7 @@ export default function ChatPage() {
           {filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-32 gap-1">
               <span className="text-2xl">💬</span>
-              <p className="text-[11px] theme-text-muted">ไม่พบบทสนทนา</p>
+              <p className="text-[13px] theme-text-muted">ไม่พบบทสนทนา</p>
             </div>
           ) : filtered.map(conv => {
             const isOpen = openPanels.includes(conv.id);
@@ -1014,7 +1014,7 @@ export default function ChatPage() {
                 } ${isRecent && !isOpen ? "animate-pulse-subtle" : ""}`}
               >
                 <div className="relative shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-[10px] font-bold text-white">
+                  <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-[13px] font-bold text-white">
                     {getInitials(conv.name)}
                   </div>
                   {sentimentLevel && (
@@ -1033,18 +1033,18 @@ export default function ChatPage() {
                       {conv.name !== conv.id ? conv.name : conv.id.substring(0, 12) + "..."}
                     </span>
                     {isGroup ? (
-                      <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-orange-600 text-white leading-none">กลุ่ม</span>
+                      <span className="text-[11px] font-bold px-1.5 py-0.5 rounded bg-orange-600 text-white leading-none">กลุ่ม</span>
                     ) : (
-                      <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white leading-none">DM</span>
+                      <span className="text-[11px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white leading-none">DM</span>
                     )}
                   </div>
-                  <p className={`text-[10px] truncate mt-0.5 ${isRecent ? "theme-text-secondary font-medium" : "theme-text-muted"}`}>
+                  <p className={`text-[13px] truncate mt-0.5 ${isRecent ? "theme-text-secondary font-medium" : "theme-text-muted"}`}>
                     {conv.lastMessage || "---"}
                   </p>
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className="text-[9px] theme-text-muted">{timeAgo(conv.lastActivity)}</span>
+                    <span className="text-[12px] theme-text-muted">{timeAgo(conv.lastActivity)}</span>
                     {conv.purchaseIntent?.level === "red" && (
-                      <span className="text-[8px] bg-red-900/50 text-red-400 px-1 rounded">สนใจซื้อ!</span>
+                      <span className="text-[11px] bg-red-900/50 text-red-400 px-1 rounded">สนใจซื้อ!</span>
                     )}
                   </div>
                 </div>
@@ -1066,7 +1066,7 @@ export default function ChatPage() {
             </div>
 
             {/* Features */}
-            <div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 text-[11px] theme-text-muted text-left">
+            <div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 text-[13px] theme-text-muted text-left">
               <p>📱 <strong className="text-green-400">Reply API</strong> --- ตอบ LINE ฟรี!</p>
               <p>🤖 <strong className="text-amber-400">AI อัตโนมัติ</strong> --- 5 นาที ไม่ตอบ</p>
               <p>💡 <strong className="text-indigo-400">AI แนะนำ</strong> --- คำตอบ + เหตุผล</p>

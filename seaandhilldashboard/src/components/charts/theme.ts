@@ -34,6 +34,6 @@ export const SENTIMENT_COLORS: Record<string, string> = {
 
 // Shared chart style for dark theme
 export const chartStyle = {
-  fontSize: 11,
+  fontSize: 13,
   fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
 };

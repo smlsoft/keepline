@@ -100,7 +100,7 @@ function timeAgo(dateStr: string | null): string {
 function platformBadge(platform: string) {
   const cfg = PLATFORM_CONFIG[platform] || PLATFORM_CONFIG.line;
   return (
-    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${cfg.badgeBg} text-white leading-none shrink-0`}>
+    <span className={`text-[12px] font-bold px-1.5 py-0.5 rounded ${cfg.badgeBg} text-white leading-none shrink-0`}>
       {cfg.label}
     </span>
   );
@@ -163,7 +163,7 @@ function ConversationItem({
         <div className="flex items-center gap-1.5">
           <span className="text-sm theme-text-muted truncate flex-1">{conv.lastMessage || "---"}</span>
         </div>
-        <span className="text-[10px] theme-text-muted mt-0.5 block">{timeAgo(conv.lastActivity)}</span>
+        <span className="text-[13px] theme-text-muted mt-0.5 block">{timeAgo(conv.lastActivity)}</span>
       </div>
     </button>
   );
@@ -190,7 +190,7 @@ function ChatBubble({
         }`}
       >
         {msg.userName && (
-          <p className={`text-[11px] font-semibold mb-1 ${isStaff ? (isAutoReply ? "text-amber-200" : "text-indigo-200") : "text-sky-400"}`}>
+          <p className={`text-[13px] font-semibold mb-1 ${isStaff ? (isAutoReply ? "text-amber-200" : "text-indigo-200") : "text-sky-400"}`}>
             {msg.userName}
           </p>
         )}
@@ -237,7 +237,7 @@ function ChatBubble({
           >
             <span className="text-lg">📎</span>
             <span className="flex-1 truncate">{msg.file.fileName}</span>
-            <span className="text-[10px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
+            <span className="text-[13px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
           </a>
         )}
         {/* Location */}
@@ -258,12 +258,12 @@ function ChatBubble({
         {/* Time + send method */}
         <div className={`flex items-center justify-end gap-1 mt-1 ${isStaff ? "text-indigo-300" : "theme-text-muted"}`}>
           {msg.sendMethod && isStaff && (
-            <span className={`text-[9px] ${msg.sendMethod === "reply" ? "text-green-300" : "text-amber-300"}`}>
+            <span className={`text-[12px] ${msg.sendMethod === "reply" ? "text-green-300" : "text-amber-300"}`}>
               {msg.sendMethod === "reply" ? "✓ฟรี" : "push"}
             </span>
           )}
           {msg.createdAt && (
-            <span className="text-[10px] text-right">
+            <span className="text-[13px] text-right">
               {new Date(msg.createdAt).toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" })}
             </span>
           )}
@@ -589,7 +589,7 @@ export default function InboxPage() {
                   <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
                   <span className="text-xs theme-text-muted">{selectedConv?.messageCount} ข้อความ</span>
                   {selectedConv?.customerSentiment && (
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${
+                    <span className={`text-[13px] px-1.5 py-0.5 rounded ${
                       selectedConv.customerSentiment.level === "green" ? "bg-emerald-900/50 text-emerald-400" :
                       selectedConv.customerSentiment.level === "yellow" ? "bg-amber-900/50 text-amber-400" :
                       "bg-red-900/50 text-red-400"
@@ -598,7 +598,7 @@ export default function InboxPage() {
                     </span>
                   )}
                   {selectedConv?.purchaseIntent && (
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${
+                    <span className={`text-[13px] px-1.5 py-0.5 rounded ${
                       selectedConv.purchaseIntent.level === "green" ? "bg-emerald-900/50 text-emerald-400" :
                       selectedConv.purchaseIntent.level === "yellow" ? "bg-amber-900/50 text-amber-400" :
                       "bg-red-900/50 text-red-400"
@@ -694,7 +694,7 @@ export default function InboxPage() {
                       >
                         <div className="flex items-center gap-2 mb-0.5">
                           <span className="font-medium theme-text">{t.title}</span>
-                          <span className="text-[10px] theme-text-muted bg-gray-700/40 px-1.5 rounded">
+                          <span className="text-[13px] theme-text-muted bg-gray-700/40 px-1.5 rounded">
                             {CATEGORY_LABELS[t.category] || t.category}
                           </span>
                         </div>
@@ -764,7 +764,7 @@ export default function InboxPage() {
                   )}
                 </button>
               </div>
-              <p className="text-[10px] theme-text-muted mt-1.5 px-1">
+              <p className="text-[13px] theme-text-muted mt-1.5 px-1">
                 Enter = ส่ง · Shift+Enter = ขึ้นบรรทัด · ⚡ = ข้อความสำเร็จรูป
               </p>
             </div>
@@ -830,11 +830,11 @@ function CustomerInfoPanel({
         <div className="grid grid-cols-2 gap-2">
           <div className="theme-bg-card rounded-xl p-3 text-center">
             <p className="text-xl font-bold theme-text">{conv.messageCount}</p>
-            <p className="text-[10px] theme-text-muted mt-0.5">ข้อความ</p>
+            <p className="text-[13px] theme-text-muted mt-0.5">ข้อความ</p>
           </div>
           <div className="theme-bg-card rounded-xl p-3 text-center">
             <p className="text-xl font-bold theme-text">{conv.analysisLogsCount || 0}</p>
-            <p className="text-[10px] theme-text-muted mt-0.5">วิเคราะห์</p>
+            <p className="text-[13px] theme-text-muted mt-0.5">วิเคราะห์</p>
           </div>
         </div>
 
@@ -850,7 +850,7 @@ function CustomerInfoPanel({
               }`}>
                 <div>
                   <p className="text-xs font-medium theme-text">ความรู้สึกลูกค้า 😊</p>
-                  <p className={`text-[11px] mt-0.5 ${
+                  <p className={`text-[13px] mt-0.5 ${
                     sentimentData.level === "green" ? "text-emerald-400" :
                     sentimentData.level === "yellow" ? "text-amber-400" : "text-red-400"
                   }`}>
@@ -868,7 +868,7 @@ function CustomerInfoPanel({
               }`}>
                 <div>
                   <p className="text-xs font-medium theme-text">โอกาสซื้อ 🛒</p>
-                  <p className={`text-[11px] mt-0.5 ${
+                  <p className={`text-[13px] mt-0.5 ${
                     purchaseData.level === "green" ? "text-emerald-400" :
                     purchaseData.level === "yellow" ? "text-amber-400" : "text-red-400"
                   }`}>

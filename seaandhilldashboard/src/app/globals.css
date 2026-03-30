@@ -3,6 +3,16 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Font size overrides — ขนาดใหญ่ขึ้นเพื่ออ่านง่าย */
+  --font-size-xs: 0.8125rem;       /* 13px (default 12px) */
+  --font-size-xs--line-height: 1.5;
+  --font-size-sm: 0.9375rem;       /* 15px (default 14px) */
+  --font-size-sm--line-height: 1.5;
+  --font-size-base: 1.0625rem;     /* 17px (default 16px) */
+  --font-size-base--line-height: 1.6;
+  --font-size-lg: 1.1875rem;       /* 19px (default 18px) */
+  --font-size-lg--line-height: 1.6;
 }
 
 /* ============================================
@@ -111,10 +121,16 @@
 /* ============================================
    Base
    ============================================ */
+html {
+  font-size: 16px;
+}
+
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

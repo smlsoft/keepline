@@ -94,15 +94,15 @@ export default function AnalyticsPage() {
             <div className="grid grid-cols-3 gap-3">
               <div className="stat-card text-center">
                 <p className="text-2xl font-bold gradient-text">{data.summary.totalMessages.toLocaleString()}</p>
-                <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>ข้อความทั้งหมด</p>
+                <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>ข้อความทั้งหมด</p>
               </div>
               <div className="stat-card text-center">
                 <p className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>{data.summary.totalCustomers}</p>
-                <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>ลูกค้า</p>
+                <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>ลูกค้า</p>
               </div>
               <div className="stat-card text-center">
                 <p className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>{data.summary.totalGroups}</p>
-                <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>ห้องสนทนา</p>
+                <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>ห้องสนทนา</p>
               </div>
             </div>
 

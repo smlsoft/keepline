@@ -149,20 +149,20 @@ export default function TasksPage() {
 
             <div className="space-y-3">
               <div>
-                <label className="block text-[11px] theme-text-muted mb-1">ชื่องาน *</label>
+                <label className="block text-[13px] theme-text-muted mb-1">ชื่องาน *</label>
                 <input type="text" value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
                   placeholder="ติดตามใบเสนอราคา..."
                   className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text" />
               </div>
               <div>
-                <label className="block text-[11px] theme-text-muted mb-1">ชื่อลูกค้า</label>
+                <label className="block text-[13px] theme-text-muted mb-1">ชื่อลูกค้า</label>
                 <input type="text" value={form.customerName} onChange={(e) => setForm((p) => ({ ...p, customerName: e.target.value }))}
                   placeholder="สมชาย..."
                   className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] theme-text-muted mb-1">ความสำคัญ</label>
+                  <label className="block text-[13px] theme-text-muted mb-1">ความสำคัญ</label>
                   <select value={form.priority} onChange={(e) => setForm((p) => ({ ...p, priority: e.target.value as any }))}
                     className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text">
                     <option value="high">🔴 ด่วน</option>
@@ -171,19 +171,19 @@ export default function TasksPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[11px] theme-text-muted mb-1">กำหนดส่ง</label>
+                  <label className="block text-[13px] theme-text-muted mb-1">กำหนดส่ง</label>
                   <input type="date" value={form.dueDate} onChange={(e) => setForm((p) => ({ ...p, dueDate: e.target.value }))}
                     className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text" />
                 </div>
               </div>
               <div>
-                <label className="block text-[11px] theme-text-muted mb-1">ผู้รับผิดชอบ</label>
+                <label className="block text-[13px] theme-text-muted mb-1">ผู้รับผิดชอบ</label>
                 <input type="text" value={form.assignee} onChange={(e) => setForm((p) => ({ ...p, assignee: e.target.value }))}
                   placeholder="พนักงาน A..."
                   className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text" />
               </div>
               <div>
-                <label className="block text-[11px] theme-text-muted mb-1">หมายเหตุ</label>
+                <label className="block text-[13px] theme-text-muted mb-1">หมายเหตุ</label>
                 <textarea value={form.notes} onChange={(e) => setForm((p) => ({ ...p, notes: e.target.value }))} rows={3}
                   placeholder="รายละเอียดเพิ่มเติม..."
                   className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text resize-none" />
@@ -285,10 +285,10 @@ export default function TasksPage() {
                           {task.title}
                         </p>
                         <div className="flex items-center gap-1.5 shrink-0">
-                          <span className={`text-[10px] px-2 py-0.5 rounded-full border font-medium ${priority.color}`}>
+                          <span className={`text-[13px] px-2 py-0.5 rounded-full border font-medium ${priority.color}`}>
                             {priority.label}
                           </span>
-                          <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusCfg.color}`}>
+                          <span className={`text-[13px] px-2 py-0.5 rounded-full font-medium ${statusCfg.color}`}>
                             {statusCfg.label}
                           </span>
                         </div>
@@ -296,15 +296,15 @@ export default function TasksPage() {
 
                       <div className="flex items-center gap-3 mt-1.5 flex-wrap">
                         {task.customerName && (
-                          <span className="text-[11px] theme-text-muted">👤 {task.customerName}</span>
+                          <span className="text-[13px] theme-text-muted">👤 {task.customerName}</span>
                         )}
                         {task.dueDate && (
-                          <span className={`text-[11px] ${overdue ? "text-red-400 font-medium" : "theme-text-muted"}`}>
+                          <span className={`text-[13px] ${overdue ? "text-red-400 font-medium" : "theme-text-muted"}`}>
                             📅 {formatDueDate(task.dueDate)}
                           </span>
                         )}
                         {task.assignee && (
-                          <span className="text-[11px] theme-text-muted">👔 {task.assignee}</span>
+                          <span className="text-[13px] theme-text-muted">👔 {task.assignee}</span>
                         )}
                       </div>
                     </div>
@@ -321,7 +321,7 @@ export default function TasksPage() {
 
                       {/* Status Actions */}
                       <div>
-                        <p className="text-[11px] theme-text-muted mb-2">เปลี่ยนสถานะ:</p>
+                        <p className="text-[13px] theme-text-muted mb-2">เปลี่ยนสถานะ:</p>
                         <div className="flex flex-wrap gap-2">
                           {(["pending", "in_progress", "completed", "cancelled"] as const).map((s) => {
                             const cfg = STATUS_CONFIG[s];
@@ -341,14 +341,14 @@ export default function TasksPage() {
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <p className="text-[10px] theme-text-muted">
+                        <p className="text-[13px] theme-text-muted">
                           สร้าง {new Date(task.createdAt).toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "2-digit" })}
                           {task.completedAt && ` · เสร็จ ${new Date(task.completedAt).toLocaleDateString("th-TH", { day: "numeric", month: "short" })}`}
                         </p>
                         <button
                           onClick={() => handleDelete(task._id)}
                           disabled={deletingId === task._id}
-                          className="text-[11px] text-red-400 hover:text-red-300 transition disabled:opacity-50">
+                          className="text-[13px] text-red-400 hover:text-red-300 transition disabled:opacity-50">
                           {deletingId === task._id ? "กำลังลบ..." : "🗑️ ลบ"}
                         </button>
                       </div>

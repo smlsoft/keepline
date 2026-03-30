@@ -134,8 +134,8 @@ export default function CostsPage() {
                 <span className="text-xl">{c.icon}</span>
                 <span className="text-lg font-bold">{c.value}</span>
               </div>
-              <p className="text-[11px] theme-text-secondary mt-1">{c.label}</p>
-              {c.sub && <p className="text-[10px] theme-text-muted">{c.sub}</p>}
+              <p className="text-[13px] theme-text-secondary mt-1">{c.label}</p>
+              {c.sub && <p className="text-[13px] theme-text-muted">{c.sub}</p>}
             </div>
           ))}
         </div>
@@ -161,16 +161,16 @@ export default function CostsPage() {
               <div className="space-y-2">
                 {daily.map((d) => (
                   <div key={d._id} className="flex items-center gap-2">
-                    <span className="text-[11px] theme-text-secondary w-16 shrink-0">{d._id.substring(5)}</span>
+                    <span className="text-[13px] theme-text-secondary w-16 shrink-0">{d._id.substring(5)}</span>
                     <div className="flex-1 theme-bg-card rounded-full h-6 overflow-hidden">
                       <div
-                        className="bg-blue-500 h-6 rounded-full flex items-center px-2 text-[10px] font-bold text-white"
+                        className="bg-blue-500 h-6 rounded-full flex items-center px-2 text-[13px] font-bold text-white"
                         style={{ width: `${(d.totalTokens / maxDailyTokens) * 100}%`, minWidth: d.totalTokens > 0 ? 40 : 0 }}
                       >
                         {formatTokens(d.totalTokens)}
                       </div>
                     </div>
-                    <span className="text-[10px] theme-text-muted w-14 text-right">{formatCost(d.totalCost)}</span>
+                    <span className="text-[13px] theme-text-muted w-14 text-right">{formatCost(d.totalCost)}</span>
                   </div>
                 ))}
               </div>
@@ -188,11 +188,11 @@ export default function CostsPage() {
                   <div key={f._id} className="flex items-center justify-between p-2 rounded-lg theme-bg-card">
                     <div>
                       <p className="text-sm font-medium">{FEATURE_LABELS[f._id] || f._id}</p>
-                      <p className="text-[10px] theme-text-muted">เรียก {f.calls} ครั้ง &middot; เฉลี่ย {formatTokens(Math.round(f.avgTokens))} คำ/ครั้ง</p>
+                      <p className="text-[13px] theme-text-muted">เรียก {f.calls} ครั้ง &middot; เฉลี่ย {formatTokens(Math.round(f.avgTokens))} คำ/ครั้ง</p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-bold">{formatTokens(f.totalTokens)}</p>
-                      <p className="text-[10px] theme-text-muted">{formatCost(f.totalCost)}</p>
+                      <p className="text-[13px] theme-text-muted">{formatCost(f.totalCost)}</p>
                     </div>
                   </div>
                 ))}
@@ -211,7 +211,7 @@ export default function CostsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-[11px] theme-text-muted border-b theme-border">
+                    <tr className="text-left text-[13px] theme-text-muted border-b theme-border">
                       <th className="pb-2">ผู้ให้บริการ</th>
                       <th className="pb-2 text-right">เรียกใช้</th>
                       <th className="pb-2 text-right">จำนวนคำ</th>
@@ -245,7 +245,7 @@ export default function CostsPage() {
             ) : (
               <div className="space-y-1.5 max-h-[400px] overflow-y-auto">
                 {recent.map((r, i) => (
-                  <div key={i} className="flex items-center justify-between text-[11px] p-1.5 rounded theme-bg-card">
+                  <div key={i} className="flex items-center justify-between text-[13px] p-1.5 rounded theme-bg-card">
                     <div className="flex items-center gap-2">
                       <span className="theme-text-muted w-12 shrink-0">{formatDate(r.createdAt)}</span>
                       <span className="font-medium truncate max-w-[140px]">{FEATURE_LABELS[r.feature] || r.feature}</span>
@@ -295,11 +295,11 @@ function CooldownBadge({ remainSec, readyColor }: { remainSec: number; readyColo
     return () => clearTimeout(t);
   }, [sec]);
 
-  if (sec <= 0) return <span className="text-[10px] shrink-0 font-medium" style={{ color: readyColor }}>✓ พร้อม</span>;
+  if (sec <= 0) return <span className="text-[13px] shrink-0 font-medium" style={{ color: readyColor }}>✓ พร้อม</span>;
   const min = Math.floor(sec / 60);
   const s = sec % 60;
   return (
-    <span className="text-[10px] shrink-0 font-medium font-mono" style={{ color: "#f87171" }}>
+    <span className="text-[13px] shrink-0 font-medium font-mono" style={{ color: "#f87171" }}>
       ⏳ {min > 0 ? `${min}:${s.toString().padStart(2, "0")}` : `${s}s`}
     </span>
   );
@@ -342,13 +342,13 @@ function AIModelsRealtime() {
       <div className="flex items-center justify-between mb-3">
         <div>
           <h2 className="text-sm font-bold">🤖 AI Models — สถานะ Realtime</h2>
-          <p className="text-[11px] theme-text-muted">ค้นพบล่าสุด {data.lastDiscovery ? new Date(data.lastDiscovery).toLocaleTimeString("th-TH") : "—"}</p>
+          <p className="text-[13px] theme-text-muted">ค้นพบล่าสุด {data.lastDiscovery ? new Date(data.lastDiscovery).toLocaleTimeString("th-TH") : "—"}</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[11px] px-2 py-1 rounded-full font-medium" style={{ color: "#4ade80", background: "rgba(74,222,128,0.1)" }}>✓ พร้อม {readyCount + dedicatedReady}</span>
-          {coolingCount > 0 && <span className="text-[11px] px-2 py-1 rounded-full font-medium" style={{ color: "#f87171", background: "rgba(248,113,113,0.1)" }}>⏳ รอ {coolingCount}</span>}
+          <span className="text-[13px] px-2 py-1 rounded-full font-medium" style={{ color: "#4ade80", background: "rgba(74,222,128,0.1)" }}>✓ พร้อม {readyCount + dedicatedReady}</span>
+          {coolingCount > 0 && <span className="text-[13px] px-2 py-1 rounded-full font-medium" style={{ color: "#f87171", background: "rgba(248,113,113,0.1)" }}>⏳ รอ {coolingCount}</span>}
           {/* Countdown */}
-          <span className="text-[10px] px-2 py-1 rounded-full font-mono" style={{ color: "#64748b", background: "rgba(100,116,139,0.1)" }}>
+          <span className="text-[13px] px-2 py-1 rounded-full font-mono" style={{ color: "#64748b", background: "rgba(100,116,139,0.1)" }}>
             🔄 {countdown}s
           </span>
         </div>
@@ -369,7 +369,7 @@ function AIModelsRealtime() {
                 <span className={`w-2 h-2 rounded-full shrink-0 ${isCooling ? "bg-red-500 animate-pulse" : "bg-green-500"}`} />
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-medium truncate">{model}</div>
-                  <div className="text-[10px] theme-text-muted">{provider}</div>
+                  <div className="text-[13px] theme-text-muted">{provider}</div>
                 </div>
                 <CooldownBadge remainSec={isCooling ? cd.remainSec : 0} readyColor="#4ade80" />
               </div>
@@ -392,7 +392,7 @@ function AIModelsRealtime() {
                   <span className={`w-2 h-2 rounded-full shrink-0 ${isCooling ? "bg-red-500 animate-pulse" : "bg-blue-500"}`} />
                   <div className="flex-1 min-w-0">
                     <div className="text-xs font-medium">{d.split(" (")[0]}</div>
-                    <div className="text-[10px] theme-text-muted">dedicated</div>
+                    <div className="text-[13px] theme-text-muted">dedicated</div>
                   </div>
                   <CooldownBadge remainSec={isCooling ? cd.remainSec : 0} readyColor="#60a5fa" />
                 </div>
@@ -434,7 +434,7 @@ function AIScoreBoard() {
   return (
     <section className="theme-bg-secondary border theme-border rounded-xl p-4">
       <h2 className="text-sm font-bold mb-1">🏆 AI Score — ตัวไหนเก่งอะไร</h2>
-      <p className="text-[11px] theme-text-muted mb-4">คะแนนจากผลลัพธ์จริง — ใช้เลือก AI ที่เหมาะกับงาน</p>
+      <p className="text-[13px] theme-text-muted mb-4">คะแนนจากผลลัพธ์จริง — ใช้เลือก AI ที่เหมาะกับงาน</p>
       <div className="space-y-4">
         {Object.entries(byTask).map(([task, items]) => (
           <div key={task}>
@@ -444,7 +444,7 @@ function AIScoreBoard() {
                 <div key={`${s.provider}-${s.model}-${s.taskType}`} className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full shrink-0 ${s.score >= 80 ? "bg-green-500" : s.score >= 50 ? "bg-yellow-500" : "bg-red-500"}`}></span>
                   <span className="text-xs font-medium w-28 truncate">{s.provider}</span>
-                  <span className="text-[11px] theme-text-secondary w-20 truncate">{s.model}</span>
+                  <span className="text-[13px] theme-text-secondary w-20 truncate">{s.model}</span>
                   <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: "var(--bg-primary)" }}>
                     <div className="h-full rounded-full transition-all" style={{
                       width: `${s.score}%`,
@@ -454,7 +454,7 @@ function AIScoreBoard() {
                   <span className="text-xs font-bold w-10 text-right" style={{ color: s.score >= 80 ? "#4ade80" : s.score >= 50 ? "#fbbf24" : "#f87171" }}>
                     {s.score}%
                   </span>
-                  <span className="text-[10px] theme-text-muted w-16 text-right">{s.success}✓ {s.fail}✕</span>
+                  <span className="text-[13px] theme-text-muted w-16 text-right">{s.success}✓ {s.fail}✕</span>
                 </div>
               ))}
             </div>

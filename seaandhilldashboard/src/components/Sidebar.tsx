@@ -121,7 +121,7 @@ function SidebarNavLink({ href, icon, label, onClick, badge }: NavItem & { onCli
       <span className="text-base leading-none w-5 text-center">{icon}</span>
       <span className="truncate">{label}</span>
       {badge && badge > 0 ? (
-        <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold bg-red-500 text-white rounded-full min-w-[18px] text-center animate-pulse">
+        <span className="ml-auto px-1.5 py-0.5 text-[13px] font-bold bg-red-500 text-white rounded-full min-w-[18px] text-center animate-pulse">
           {badge > 99 ? "99+" : badge}
         </span>
       ) : active ? (
@@ -175,7 +175,7 @@ function UserSection({ compact = false }: { compact?: boolean }) {
         {!compact && (
           <div className="flex-1 text-left min-w-0">
             <p className="text-xs font-medium truncate" style={{ color: "var(--text-primary)" }}>{user?.name || user?.email}</p>
-            <p className="text-[10px] truncate" style={{ color: "var(--text-muted)" }}>{user?.email}</p>
+            <p className="text-[13px] truncate" style={{ color: "var(--text-muted)" }}>{user?.email}</p>
           </div>
         )}
       </button>
@@ -189,7 +189,7 @@ function UserSection({ compact = false }: { compact?: boolean }) {
             <div className="px-4 py-3 border-b" style={{ borderColor: "var(--border)" }}>
               <p className="text-sm font-medium truncate" style={{ color: "var(--text-primary)" }}>{user?.name || "ผู้ใช้"}</p>
               <p className="text-xs truncate mt-0.5" style={{ color: "var(--text-secondary)" }}>{user?.email}</p>
-              <span className="inline-block mt-1.5 text-[10px] px-2.5 py-0.5 rounded-full font-medium gradient-bg text-white">
+              <span className="inline-block mt-1.5 text-[13px] px-2.5 py-0.5 rounded-full font-medium gradient-bg text-white">
                 {(user as any)?.plan === "pro" ? "Pro" : "Free"}
               </span>
             </div>
@@ -267,7 +267,7 @@ function RebuildButton() {
         )}
       </button>
       {logs.length > 0 && (
-        <div className="mt-1.5 px-2.5 py-2 rounded-lg text-[10px] font-mono space-y-0.5 max-h-32 overflow-y-auto"
+        <div className="mt-1.5 px-2.5 py-2 rounded-lg text-[13px] font-mono space-y-0.5 max-h-32 overflow-y-auto"
           style={{ background: "var(--bg-primary)", color: "var(--text-muted)" }}>
           {logs.map((l, i) => <p key={i}>{l}</p>)}
         </div>
@@ -300,8 +300,8 @@ function NavWithBadges() {
             <button onClick={() => toggleGroup(label)}
               className="w-full flex items-center justify-between px-3 py-1.5 mb-0.5 rounded-lg cursor-pointer transition hover:bg-[var(--bg-hover)] active:scale-[0.98]"
               style={{ color: "var(--text-muted)" }}>
-              <span className="text-[10px] uppercase tracking-widest font-semibold">{label}</span>
-              <span className="text-[10px] transition-transform" style={{ transform: isCollapsed ? "rotate(-90deg)" : "rotate(0deg)" }}>▼</span>
+              <span className="text-[13px] uppercase tracking-widest font-semibold">{label}</span>
+              <span className="text-[13px] transition-transform" style={{ transform: isCollapsed ? "rotate(-90deg)" : "rotate(0deg)" }}>▼</span>
             </button>
           )}
           {!isCollapsed && group.items.map((item) => (
@@ -342,10 +342,10 @@ function BottomTabBar({ onMorePress }: { onMorePress: () => void }) {
               }`}
             >
               <span className={`text-xl leading-none transition-transform ${active ? "scale-110" : ""}`}>{tab.icon}</span>
-              <span className={`text-[10px] leading-tight ${active ? "font-semibold" : ""}`}>{tab.label}</span>
+              <span className={`text-[13px] leading-tight ${active ? "font-semibold" : ""}`}>{tab.label}</span>
               {active && <span className="w-1 h-1 rounded-full bg-indigo-400 mt-0.5" />}
               {badge > 0 && (
-                <span className="absolute top-0 right-1 px-1 py-0.5 text-[8px] font-bold bg-red-500 text-white rounded-full min-w-[14px] text-center">
+                <span className="absolute top-0 right-1 px-1 py-0.5 text-[11px] font-bold bg-red-500 text-white rounded-full min-w-[14px] text-center">
                   {badge > 99 ? "99+" : badge}
                 </span>
               )}
@@ -358,7 +358,7 @@ function BottomTabBar({ onMorePress }: { onMorePress: () => void }) {
           className="flex flex-col items-center justify-center gap-0.5 w-16 py-1 rounded-xl text-[var(--text-muted)]"
         >
           <span className="text-xl leading-none">☰</span>
-          <span className="text-[10px] leading-tight">เพิ่มเติม</span>
+          <span className="text-[13px] leading-tight">เพิ่มเติม</span>
         </button>
       </div>
     </nav>
@@ -390,7 +390,7 @@ function MoreDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
             {NAV_GROUPS.map((group, gi) => (
               <div key={gi} className={gi > 0 ? "mt-3 pt-3 border-t" : ""} style={{ borderColor: "var(--border)" }}>
                 {group.groupLabel && (
-                  <p className="text-[11px] uppercase tracking-wider px-2 mb-2 font-medium"
+                  <p className="text-[13px] uppercase tracking-wider px-2 mb-2 font-medium"
                     style={{ color: "var(--text-muted)" }}>
                     {group.groupLabel}
                   </p>
@@ -438,7 +438,7 @@ function MoreDrawerItem({ href, icon, label, onClick }: NavItem & { onClick: () 
       style={{ color: active ? undefined : "var(--text-secondary)" }}
     >
       <span className="text-2xl leading-none">{icon}</span>
-      <span className={`text-[11px] ${active ? "font-semibold" : ""}`}>{label}</span>
+      <span className={`text-[13px] ${active ? "font-semibold" : ""}`}>{label}</span>
     </Link>
   );
 }
@@ -470,10 +470,10 @@ function AICostMini() {
     <Link href="/costs" className="flex items-center justify-between px-4 py-2 border-b transition hover:bg-[var(--bg-hover)]" style={{ borderColor: "var(--border)" }}>
       <div className="flex items-center gap-2">
         <span className="text-xs">🤖</span>
-        <span className="text-[11px] font-bold" style={{ color: data.month.thb === 0 ? "#4ade80" : "#fbbf24" }}>{fmt(data.month.thb)}</span>
-        <span className="text-[9px]" style={{ color: "var(--text-muted)" }}>เดือนนี้</span>
+        <span className="text-[13px] font-bold" style={{ color: data.month.thb === 0 ? "#4ade80" : "#fbbf24" }}>{fmt(data.month.thb)}</span>
+        <span className="text-[12px]" style={{ color: "var(--text-muted)" }}>เดือนนี้</span>
       </div>
-      {modelCount > 0 && <span className="text-[8px] px-1.5 py-0.5 rounded-full font-medium" style={{ color: "#4ade80", background: "rgba(74,222,128,0.08)" }}>{modelCount} AI ฟรี</span>}
+      {modelCount > 0 && <span className="text-[11px] px-1.5 py-0.5 rounded-full font-medium" style={{ color: "#4ade80", background: "rgba(74,222,128,0.08)" }}>{modelCount} AI ฟรี</span>}
     </Link>
   );
 }
@@ -499,7 +499,7 @@ export default function Sidebar() {
               </div>
               <div className="min-w-0">
                 <h1 className="text-sm font-bold leading-tight" style={{ color: "var(--text-primary)" }}>OpenClaw</h1>
-                <p className="text-[10px] leading-tight" style={{ color: "var(--text-muted)" }}>Mini CRM</p>
+                <p className="text-[13px] leading-tight" style={{ color: "var(--text-muted)" }}>Mini CRM</p>
               </div>
             </div>
           </div>
@@ -515,7 +515,7 @@ export default function Sidebar() {
           <div className="px-3 pb-3 pt-2 border-t space-y-2.5" style={{ borderColor: "var(--border)" }}>
             <RebuildButton />
             <div className="flex items-center justify-between px-2">
-              <span className="text-[11px]" style={{ color: "var(--text-muted)" }}>ธีม</span>
+              <span className="text-[13px]" style={{ color: "var(--text-muted)" }}>ธีม</span>
               <ThemeToggle />
             </div>
             <UserSection />

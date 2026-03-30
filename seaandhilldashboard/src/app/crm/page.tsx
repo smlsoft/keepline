@@ -57,7 +57,7 @@ function Badge({ level, label }: { level: string; label: string }) {
     yellow: "bg-amber-500/20 text-amber-400 border-amber-500/30",
     red: "bg-red-500/20 text-red-400 border-red-500/30",
   };
-  return <span className={`px-2 py-0.5 rounded-full text-[11px] font-medium border ${colors[level] || colors.green}`}>{label}</span>;
+  return <span className={`px-2 py-0.5 rounded-full text-[13px] font-medium border ${colors[level] || colors.green}`}>{label}</span>;
 }
 
 type FilterStage = string;
@@ -132,19 +132,19 @@ export default function CrmPage() {
         {(totalPipelineValue > 0 || wonValue > 0) && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4">
-              <p className="text-[11px] text-blue-400 mb-1">💼 Pipeline รวม</p>
+              <p className="text-[13px] text-blue-400 mb-1">💼 Pipeline รวม</p>
               <p className="text-xl font-bold text-blue-300">{totalPipelineValue > 0 ? formatTHB(totalPipelineValue) : "-"}</p>
-              <p className="text-[10px] theme-text-muted mt-1">สนใจ, เสนอราคา, ต่อรอง, ติดตาม</p>
+              <p className="text-[13px] theme-text-muted mt-1">สนใจ, เสนอราคา, ต่อรอง, ติดตาม</p>
             </div>
             <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-              <p className="text-[11px] text-emerald-400 mb-1">✅ ปิดการขายได้</p>
+              <p className="text-[13px] text-emerald-400 mb-1">✅ ปิดการขายได้</p>
               <p className="text-xl font-bold text-emerald-300">{wonValue > 0 ? formatTHB(wonValue) : "-"}</p>
-              <p className="text-[10px] theme-text-muted mt-1">{customers.filter((c) => c.pipelineStage === "closed_won").length} ราย</p>
+              <p className="text-[13px] theme-text-muted mt-1">{customers.filter((c) => c.pipelineStage === "closed_won").length} ราย</p>
             </div>
             <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-              <p className="text-[11px] text-red-400 mb-1">❌ ปิดไม่ได้</p>
+              <p className="text-[13px] text-red-400 mb-1">❌ ปิดไม่ได้</p>
               <p className="text-xl font-bold text-red-300">{lostValue > 0 ? formatTHB(lostValue) : "-"}</p>
-              <p className="text-[10px] theme-text-muted mt-1">{customers.filter((c) => c.pipelineStage === "closed_lost").length} ราย</p>
+              <p className="text-[13px] theme-text-muted mt-1">{customers.filter((c) => c.pipelineStage === "closed_lost").length} ราย</p>
             </div>
           </div>
         )}
@@ -160,7 +160,7 @@ export default function CrmPage() {
                 <span className="text-lg">{s.icon}</span>
                 <span className="text-xl font-bold">{s.count}</span>
               </div>
-              <p className="text-[10px] theme-text-muted mt-1">{s.label}</p>
+              <p className="text-[13px] theme-text-muted mt-1">{s.label}</p>
             </button>
           ))}
         </div>
@@ -213,7 +213,7 @@ export default function CrmPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-[11px] theme-text-muted border-b theme-border">
+                <tr className="text-left text-[13px] theme-text-muted border-b theme-border">
                   <th className="pb-3 pr-4">ลูกค้า</th>
                   <th className="pb-3 px-2 text-center">สถานะ</th>
                   <th className="pb-3 px-2 text-center">💰 มูลค่า</th>
@@ -238,13 +238,13 @@ export default function CrmPage() {
                           </div>
                           <div>
                             <p className="font-medium text-sm hover:underline">{c.name}</p>
-                            {c.phone && <p className="text-[10px] theme-text-muted">{c.phone}</p>}
-                            {c.company && <p className="text-[10px] theme-text-muted">{c.company}</p>}
+                            {c.phone && <p className="text-[13px] theme-text-muted">{c.phone}</p>}
+                            {c.company && <p className="text-[13px] theme-text-muted">{c.company}</p>}
                           </div>
                         </Link>
                       </td>
                       <td className="py-3 px-2 text-center">
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium text-white ${stage.color}`}>
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[13px] font-medium text-white ${stage.color}`}>
                           {stage.icon} {stage.label}
                         </span>
                       </td>
@@ -265,7 +265,7 @@ export default function CrmPage() {
                       <td className="py-3 px-2">
                         <div className="flex flex-wrap gap-1 max-w-[200px]">
                           {(c.tags || []).slice(0, 5).map((t) => (
-                            <span key={t} className="text-[9px] px-1.5 py-0.5 rounded theme-bg-card border theme-border theme-text-secondary">{t}</span>
+                            <span key={t} className="text-[12px] px-1.5 py-0.5 rounded theme-bg-card border theme-border theme-text-secondary">{t}</span>
                           ))}
                         </div>
                       </td>
@@ -273,18 +273,18 @@ export default function CrmPage() {
                         <div className="flex flex-wrap gap-1 max-w-[180px]">
                           {(c.groups || []).slice(0, 3).map((g) => (
                             <Link key={g.sourceId} href={`/dashboard/group/${g.sourceId}`}
-                              className="text-[9px] px-1.5 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/30 hover:bg-cyan-800/50 transition truncate max-w-[120px]"
+                              className="text-[12px] px-1.5 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/30 hover:bg-cyan-800/50 transition truncate max-w-[120px]"
                               title={`${g.groupName} (${g.messageCount} ข้อความ)`}>
                               {g.groupName}
                             </Link>
                           ))}
                           {(c.groups || []).length > 3 && (
-                            <span className="text-[9px] px-1.5 py-0.5 rounded-full theme-bg-card theme-text-muted">+{c.groups!.length - 3}</span>
+                            <span className="text-[12px] px-1.5 py-0.5 rounded-full theme-bg-card theme-text-muted">+{c.groups!.length - 3}</span>
                           )}
                         </div>
                       </td>
                       <td className="py-3 px-2 text-center text-xs theme-text-muted">{(c.rooms || []).length}</td>
-                      <td className="py-3 pl-2 text-[11px] theme-text-muted">
+                      <td className="py-3 pl-2 text-[13px] theme-text-muted">
                         {c.updatedAt ? new Date(c.updatedAt).toLocaleString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "-"}
                       </td>
                     </tr>

@@ -141,7 +141,7 @@ export default function BroadcastPage() {
                 <textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} rows={4}
                   placeholder="สวัสดีครับ {{name}} ..."
                   className="w-full px-3 py-2.5 rounded-xl border text-sm resize-none" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
-                <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)" }}>ใช้ {"{{name}}"} แทนชื่อลูกค้า</p>
+                <p className="text-[13px] mt-1" style={{ color: "var(--text-muted)" }}>ใช้ {"{{name}}"} แทนชื่อลูกค้า</p>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -269,8 +269,8 @@ export default function BroadcastPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
                         <span className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{b.name}</span>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium border ${sc.bg}`}>{sc.label}</span>
-                        <span className="text-[10px] px-1.5 py-0.5 rounded-full border" style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}>
+                        <span className={`text-[13px] px-2 py-0.5 rounded-full font-medium border ${sc.bg}`}>{sc.label}</span>
+                        <span className="text-[13px] px-1.5 py-0.5 rounded-full border" style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}>
                           {TARGET_LABELS[b.targetType]}
                           {b.targetType === "tier" && b.targetTier ? ` (${TIER_LABELS[b.targetTier] || b.targetTier})` : ""}
                           {b.targetType === "tag" && b.targetTags.length ? ` (${b.targetTags.join(", ")})` : ""}
@@ -278,17 +278,17 @@ export default function BroadcastPage() {
                       </div>
                       <p className="text-xs line-clamp-2 mb-2" style={{ color: "var(--text-secondary)" }}>{b.message}</p>
                       {b.status === "sent" && (
-                        <p className="text-[10px] mb-1" style={{ color: "var(--text-muted)" }}>
+                        <p className="text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>
                           ส่งถึง {b.stats.sent} คน {b.stats.failed > 0 ? `(ล้มเหลว ${b.stats.failed})` : ""}
                           {b.sentAt ? ` — ${timeAgo(b.sentAt)}` : ""}
                         </p>
                       )}
                       {b.scheduledAt && b.status === "scheduled" && (
-                        <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>
+                        <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>
                           ตั้งเวลา: {new Date(b.scheduledAt).toLocaleString("th-TH")}
                         </p>
                       )}
-                      <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{timeAgo(b.createdAt)}</p>
+                      <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>{timeAgo(b.createdAt)}</p>
                     </div>
 
                     {/* Actions */}

@@ -104,13 +104,13 @@ export default function TemplatesPage() {
 
             <div className="space-y-3">
               <div>
-                <label className="block text-[11px] theme-text-muted mb-1">ชื่อข้อความสำเร็จรูป *</label>
+                <label className="block text-[13px] theme-text-muted mb-1">ชื่อข้อความสำเร็จรูป *</label>
                 <input type="text" value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
                   placeholder="ทักทายลูกค้าใหม่"
                   className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text" />
               </div>
               <div>
-                <label className="block text-[11px] theme-text-muted mb-1">หมวดหมู่</label>
+                <label className="block text-[13px] theme-text-muted mb-1">หมวดหมู่</label>
                 <div className="flex flex-wrap gap-2">
                   {CATEGORIES.map((c) => (
                     <button key={c.value} onClick={() => setForm((p) => ({ ...p, category: c.value }))}
@@ -121,7 +121,7 @@ export default function TemplatesPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-[11px] theme-text-muted mb-1">ข้อความ *</label>
+                <label className="block text-[13px] theme-text-muted mb-1">ข้อความ *</label>
                 <textarea value={form.content} onChange={(e) => setForm((p) => ({ ...p, content: e.target.value }))} rows={5}
                   placeholder="สวัสดีค่ะ ขอบคุณที่สนใจสินค้าของเรา มีอะไรให้ช่วยเหลือคะ?"
                   className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text resize-none" />
@@ -199,12 +199,12 @@ export default function TemplatesPage() {
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm">{t.title}</p>
-                      <span className={`inline-block text-[10px] px-2 py-0.5 rounded-full border mt-1 font-medium ${catCfg.bg} ${catCfg.color}`}>
+                      <span className={`inline-block text-[13px] px-2 py-0.5 rounded-full border mt-1 font-medium ${catCfg.bg} ${catCfg.color}`}>
                         {catCfg.label}
                       </span>
                     </div>
                     {t.usageCount > 0 && (
-                      <span className="text-[10px] theme-text-muted shrink-0">ใช้ {t.usageCount}x</span>
+                      <span className="text-[13px] theme-text-muted shrink-0">ใช้ {t.usageCount}x</span>
                     )}
                   </div>
 

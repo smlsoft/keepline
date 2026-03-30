@@ -229,7 +229,7 @@ export default function Home() {
               <span className="text-red-400 text-sm font-bold shrink-0">⚠️ ตอบช้า</span>
               <div className="flex gap-2">
                 {alerts.filter(a => a.type === "slow_response").slice(0, 5).map((a) => (
-                  <span key={a._id} className={`shrink-0 text-[11px] px-2 py-1 rounded-lg border ${a.level === "red" ? "bg-red-900/50 border-red-700 text-red-300" : "bg-amber-900/50 border-amber-700 text-amber-300"}`}>
+                  <span key={a._id} className={`shrink-0 text-[13px] px-2 py-1 rounded-lg border ${a.level === "red" ? "bg-red-900/50 border-red-700 text-red-300" : "bg-amber-900/50 border-amber-700 text-amber-300"}`}>
                     {a.staffName.replace(/^SML\s*-?\s*/i, "")} ตอบช้า {a.responseMinutes} นาที ({a.customerName})
                   </span>
                 ))}
@@ -257,7 +257,7 @@ export default function Home() {
 
               {/* ความพอใจลูกค้า */}
               <div className="flex items-center gap-1 theme-bg-secondary rounded-lg px-2 py-1 border theme-border">
-                <span className="text-[10px] theme-text-muted mr-1">ลูกค้า</span>
+                <span className="text-[13px] theme-text-muted mr-1">ลูกค้า</span>
                 {([
                   { color: "green" as const, label: "ปกติ", emoji: "😊" },
                   { color: "yellow" as const, label: "ติดตาม", emoji: "😐" },
@@ -275,7 +275,7 @@ export default function Home() {
                         if (!prev.has(key)) next.add(key);
                         return next;
                       })}
-                      className={`px-2 py-0.5 rounded text-[10px] font-medium transition-all ${isActive ? activeBg : inactiveBg}`}
+                      className={`px-2 py-0.5 rounded text-[13px] font-medium transition-all ${isActive ? activeBg : inactiveBg}`}
                     >{emoji} {label}</button>
                   );
                 })}
@@ -283,7 +283,7 @@ export default function Home() {
 
               {/* โอกาสซื้อ */}
               <div className="flex items-center gap-1 theme-bg-secondary rounded-lg px-2 py-1 border theme-border">
-                <span className="text-[10px] theme-text-muted mr-1">ซื้อ</span>
+                <span className="text-[13px] theme-text-muted mr-1">ซื้อ</span>
                 {([
                   { color: "green" as const, label: "ไม่สนใจ", emoji: "🟢" },
                   { color: "yellow" as const, label: "สนใจ", emoji: "🟡" },
@@ -301,7 +301,7 @@ export default function Home() {
                         if (!prev.has(key)) next.add(key);
                         return next;
                       })}
-                      className={`px-2 py-0.5 rounded text-[10px] font-medium transition-all ${isActive ? activeBg : inactiveBg}`}
+                      className={`px-2 py-0.5 rounded text-[13px] font-medium transition-all ${isActive ? activeBg : inactiveBg}`}
                     >{emoji} {label}</button>
                   );
                 })}
@@ -333,7 +333,7 @@ export default function Home() {
 
       {/* Platform Filter Tabs */}
       <div className="border-b theme-border px-3 md:px-6 py-2 flex items-center gap-2">
-        <span className="text-[11px] theme-text-muted mr-1 shrink-0">ช่องทาง:</span>
+        <span className="text-[13px] theme-text-muted mr-1 shrink-0">ช่องทาง:</span>
         {([
           { value: "all", label: "ทั้งหมด", badgeClass: "theme-bg-card theme-text-secondary hover:theme-bg-hover", activeClass: "bg-white text-black" },
           { value: "line", label: "LINE", badgeClass: "bg-green-900/40 text-green-400 hover:bg-green-800/50 border border-green-800/50", activeClass: "bg-green-600 text-white border border-green-500" },
@@ -348,7 +348,7 @@ export default function Home() {
               className={`px-3 py-1 rounded-lg text-xs font-medium transition flex items-center gap-1.5 ${isActive ? activeClass : badgeClass}`}
             >
               {label}
-              <span className={`text-[10px] px-1 rounded-full ${isActive ? "bg-white/20" : "theme-bg-card"}`}>{count}</span>
+              <span className={`text-[13px] px-1 rounded-full ${isActive ? "bg-white/20" : "theme-bg-card"}`}>{count}</span>
             </button>
           );
         })}

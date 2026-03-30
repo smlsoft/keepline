@@ -232,7 +232,7 @@ export default function RevenuePage() {
                   <div className="absolute top-full left-0 mt-1 z-50 card p-3 min-w-[240px] shadow-lg" style={{ background: "var(--bg-elevated)" }}>
                     {PRESETS.map((g) => (
                       <div key={g.group} className="mb-2 last:mb-0">
-                        <p className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>{g.group}</p>
+                        <p className="text-[13px] font-bold uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>{g.group}</p>
                         <div className="flex flex-wrap gap-1">
                           {g.items.map((p) => (
                             <button key={p.value} onClick={() => handlePreset(p.value)}
@@ -271,7 +271,7 @@ export default function RevenuePage() {
 
           {/* Active range label */}
           <div className="mt-2 flex items-center gap-2">
-            <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>📅 ช่วงที่แสดง:</span>
+            <span className="text-[13px]" style={{ color: "var(--text-muted)" }}>📅 ช่วงที่แสดง:</span>
             <span className="text-xs font-medium gradient-text">{currentRange.label}</span>
           </div>
         </div>
@@ -299,7 +299,7 @@ export default function RevenuePage() {
                       <span className={`text-sm font-bold ${customChange >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                         {customChange >= 0 ? "▲" : "▼"} {Math.abs(customChange)}%
                       </span>
-                      <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>
+                      <span className="text-[13px]" style={{ color: "var(--text-muted)" }}>
                         vs ช่วงก่อนหน้า ({formatTHB(data.prevPeriod.sum)})
                       </span>
                     </div>
@@ -318,27 +318,27 @@ export default function RevenuePage() {
             {/* ─── KPI Cards Row ─── */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
               <div className="stat-card text-center">
-                <p className="text-[10px] mb-1" style={{ color: "var(--text-muted)" }}>ยอดเฉลี่ย/ออเดอร์</p>
+                <p className="text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>ยอดเฉลี่ย/ออเดอร์</p>
                 <p className="text-lg font-bold text-purple-400">{formatTHB(data.avgOrderValue)}</p>
               </div>
               <div className="stat-card text-center">
-                <p className="text-[10px] mb-1" style={{ color: "var(--text-muted)" }}>จำนวนออเดอร์</p>
+                <p className="text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>จำนวนออเดอร์</p>
                 <p className="text-lg font-bold text-cyan-400">{data.custom.count}</p>
                 {compare && countChange !== 0 && (
-                  <p className={`text-[10px] ${countChange >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                  <p className={`text-[13px] ${countChange >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                     {countChange >= 0 ? "+" : ""}{countChange}%
                   </p>
                 )}
               </div>
               <div className="stat-card text-center">
-                <p className="text-[10px] mb-1" style={{ color: "var(--text-muted)" }}>ปิดได้แล้ว</p>
+                <p className="text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>ปิดได้แล้ว</p>
                 <p className="text-lg font-bold text-emerald-400">{formatTHB(data.won.sum)}</p>
-                <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{data.won.count} ราย</p>
+                <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>{data.won.count} ราย</p>
               </div>
               <div className="stat-card text-center">
-                <p className="text-[10px] mb-1" style={{ color: "var(--text-muted)" }}>ปีนี้</p>
+                <p className="text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>ปีนี้</p>
                 <p className="text-lg font-bold text-amber-400">{formatTHB(data.year.sum)}</p>
-                <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{data.year.count} รายการ</p>
+                <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>{data.year.count} รายการ</p>
               </div>
             </div>
 
@@ -365,7 +365,7 @@ export default function RevenuePage() {
                       {data.byPlatform.map((p) => (
                         <div key={p.platform} className="flex items-center gap-1.5">
                           <span className="w-2.5 h-2.5 rounded-full" style={{ background: PLATFORM_COLORS[PLATFORM_NAMES[p.platform] || "อื่นๆ"] }} />
-                          <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>
+                          <span className="text-[13px]" style={{ color: "var(--text-muted)" }}>
                             {PLATFORM_NAMES[p.platform] || p.platform} {formatTHB(p.sum)}
                           </span>
                         </div>
@@ -447,7 +447,7 @@ export default function RevenuePage() {
                                   {c.name.length > 20 ? c.name.substring(0, 20) + "…" : c.name}
                                 </td>
                                 <td className="py-2 px-2">
-                                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium"
+                                  <span className="px-1.5 py-0.5 rounded text-[13px] font-medium"
                                     style={{ background: PLATFORM_COLORS[PLATFORM_NAMES[c.platform] || "อื่นๆ"] + "22", color: PLATFORM_COLORS[PLATFORM_NAMES[c.platform] || "อื่นๆ"] }}>
                                     {PLATFORM_NAMES[c.platform] || c.platform}
                                   </span>
@@ -459,7 +459,7 @@ export default function RevenuePage() {
                                     <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: "var(--border)" }}>
                                       <div className="h-full rounded-full transition-all" style={{ width: `${(c.sum / maxSum) * 100}%`, background: "var(--gradient-start, #6366f1)" }} />
                                     </div>
-                                    <span className="text-[10px] w-8 text-right" style={{ color: "var(--text-muted)" }}>{pct}%</span>
+                                    <span className="text-[13px] w-8 text-right" style={{ color: "var(--text-muted)" }}>{pct}%</span>
                                   </div>
                                 </td>
                               </tr>
@@ -483,7 +483,7 @@ export default function RevenuePage() {
                         {data.byPlatform.map((p) => (
                           <div key={p.platform} className="flex items-center gap-1.5">
                             <span className="w-2.5 h-2.5 rounded-full" style={{ background: PLATFORM_COLORS[PLATFORM_NAMES[p.platform] || "อื่นๆ"] }} />
-                            <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>
+                            <span className="text-[13px]" style={{ color: "var(--text-muted)" }}>
                               {PLATFORM_NAMES[p.platform] || p.platform} {formatTHB(p.sum)}
                             </span>
                           </div>
@@ -519,7 +519,7 @@ export default function RevenuePage() {
                     previous={data.prevPeriod.count > 0 ? Math.round(data.prevPeriod.sum / data.prevPeriod.count) : 0}
                     format={formatTHB} />
                   <div className="text-center">
-                    <p className="text-[10px] mb-1" style={{ color: "var(--text-muted)" }}>การเปลี่ยนแปลง</p>
+                    <p className="text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>การเปลี่ยนแปลง</p>
                     <p className={`text-2xl font-bold ${customChange >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                       {customChange >= 0 ? "+" : ""}{customChange}%
                     </p>
@@ -546,12 +546,12 @@ function StatMini({ label, value, count, sub, color, badge }: {
 }) {
   return (
     <div className="stat-card text-center">
-      <p className="text-[10px] mb-1" style={{ color: "var(--text-muted)" }}>{label}</p>
+      <p className="text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>{label}</p>
       <p className={`text-lg font-bold ${color}`}>{formatTHB(value)}</p>
-      {count !== undefined && <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{count} รายการ</p>}
-      {sub && <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{sub}</p>}
+      {count !== undefined && <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>{count} รายการ</p>}
+      {sub && <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>{sub}</p>}
       {badge && (
-        <p className={`text-[10px] font-medium ${badge.value >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+        <p className={`text-[13px] font-medium ${badge.value >= 0 ? "text-emerald-400" : "text-red-400"}`}>
           {badge.value >= 0 ? "+" : ""}{badge.value}% {badge.label}
         </p>
       )}
@@ -568,11 +568,11 @@ function CompareItem({ label, current, previous, format }: {
   const change = previous > 0 ? Math.round(((current - previous) / previous) * 100) : 0;
   return (
     <div className="text-center">
-      <p className="text-[10px] mb-1" style={{ color: "var(--text-muted)" }}>{label}</p>
+      <p className="text-[13px] mb-1" style={{ color: "var(--text-muted)" }}>{label}</p>
       <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{format(current)}</p>
-      <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>ก่อนหน้า: {format(previous)}</p>
+      <p className="text-[13px]" style={{ color: "var(--text-muted)" }}>ก่อนหน้า: {format(previous)}</p>
       {change !== 0 && (
-        <p className={`text-[10px] font-bold ${change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+        <p className={`text-[13px] font-bold ${change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
           {change >= 0 ? "▲+" : "▼"}{Math.abs(change)}%
         </p>
       )}

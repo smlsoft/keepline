@@ -205,18 +205,18 @@ export default function AutoCloserPage() {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>ข้อความติดตาม (ทีละขั้น)</label>
-                  <button onClick={addMessage} className="text-[10px] px-2 py-1 rounded-lg gradient-bg text-white">+ เพิ่มขั้น</button>
+                  <button onClick={addMessage} className="text-[13px] px-2 py-1 rounded-lg gradient-bg text-white">+ เพิ่มขั้น</button>
                 </div>
                 <div className="space-y-2">
                   {form.messages.map((m, i) => (
                     <div key={i} className="flex gap-2 items-start">
                       <div className="shrink-0">
-                        <label className="block text-[10px] mb-0.5" style={{ color: "var(--text-muted)" }}>วันที่</label>
+                        <label className="block text-[13px] mb-0.5" style={{ color: "var(--text-muted)" }}>วันที่</label>
                         <input type="number" value={m.dayOffset} onChange={(e) => updateMessage(i, "dayOffset", e.target.value)}
                           className="w-14 px-2 py-1.5 rounded-lg border text-xs text-center" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
                       </div>
                       <div className="flex-1">
-                        <label className="block text-[10px] mb-0.5" style={{ color: "var(--text-muted)" }}>ข้อความขั้นที่ {i + 1}</label>
+                        <label className="block text-[13px] mb-0.5" style={{ color: "var(--text-muted)" }}>ข้อความขั้นที่ {i + 1}</label>
                         <textarea value={m.template} onChange={(e) => updateMessage(i, "template", e.target.value)} rows={2}
                           placeholder="สวัสดีครับ {{name}} ..."
                           className="w-full px-2 py-1.5 rounded-lg border text-xs resize-none" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
@@ -301,7 +301,7 @@ export default function AutoCloserPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
                           <span className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{r.name}</span>
-                          <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium border ${
+                          <span className={`text-[13px] px-2 py-0.5 rounded-full font-medium border ${
                             r.status === "active" ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/20" : "bg-amber-500/15 text-amber-400 border-amber-500/20"
                           }`}>
                             {r.status === "active" ? "ทำงานอยู่" : "หยุดชั่วคราว"}
@@ -316,7 +316,7 @@ export default function AutoCloserPage() {
                           {r.messages.length} ขั้นตอน | ช่องทาง: {r.platform === "all" ? "ทุกช่องทาง" : r.platform}
                         </p>
                         {/* Mini stats */}
-                        <div className="flex gap-4 text-[10px]" style={{ color: "var(--text-muted)" }}>
+                        <div className="flex gap-4 text-[13px]" style={{ color: "var(--text-muted)" }}>
                           <span>ใช้งาน {r.stats.triggered} ครั้ง</span>
                           <span className="text-emerald-400">ตอบ {r.stats.replied}</span>
                           <span className="text-indigo-400">ปิดขาย {r.stats.converted}</span>
@@ -356,7 +356,7 @@ export default function AutoCloserPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
                           <span className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{q.customerName}</span>
-                          <span className={`text-[10px] font-medium ${qs.color}`}>{qs.label}</span>
+                          <span className={`text-[13px] font-medium ${qs.color}`}>{qs.label}</span>
                         </div>
                         <p className="text-xs" style={{ color: "var(--text-muted)" }}>
                           กฎ: {q.ruleName} | ขั้นที่ {q.currentStep + 1}

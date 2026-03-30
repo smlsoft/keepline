@@ -57,7 +57,7 @@ function Badge({ level, label }: { level: string; label: string }) {
     yellow: "bg-amber-500/20 text-amber-400 border-amber-500/30",
     red: "bg-red-500/20 text-red-400 border-red-500/30",
   };
-  return <span className={`px-2 py-0.5 rounded-full text-[11px] font-medium border ${colors[level] || colors.green}`}>{label}</span>;
+  return <span className={`px-2 py-0.5 rounded-full text-[13px] font-medium border ${colors[level] || colors.green}`}>{label}</span>;
 }
 
 export default function CustomerDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -203,14 +203,14 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
             <p className="text-xs theme-text-muted">ลูกค้า: {firstName || lastName ? `${firstName} ${lastName}`.trim() : customer.name}</p>
             <div className="space-y-3">
               <div>
-                <label className="block text-[11px] theme-text-muted mb-1">ชื่องาน *</label>
+                <label className="block text-[13px] theme-text-muted mb-1">ชื่องาน *</label>
                 <input type="text" value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)}
                   placeholder="ติดตามใบเสนอราคา, โทรหา, นัดประชุม..."
                   className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] theme-text-muted mb-1">ความสำคัญ</label>
+                  <label className="block text-[13px] theme-text-muted mb-1">ความสำคัญ</label>
                   <select value={taskPriority} onChange={(e) => setTaskPriority(e.target.value)}
                     className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text">
                     <option value="high">🔴 ด่วน</option>
@@ -219,13 +219,13 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[11px] theme-text-muted mb-1">กำหนดส่ง</label>
+                  <label className="block text-[13px] theme-text-muted mb-1">กำหนดส่ง</label>
                   <input type="date" value={taskDueDate} onChange={(e) => setTaskDueDate(e.target.value)}
                     className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text" />
                 </div>
               </div>
               <div>
-                <label className="block text-[11px] theme-text-muted mb-1">หมายเหตุ</label>
+                <label className="block text-[13px] theme-text-muted mb-1">หมายเหตุ</label>
                 <textarea value={taskNotes} onChange={(e) => setTaskNotes(e.target.value)} rows={3}
                   placeholder="รายละเอียดเพิ่มเติม..."
                   className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text resize-none" />
@@ -261,7 +261,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                 <h1 className="text-lg font-bold">{firstName || lastName ? `${firstName} ${lastName}`.trim() : customer.name}</h1>
                 <div className="flex items-center gap-2">
                   {company && <span className="text-xs theme-text-muted">{company}</span>}
-                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium text-white ${stage.color}`}>
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[13px] font-medium text-white ${stage.color}`}>
                     {stage.icon} {stage.label}
                   </span>
                 </div>
@@ -292,19 +292,19 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
         {/* AI Scores — Auto จาก สนทนา */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="rounded-xl border theme-border p-3" style={{ background: "var(--bg-card)" }}>
-            <p className="text-[10px] theme-text-muted mb-1">😊 ความรู้สึก</p>
+            <p className="text-[13px] theme-text-muted mb-1">😊 ความรู้สึก</p>
             {customer.lastSentiment ? <Badge level={customer.lastSentiment.level} label={SL[customer.lastSentiment.level]} /> : <span className="theme-text-muted text-xs">-</span>}
           </div>
           <div className="rounded-xl border theme-border p-3" style={{ background: "var(--bg-card)" }}>
-            <p className="text-[10px] theme-text-muted mb-1">🛒 โอกาสซื้อ</p>
+            <p className="text-[13px] theme-text-muted mb-1">🛒 โอกาสซื้อ</p>
             {customer.lastPurchaseIntent ? <Badge level={customer.lastPurchaseIntent.level} label={PL[customer.lastPurchaseIntent.level]} /> : <span className="theme-text-muted text-xs">-</span>}
           </div>
           <div className="rounded-xl border theme-border p-3" style={{ background: "var(--bg-card)" }}>
-            <p className="text-[10px] theme-text-muted mb-1">📨 ข้อความ</p>
+            <p className="text-[13px] theme-text-muted mb-1">📨 ข้อความ</p>
             <span className="text-lg font-bold">{customer.totalMessages}</span>
           </div>
           <div className="rounded-xl border theme-border p-3" style={{ background: "var(--bg-card)" }}>
-            <p className="text-[10px] theme-text-muted mb-1">💬 ห้อง</p>
+            <p className="text-[13px] theme-text-muted mb-1">💬 ห้อง</p>
             <span className="text-lg font-bold">{(customer.rooms || []).length}</span>
           </div>
         </div>
@@ -356,38 +356,38 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[11px] theme-text-muted mb-1">ชื่อ</label>
+              <label className="block text-[13px] theme-text-muted mb-1">ชื่อ</label>
               <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}
                 placeholder={customer.name}
                 className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text" style={{ background: "var(--bg-primary)" }} />
             </div>
             <div>
-              <label className="block text-[11px] theme-text-muted mb-1">นามสกุล</label>
+              <label className="block text-[13px] theme-text-muted mb-1">นามสกุล</label>
               <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text" style={{ background: "var(--bg-primary)" }} />
             </div>
             <div>
-              <label className="block text-[11px] theme-text-muted mb-1">บริษัท</label>
+              <label className="block text-[13px] theme-text-muted mb-1">บริษัท</label>
               <input type="text" value={company} onChange={(e) => setCompany(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text" style={{ background: "var(--bg-primary)" }} />
             </div>
             <div>
-              <label className="block text-[11px] theme-text-muted mb-1">ตำแหน่ง</label>
+              <label className="block text-[13px] theme-text-muted mb-1">ตำแหน่ง</label>
               <input type="text" value={position} onChange={(e) => setPosition(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text" style={{ background: "var(--bg-primary)" }} />
             </div>
             <div>
-              <label className="block text-[11px] theme-text-muted mb-1">เบอร์โทร</label>
+              <label className="block text-[13px] theme-text-muted mb-1">เบอร์โทร</label>
               <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text" style={{ background: "var(--bg-primary)" }} />
             </div>
             <div>
-              <label className="block text-[11px] theme-text-muted mb-1">อีเมล</label>
+              <label className="block text-[13px] theme-text-muted mb-1">อีเมล</label>
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text" style={{ background: "var(--bg-primary)" }} />
             </div>
             <div>
-              <label className="block text-[11px] theme-text-muted mb-1">รูปภาพ (URL)</label>
+              <label className="block text-[13px] theme-text-muted mb-1">รูปภาพ (URL)</label>
               <input type="url" value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)}
                 placeholder="https://..."
                 className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text" style={{ background: "var(--bg-primary)" }} />
@@ -395,20 +395,20 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
           </div>
 
           <div className="mt-4">
-            <label className="block text-[11px] theme-text-muted mb-1">ที่อยู่</label>
+            <label className="block text-[13px] theme-text-muted mb-1">ที่อยู่</label>
             <input type="text" value={address} onChange={(e) => setAddress(e.target.value)}
               className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text" style={{ background: "var(--bg-primary)" }} />
           </div>
 
           <div className="mt-4">
-            <label className="block text-[11px] theme-text-muted mb-1">Tags เพิ่มเติม <span className="theme-text-muted">(คั่นด้วย ,)</span></label>
+            <label className="block text-[13px] theme-text-muted mb-1">Tags เพิ่มเติม <span className="theme-text-muted">(คั่นด้วย ,)</span></label>
             <input type="text" value={customTags} onChange={(e) => setCustomTags(e.target.value)}
               placeholder="VIP, ลูกค้าเก่า, กรุงเทพ"
               className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text" style={{ background: "var(--bg-primary)" }} />
           </div>
 
           <div className="mt-4">
-            <label className="block text-[11px] theme-text-muted mb-1">หมายเหตุ</label>
+            <label className="block text-[13px] theme-text-muted mb-1">หมายเหตุ</label>
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
               placeholder="บันทึกเพิ่มเติม..."
               className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text resize-none" style={{ background: "var(--bg-primary)" }} />
@@ -426,9 +426,9 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                       <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/30 font-medium">
                         {g.groupName}
                       </span>
-                      <span className="text-[10px] theme-text-muted">{g.messageCount} ข้อความ</span>
+                      <span className="text-[13px] theme-text-muted">{g.messageCount} ข้อความ</span>
                     </div>
-                    <span className="text-[10px] theme-text-muted">
+                    <span className="text-[13px] theme-text-muted">
                       {g.lastActiveAt ? new Date(g.lastActiveAt).toLocaleString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : ""}
                     </span>
                   </Link>
@@ -442,7 +442,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
             <h3 className="text-xs font-bold theme-text-muted mb-3 uppercase tracking-wide">🔗 ช่องทาง LINE</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-[11px] theme-text-muted mb-1">
+                <label className="block text-[13px] theme-text-muted mb-1">
                   <span className="inline-flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-green-500 inline-block" /> LINE ID</span>
                 </label>
                 <input type="text" value={lineId}
@@ -453,10 +453,10 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
             </div>
             {(customer.rooms || []).length > 0 && (
               <div className="mt-3">
-                <p className="text-[10px] theme-text-muted mb-1">ห้องสนทนาที่เชื่อมอยู่ ({customer.rooms.length})</p>
+                <p className="text-[13px] theme-text-muted mb-1">ห้องสนทนาที่เชื่อมอยู่ ({customer.rooms.length})</p>
                 <div className="flex flex-wrap gap-1">
                   {customer.rooms.map((r) => {
-                    return <span key={r} className="text-[10px] px-2 py-0.5 rounded-lg border font-mono bg-green-500/10 text-green-400 border-green-500/20">LINE: {r.substring(0, 16)}{r.length > 16 ? "..." : ""}</span>;
+                    return <span key={r} className="text-[13px] px-2 py-0.5 rounded-lg border font-mono bg-green-500/10 text-green-400 border-green-500/20">LINE: {r.substring(0, 16)}{r.length > 16 ? "..." : ""}</span>;
                   })}
                 </div>
               </div>
@@ -474,7 +474,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
             <h3 className="text-xs font-bold theme-text-muted mb-3 uppercase tracking-wide">💰 ข้อมูล Deal</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[11px] theme-text-muted mb-1">มูลค่า Deal (บาท)</label>
+                <label className="block text-[13px] theme-text-muted mb-1">มูลค่า Deal (บาท)</label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm theme-text-muted">฿</span>
                   <input type="number" value={dealValue} onChange={(e) => setDealValue(e.target.value)}
@@ -482,18 +482,18 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                     className="w-full pl-7 pr-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text" style={{ background: "var(--bg-primary)" }} />
                 </div>
                 {dealValue && parseFloat(dealValue) > 0 && (
-                  <p className="text-[10px] text-emerald-400 mt-1">{formatTHB(parseFloat(dealValue))}</p>
+                  <p className="text-[13px] text-emerald-400 mt-1">{formatTHB(parseFloat(dealValue))}</p>
                 )}
               </div>
               <div>
-                <label className="block text-[11px] theme-text-muted mb-1">วันที่คาดว่าจะปิด</label>
+                <label className="block text-[13px] theme-text-muted mb-1">วันที่คาดว่าจะปิด</label>
                 <input type="date" value={expectedCloseDate} onChange={(e) => setExpectedCloseDate(e.target.value)}
                   className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text" style={{ background: "var(--bg-primary)" }} />
               </div>
             </div>
             {(customer.pipelineStage === "closed_won" || customer.pipelineStage === "closed_lost") && (
               <div className="mt-3">
-                <label className="block text-[11px] theme-text-muted mb-1">
+                <label className="block text-[13px] theme-text-muted mb-1">
                   เหตุผล{customer.pipelineStage === "closed_won" ? "ที่ปิดการขายได้" : "ที่ไม่ซื้อ"}
                 </label>
                 <input type="text" value={winLossReason} onChange={(e) => setWinLossReason(e.target.value)}
@@ -504,7 +504,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
           </div>
 
           <div className="mt-4 flex items-center justify-between">
-            <p className="text-[10px] theme-text-muted">
+            <p className="text-[13px] theme-text-muted">
               สร้างเมื่อ {new Date(customer.createdAt).toLocaleString("th-TH")} &middot;
               อัปเดต {new Date(customer.updatedAt).toLocaleString("th-TH")}
             </p>

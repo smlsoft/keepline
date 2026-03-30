@@ -175,9 +175,9 @@ export default function CustomerConversationPage({ params }: { params: Promise<{
                     <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/30 font-medium">
                       {g.groupName}
                     </span>
-                    <span className="text-[10px] theme-text-muted">{g.messageCount} ข้อความ</span>
+                    <span className="text-[13px] theme-text-muted">{g.messageCount} ข้อความ</span>
                   </div>
-                  <span className="text-[10px] theme-text-muted">
+                  <span className="text-[13px] theme-text-muted">
                     {g.lastActiveAt ? new Date(g.lastActiveAt).toLocaleString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : ""}
                   </span>
                 </Link>
@@ -221,8 +221,8 @@ export default function CustomerConversationPage({ params }: { params: Promise<{
                         {(() => {
                           const groupMatch = msg.sourceId && customer.groups?.find(g => g.sourceId === msg.sourceId);
                           return groupMatch
-                            ? <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/30">{groupMatch.groupName}</span>
-                            : <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-blue-900/40 text-blue-300 border border-blue-700/30">DM</span>;
+                            ? <span className="text-[12px] px-1.5 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/30">{groupMatch.groupName}</span>
+                            : <span className="text-[12px] px-1.5 py-0.5 rounded-full bg-blue-900/40 text-blue-300 border border-blue-700/30">DM</span>;
                         })()}
                         {msg.userName && (
                           <span className={`text-xs font-semibold ${isStaff ? (msg.isAutoReply ? "text-amber-200" : "text-indigo-200") : "text-sky-400"}`}>
@@ -272,7 +272,7 @@ export default function CustomerConversationPage({ params }: { params: Promise<{
                         >
                           <span className="text-lg">📎</span>
                           <span className="flex-1 truncate">{msg.file.fileName}</span>
-                          <span className="text-[10px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
+                          <span className="text-[13px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
                         </a>
                       )}
 

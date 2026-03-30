@@ -56,12 +56,12 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
                         <span className="text-xs font-bold truncate" style={{ color: "var(--text-primary)" }}>
                           {toast.name}
                         </span>
-                        <span className="text-[9px] px-1.5 py-0.5 rounded-full font-medium"
+                        <span className="text-[12px] px-1.5 py-0.5 rounded-full font-medium"
                           style={{ background: "var(--primary-bg)", color: "var(--primary)" }}>
                           ใหม่
                         </span>
                       </div>
-                      <p className="text-[11px] truncate mt-0.5" style={{ color: "var(--text-secondary)" }}>
+                      <p className="text-[13px] truncate mt-0.5" style={{ color: "var(--text-secondary)" }}>
                         {toast.user}: {toast.message}
                       </p>
                     </div>

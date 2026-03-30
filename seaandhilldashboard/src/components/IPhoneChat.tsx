@@ -94,7 +94,7 @@ function ScoreBadge({ label, data, type }: { label: string; data?: ScoreData | n
   const bgColor = data.level === "green" ? "bg-green-600" : data.level === "yellow" ? "bg-yellow-600" : "bg-red-600";
   const levelLabel = type === "sentiment" ? SENTIMENT_LABELS[data.level] : PURCHASE_LABELS[data.level];
   return (
-    <div className={`${bgColor} rounded px-1.5 py-0.5 text-[9px] leading-tight`} title={`${data.reason}\n${levelLabel} (${data.score}%)`}>
+    <div className={`${bgColor} rounded px-1.5 py-0.5 text-[12px] leading-tight`} title={`${data.reason}\n${levelLabel} (${data.score}%)`}>
       <span className="opacity-70">{label}</span> <span className="font-bold">{levelLabel}</span>
     </div>
   );
@@ -199,17 +199,17 @@ export default function IPhoneChat({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 min-w-0">
               <p className="text-white text-sm font-semibold truncate">{displayName}</p>
-              <span className="shrink-0 text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-600/80 text-white leading-none">LINE</span>
+              <span className="shrink-0 text-[12px] font-bold px-1.5 py-0.5 rounded bg-green-600/80 text-white leading-none">LINE</span>
             </div>
             <div className="flex items-center gap-1 mt-0.5 flex-wrap">
               <ScoreBadge label="😊" data={group.customerSentiment || group.sentiment} type="sentiment" />
               <ScoreBadge label="👔" data={group.staffSentiment} type="sentiment" />
               <ScoreBadge label="🛒" data={group.purchaseIntent} type="purchase" />
-              {!group.sentiment && !group.customerSentiment && <span className="text-green-200 text-[10px]">{group.messageCount} msgs</span>}
+              {!group.sentiment && !group.customerSentiment && <span className="text-green-200 text-[13px]">{group.messageCount} msgs</span>}
               {(group.analysisLogsCount || 0) > 0 && (
                 <button
                   onClick={(e) => { e.stopPropagation(); setShowHistory(!showHistory); if (!showHistory) fetchLogs(); }}
-                  className="theme-bg-card hover:theme-bg-hover rounded px-1.5 py-0.5 text-[9px] theme-text-secondary transition"
+                  className="theme-bg-card hover:theme-bg-hover rounded px-1.5 py-0.5 text-[12px] theme-text-secondary transition"
                   title="ดูประวัติการวิเคราะห์"
                 >📊 {group.analysisLogsCount}</button>
               )}
@@ -221,20 +221,20 @@ export default function IPhoneChat({
         {showHistory && (
           <div className="iphone-history border-b theme-border px-3 py-2 max-h-[200px] overflow-y-auto shrink-0">
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[11px] font-bold theme-text-secondary">📊 ประวัติการวิเคราะห์</span>
+              <span className="text-[13px] font-bold theme-text-secondary">📊 ประวัติการวิเคราะห์</span>
               <button onClick={() => setShowHistory(false)} className="text-xs theme-text-muted">&times;</button>
             </div>
             {loadingLogs ? (
-              <p className="text-[10px] text-center py-2 theme-text-muted">Loading...</p>
+              <p className="text-[13px] text-center py-2 theme-text-muted">Loading...</p>
             ) : logs.length === 0 ? (
-              <p className="text-[10px] text-center py-2 theme-text-muted">ยังไม่มีประวัติ</p>
+              <p className="text-[13px] text-center py-2 theme-text-muted">ยังไม่มีประวัติ</p>
             ) : (
               <div className="space-y-1.5">
                 {logs.map((log) => {
                   const sColor = log.sentiment?.level === "green" ? "text-green-400" : log.sentiment?.level === "yellow" ? "text-yellow-400" : "text-red-400";
                   const pColor = log.purchaseIntent?.level === "green" ? "text-green-400" : log.purchaseIntent?.level === "yellow" ? "text-yellow-400" : "text-red-400";
                   return (
-                    <div key={log._id} className="iphone-history-card rounded px-2 py-1.5 text-[10px]">
+                    <div key={log._id} className="iphone-history-card rounded px-2 py-1.5 text-[13px]">
                       <div className="flex items-center justify-between mb-0.5">
                         <span className="theme-text-muted">
                           {new Date(log.analyzedAt).toLocaleString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
@@ -274,7 +274,7 @@ export default function IPhoneChat({
                 <div key={msg._id}>
                   {showDate && msg.createdAt && (
                     <div className="flex justify-center my-2">
-                      <span className="iphone-date-badge text-[10px] px-3 py-1 rounded-full">
+                      <span className="iphone-date-badge text-[13px] px-3 py-1 rounded-full">
                         {new Date(msg.createdAt).toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "2-digit" })}
                       </span>
                     </div>
@@ -282,14 +282,14 @@ export default function IPhoneChat({
 
                   <div className={`flex ${msg.role === "assistant" ? "justify-start" : "justify-end"} mb-0.5`}>
                     <div
-                      className={`relative max-w-[75%] px-2.5 py-1.5 text-[13px] ${
+                      className={`relative max-w-[75%] px-2.5 py-1.5 text-[15px] ${
                         msg.role === "assistant"
                           ? "iphone-msg-incoming rounded-lg rounded-tl-none"
                           : "iphone-msg-outgoing rounded-lg rounded-tr-none"
                       }`}
                     >
                       {msg.userName && (
-                        <p className={`text-[11px] font-medium mb-0.5 ${msg.role === "assistant" ? "text-sky-400" : "text-emerald-400"}`}>{msg.userName}</p>
+                        <p className={`text-[13px] font-medium mb-0.5 ${msg.role === "assistant" ? "text-sky-400" : "text-emerald-400"}`}>{msg.userName}</p>
                       )}
 
                       {/* Sticker */}
@@ -339,7 +339,7 @@ export default function IPhoneChat({
                         >
                           <span className="text-lg">📎</span>
                           <span className="flex-1 truncate">{msg.file.fileName}</span>
-                          <span className="text-[10px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
+                          <span className="text-[13px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
                         </a>
                       )}
 
@@ -364,7 +364,7 @@ export default function IPhoneChat({
                           <p className="flex-1" />
                         )}
                         {msg.createdAt && (
-                          <span className="iphone-time text-[10px] shrink-0 translate-y-0.5">
+                          <span className="iphone-time text-[13px] shrink-0 translate-y-0.5">
                             {new Date(msg.createdAt).toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" })}
                           </span>
                         )}
@@ -382,13 +382,13 @@ export default function IPhoneChat({
         {showTemplates && (
           <div className="iphone-history border-t theme-border px-3 py-2 max-h-[240px] overflow-y-auto shrink-0">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold theme-text-secondary">⚡ Quick Reply</span>
+              <span className="text-[13px] font-bold theme-text-secondary">⚡ Quick Reply</span>
               <button onClick={() => setShowTemplates(false)} className="text-xs theme-text-muted hover:theme-text">&times;</button>
             </div>
             {loadingTemplates ? (
-              <p className="text-[10px] text-center py-2 theme-text-muted">Loading...</p>
+              <p className="text-[13px] text-center py-2 theme-text-muted">Loading...</p>
             ) : templates.length === 0 ? (
-              <p className="text-[10px] text-center py-3 theme-text-muted">
+              <p className="text-[13px] text-center py-3 theme-text-muted">
                 ยังไม่มี template —{" "}
                 <a href="/dashboard/templates" className="text-blue-400 underline">เพิ่มที่นี่</a>
               </p>
@@ -398,18 +398,18 @@ export default function IPhoneChat({
                   <button
                     key={t._id}
                     onClick={() => handleCopyTemplate(t)}
-                    className="w-full text-left rounded-lg px-2.5 py-2 text-[11px] transition iphone-history-card hover:opacity-80 active:scale-[0.98]"
+                    className="w-full text-left rounded-lg px-2.5 py-2 text-[13px] transition iphone-history-card hover:opacity-80 active:scale-[0.98]"
                   >
                     <div className="flex items-center justify-between mb-0.5">
                       <span className="font-medium theme-text">{t.title}</span>
                       <div className="flex items-center gap-1.5">
-                        <span className={`text-[9px] ${CATEGORY_COLORS[t.category] || "theme-text-secondary"}`}>
+                        <span className={`text-[12px] ${CATEGORY_COLORS[t.category] || "theme-text-secondary"}`}>
                           {CATEGORY_LABELS[t.category] || t.category}
                         </span>
                         {copiedId === t._id ? (
-                          <span className="text-[9px] text-emerald-400 font-bold">✓ คัดลอก</span>
+                          <span className="text-[12px] text-emerald-400 font-bold">✓ คัดลอก</span>
                         ) : (
-                          <span className="text-[9px] theme-text-muted">📋</span>
+                          <span className="text-[12px] theme-text-muted">📋</span>
                         )}
                       </div>
                     </div>
@@ -428,7 +428,7 @@ export default function IPhoneChat({
               setShowTemplates((prev) => !prev);
               if (!showTemplates) fetchTemplates();
             }}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-medium transition ${
+            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[13px] font-medium transition ${
               showTemplates
                 ? "bg-amber-500/30 text-amber-300 border border-amber-500/30"
                 : "theme-bg-card theme-text-secondary hover:theme-bg-hover hover:theme-text"

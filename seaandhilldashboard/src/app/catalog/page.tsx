@@ -318,7 +318,7 @@ export default function CatalogPage() {
                   {p.tags.length > 0 && (
                     <div className="flex gap-1 flex-wrap mb-3">
                       {p.tags.slice(0, 4).map((t) => (
-                        <span key={t} className="text-[10px] px-2 py-0.5 rounded-full border" style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}>{t}</span>
+                        <span key={t} className="text-[13px] px-2 py-0.5 rounded-full border" style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}>{t}</span>
                       ))}
                     </div>
                   )}

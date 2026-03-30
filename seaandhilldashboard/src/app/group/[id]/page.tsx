@@ -170,7 +170,7 @@ export default function GroupPage({ params }: { params: Promise<{ id: string }> 
                     >
                       <span className="text-lg">📎</span>
                       <span className="flex-1 truncate">{msg.file.fileName}</span>
-                      <span className="text-[10px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
+                      <span className="text-[13px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
                     </a>
                   )}
 
@@ -181,7 +181,7 @@ export default function GroupPage({ params }: { params: Promise<{ id: string }> 
 
                   {/* Time */}
                   {msg.createdAt && (
-                    <p className="text-[10px] theme-text-muted mt-1 text-right">
+                    <p className="text-[13px] theme-text-muted mt-1 text-right">
                       {new Date(msg.createdAt).toLocaleTimeString("th-TH", {
                         hour: "2-digit",
                         minute: "2-digit",

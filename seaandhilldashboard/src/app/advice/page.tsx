@@ -146,7 +146,7 @@ function PriorityBadge({ priority }: { priority: string }) {
   const s = PRIORITY_STYLES[priority] || PRIORITY_STYLES.info;
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium ${s.bg} ${s.text} border ${s.border}`}
+      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[13px] font-medium ${s.bg} ${s.text} border ${s.border}`}
     >
       <span className={`w-1.5 h-1.5 rounded-full ${s.dot}`} />
       {s.label}
@@ -158,7 +158,7 @@ function TypeBadge({ type }: { type?: string }) {
   const cfg = TYPE_CONFIG[type || "general"] || TYPE_CONFIG.general;
   return (
     <span
-      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium"
+      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[13px] font-medium"
       style={{
         background: `${cfg.color}18`,
         color: cfg.color,
@@ -336,7 +336,7 @@ function LoopStep({
   return (
     <div className={`px-3 py-2 flex gap-2 ${highlight ? "bg-emerald-500/5" : ""}`}>
       <span
-        className="mt-0.5 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-[10px] font-bold"
+        className="mt-0.5 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-[13px] font-bold"
         style={{
           background: highlight ? "#10b98120" : "var(--bg-secondary)",
           color: highlight ? "#10b981" : "var(--text-muted)",
@@ -505,7 +505,7 @@ export default function AdvicePage() {
                   <span>{cfg.label}</span>
                   {count != null && count > 0 && (
                     <span
-                      className="rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                      className="rounded-full px-1.5 py-0.5 text-[13px] font-bold"
                       style={{
                         background: isActive ? `${cfg.color}20` : "var(--bg-card)",
                         color: isActive ? cfg.color : "var(--text-muted)",
@@ -648,7 +648,7 @@ function AdviceCard({
         <>
           <button
             onClick={() => setExpanded((v) => !v)}
-            className="flex items-center gap-1 text-[11px] theme-text-muted hover:theme-text transition-colors"
+            className="flex items-center gap-1 text-[13px] theme-text-muted hover:theme-text transition-colors"
           >
             <svg
               className={`w-3 h-3 transition-transform ${expanded ? "rotate-90" : ""}`}
@@ -669,10 +669,10 @@ function AdviceCard({
       {/* Footer */}
       <div className="flex items-center justify-between pt-1">
         {item.relatedRoom && (
-          <span className="text-[11px] theme-text-muted">ห้อง: {item.relatedRoom}</span>
+          <span className="text-[13px] theme-text-muted">ห้อง: {item.relatedRoom}</span>
         )}
         {item.timestamp && (
-          <span className="text-[11px] theme-text-muted ml-auto">
+          <span className="text-[13px] theme-text-muted ml-auto">
             {formatTimestamp(item.timestamp)}
           </span>
         )}

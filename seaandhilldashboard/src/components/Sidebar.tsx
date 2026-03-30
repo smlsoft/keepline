@@ -19,28 +19,32 @@ interface NavGroup {
   items: NavItem[];
 }
 
-// Bottom tab bar items (mobile — 5 items max)
+// Bottom tab bar items (mobile — 5 items max, Mobile First)
 const BOTTOM_TABS: NavItem[] = [
   { href: "/", icon: "📊", label: "หน้าหลัก" },
+  { href: "/tax-calendar", icon: "📅", label: "ปฏิทิน" },
   { href: "/chat", icon: "💬", label: "แชท" },
   { href: "/crm", icon: "👥", label: "ลูกค้า" },
-  { href: "/catalog", icon: "🏪", label: "สินค้า" },
 ];
 
-// Full navigation groups — จัดเป็นหมวดงาน
+// Full navigation groups — จัดเป็นหมวดงานสำนักงานบัญชี
 const NAV_GROUPS: NavGroup[] = [
-  {
-    groupLabel: "น้องกุ้ง",
-    items: [
-      { href: "/kung-room", icon: "🦐", label: "ห้องทำงานน้องกุ้ง" },
-    ],
-  },
   {
     groupLabel: "ภาพรวม",
     items: [
       { href: "/", icon: "📊", label: "แดชบอร์ด" },
       { href: "/revenue", icon: "💰", label: "รายได้" },
       { href: "/analytics", icon: "📈", label: "วิเคราะห์" },
+    ],
+  },
+  {
+    groupLabel: "งานบัญชี",
+    items: [
+      { href: "/tax-calendar", icon: "📅", label: "ปฏิทินภาษี" },
+      { href: "/tasks", icon: "📋", label: "งาน" },
+      { href: "/documents", icon: "📑", label: "เอกสาร" },
+      { href: "/appointments", icon: "📅", label: "นัดหมาย" },
+      { href: "/payments", icon: "💸", label: "เงินเข้า" },
     ],
   },
   {
@@ -61,20 +65,19 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    groupLabel: "ขายของ",
+    groupLabel: "ทีม",
     items: [
-      { href: "/catalog", icon: "🏪", label: "สินค้า/บริการ" },
-      { href: "/payments", icon: "💸", label: "เงินเข้า" },
-      { href: "/documents", icon: "📑", label: "เอกสาร" },
-      { href: "/appointments", icon: "📅", label: "นัดหมาย" },
+      { href: "/staff", icon: "👔", label: "พนักงาน" },
+      { href: "/kpi", icon: "📈", label: "KPI พนักงาน" },
+      { href: "/team", icon: "👥", label: "ทีมงาน" },
     ],
   },
   {
-    groupLabel: "รายงาน",
+    groupLabel: "🦐 น้องกุ้ง AI",
     items: [
-      { href: "/kpi", icon: "📈", label: "KPI พนักงาน" },
+      { href: "/kung-room", icon: "🦐", label: "ห้องทำงาน" },
+      { href: "/advice", icon: "💡", label: "คำแนะนำ" },
       { href: "/costs", icon: "💰", label: "ค่าใช้จ่าย AI" },
-      { href: "/advice", icon: "🦐", label: "น้องกุ้ง" },
     ],
   },
   {
@@ -83,14 +86,7 @@ const NAV_GROUPS: NavGroup[] = [
       { href: "/connections", icon: "🔗", label: "ช่องทาง" },
       { href: "/bot-config", icon: "🤖", label: "บอท" },
       { href: "/km", icon: "📚", label: "คลังความรู้" },
-      { href: "/team", icon: "👔", label: "ทีมงาน" },
-      { href: "/tasks", icon: "📋", label: "งาน" },
       { href: "/settings", icon: "⚙️", label: "ตั้งค่า" },
-    ],
-  },
-  {
-    groupLabel: "ช่วยเหลือ",
-    items: [
       { href: "/guide", icon: "📖", label: "คู่มือ" },
     ],
   },

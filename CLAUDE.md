@@ -93,6 +93,12 @@ chat_analytics  { sourceId, sentiment, purchaseIntent }
 - **CI/CD:** GitHub Actions → SSH → Hetzner
 - **คู่มือ:** `docs/DEPLOY-HETZNER.md`
 
+## Design Rules
+- **Mobile First** — ออกแบบ UI สำหรับมือถือก่อน แล้วขยายไป desktop
+- **Bottom Tabs 5 ปุ่ม:** หน้าหลัก | ปฏิทินภาษี | แชท | ลูกค้า | เพิ่มเติม
+- **ตัวอักษรใหญ่** — เหมาะสำหรับคนอายุมาก (text-xs=13px, text-sm=15px)
+- **ลด padding/margin** — กระชับ ไม่เปลืองพื้นที่
+
 ## สิ่งที่ห้ามทำ
 - ห้ามลบ folder/service โดยไม่ถามบอสก่อน
 - ห้ามเปลี่ยน deploy strategy โดยไม่แจ้ง

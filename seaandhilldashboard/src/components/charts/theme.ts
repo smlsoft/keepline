@@ -24,8 +24,6 @@ export const PIPELINE_COLORS: Record<string, string> = {
 
 export const PLATFORM_COLORS: Record<string, string> = {
   line: "#22c55e",
-  facebook: "#3b82f6",
-  instagram: "#ec4899",
 };
 
 export const SENTIMENT_COLORS: Record<string, string> = {

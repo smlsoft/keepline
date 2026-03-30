@@ -35,13 +35,9 @@ interface Customer {
 
 const PLATFORM_CFG: Record<string, { label: string; icon: string; color: string; bgLight: string; border: string }> = {
   line:      { label: "LINE",      icon: "💚", color: "text-green-400", bgLight: "bg-green-500/10",  border: "border-green-500/30" },
-  facebook:  { label: "Facebook",  icon: "💙", color: "text-blue-400",  bgLight: "bg-blue-500/10",   border: "border-blue-500/30" },
-  instagram: { label: "Instagram", icon: "💜", color: "text-pink-400",  bgLight: "bg-pink-500/10",   border: "border-pink-500/30" },
 };
 
 function detectPlatform(sourceId: string): string {
-  if (sourceId.startsWith("fb_")) return "facebook";
-  if (sourceId.startsWith("ig_")) return "instagram";
   return "line";
 }
 

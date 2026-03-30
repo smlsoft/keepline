@@ -4163,7 +4163,7 @@ app.get("/api/customers/duplicates", async (req, res) => {
     const db = await getDB();
     const customers = await db.collection("customers")
       .find({}, {
-        projection: { name: 1, firstName: 1, lastName: 1, phone: 1, email: 1, rooms: 1, platformIds: 1, totalMessages: 1, avatarUrl: 1, updatedAt: 1, pipelineStage: 1 }
+        projection: { name: 1, firstName: 1, lastName: 1, phone: 1, email: 1, rooms: 1, groups: 1, lineUserId: 1, totalMessages: 1, avatarUrl: 1, updatedAt: 1, pipelineStage: 1 }
       })
       .sort({ name: 1 })
       .toArray();
@@ -4810,7 +4810,7 @@ app.get("/api/customers/churn-risk", async (req, res) => {
     const now = new Date();
 
     const customers = await database.collection("customers")
-      .find({}, { projection: { name: 1, firstName: 1, lastName: 1, rooms: 1, platformIds: 1, totalMessages: 1, updatedAt: 1, pipelineStage: 1 } })
+      .find({}, { projection: { name: 1, firstName: 1, lastName: 1, rooms: 1, groups: 1, lineUserId: 1, totalMessages: 1, updatedAt: 1, pipelineStage: 1 } })
       .toArray();
 
     const risks = [];

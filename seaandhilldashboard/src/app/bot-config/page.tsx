@@ -23,9 +23,7 @@ const REPLY_MODES = [
   { value: "keyword", label: "คำสำคัญ", desc: "ตอบเมื่อมีคำที่กำหนด", icon: "🟡" },
 ] as const;
 
-function getPlatform(sourceId: string) {
-  if (sourceId.startsWith("fb_")) return { name: "Facebook", icon: "💙", color: "text-blue-400", bg: "bg-blue-500/10 border-blue-500/20" };
-  if (sourceId.startsWith("ig_")) return { name: "Instagram", icon: "💜", color: "text-pink-400", bg: "bg-pink-500/10 border-pink-500/20" };
+function getPlatform(_sourceId: string) {
   return { name: "LINE", icon: "💚", color: "text-green-400", bg: "bg-green-500/10 border-green-500/20" };
 }
 

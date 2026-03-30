@@ -130,12 +130,10 @@ function randomDate(daysBack: number) {
   return new Date(now - Math.random() * daysBack * 86400000);
 }
 
-function generateSourceId(platform: string) {
+function generateSourceId(_platform: string) {
   const chars = "abcdef0123456789";
   const id = Array.from({ length: 16 }, () => chars[randInt(0, 15)]).join("");
-  if (platform === "line") return (Math.random() > 0.3 ? "U" : "C") + id;
-  if (platform === "facebook") return "fb_" + id;
-  return "ig_" + id;
+  return (Math.random() > 0.3 ? "U" : "C") + id;
 }
 
 export async function POST() {
@@ -157,7 +155,7 @@ export async function POST() {
 
     // ─── 2. Generate customers + rooms ───
     const NUM_CUSTOMERS = 200;
-    const platforms = ["line", "line", "facebook", "facebook", "instagram", "instagram"]; // balanced
+    const platforms = ["line"]; // LINE only
     const pipelineStages = ["new", "new", "interested", "interested", "interested", "quoting", "quoting", "negotiating", "negotiating", "closed_won", "closed_won", "closed_lost", "closed_lost", "closed_lost", "following_up", "following_up"];
 
     interface RoomDef { sourceId: string; platform: string; customerName: string; staffName: string; isGroup?: boolean; members?: string[]; }
@@ -172,24 +170,7 @@ export async function POST() {
       const sourceId = generateSourceId(platform);
       const staff = rand(STAFF_NAMES);
 
-      // Many customers have multiple platforms (40% 2 platforms, 15% 3 platforms)
-      const extraPlatforms: { platform: string; sourceId: string }[] = [];
-      if (Math.random() > 0.5) {
-        const p2 = platform === "line" ? (Math.random() > 0.5 ? "facebook" : "instagram")
-          : platform === "facebook" ? (Math.random() > 0.5 ? "line" : "instagram")
-          : (Math.random() > 0.5 ? "line" : "facebook");
-        extraPlatforms.push({ platform: p2, sourceId: generateSourceId(p2) });
-      }
-      if (Math.random() > 0.75) {
-        const existing = [platform, ...extraPlatforms.map(e => e.platform)];
-        const p3 = ["line", "facebook", "instagram"].find(p => !existing.includes(p));
-        if (p3) extraPlatforms.push({ platform: p3, sourceId: generateSourceId(p3) });
-      }
-
-      const allRooms = [sourceId, ...extraPlatforms.map(e => e.sourceId)];
-      const platformIds: Record<string, string[]> = { line: [], facebook: [], instagram: [] };
-      platformIds[platform].push(sourceId);
-      for (const ep of extraPlatforms) platformIds[ep.platform].push(ep.sourceId);
+      const allRooms = [sourceId];
 
       const stage = rand(pipelineStages);
       const dealValue = ["quoting", "negotiating", "closed_won"].includes(stage) ? randPrice() * randInt(1, 5) : 0;
@@ -203,10 +184,7 @@ export async function POST() {
         phone: Math.random() > 0.5 ? `08${randInt(0, 9)}${randInt(1000000, 9999999)}` : "",
         email: Math.random() > 0.6 ? `${firstName.toLowerCase()}@${rand(["gmail.com", "hotmail.com", "yahoo.com"])}` : "",
         sourceId,
-        platformIds,
-        lineId: platformIds.line[0] || "",
-        facebookId: platformIds.facebook[0] || "",
-        instagramId: platformIds.instagram[0] || "",
+        lineId: sourceId,
         rooms: allRooms,
         tags: [],
         customTags: [],
@@ -223,17 +201,13 @@ export async function POST() {
 
       // Main room
       rooms.push({ sourceId, platform, customerName: name, staffName: staff });
-      // Extra rooms
-      for (const ep of extraPlatforms) {
-        rooms.push({ sourceId: ep.sourceId, platform: ep.platform, customerName: name, staffName: staff });
-      }
     }
 
     if (customerDocs.length > 0) {
       await db.collection("customers").insertMany(customerDocs);
     }
 
-    // ─── 2b. Generate GROUP chats (LINE groups, FB group chats) ───
+    // ─── 2b. Generate GROUP chats (LINE groups) ───
     const GROUP_NAMES = [
       "กลุ่มผู้รับเหมา VIP", "ช่างก่อสร้างภาคกลาง", "ผู้รับเหมา กทม.+ปริมณฑล",
       "กลุ่มสั่งปูนรวม", "ผู้รับเหมาภาคเหนือ", "ผู้รับเหมาภาคอีสาน",
@@ -268,7 +242,7 @@ export async function POST() {
 
     const NUM_GROUPS = 25;
     for (let g = 0; g < NUM_GROUPS; g++) {
-      const platform = rand(["line", "line", "facebook"]); // groups mostly LINE
+      const platform = "line"; // LINE only
       const sourceId = "C" + Array.from({ length: 16 }, () => "abcdef0123456789"[randInt(0, 15)]).join("");
       const staff = rand(STAFF_NAMES);
       const memberCount = randInt(3, 8);
@@ -556,7 +530,7 @@ export async function POST() {
       { title: "คำถามเรื่องปูน", content: "❓ FAQ ปูน:\n\nQ: ปูนตราเสือกับตราช้างต่างกันยังไง?\nA: ตราเสือ = ปูนประเภท 1 เหมาะงานโครงสร้าง (เสา คาน) ตราช้าง = ปูนผสม เหมาะงานก่อ ฉาบ\n\nQ: ปูนหมดอายุมั้ย?\nA: อายุ 3 เดือนจากวันผลิต เก็บที่แห้ง ห้ามโดนน้ำ\n\nQ: 1 คิว ใช้ปูนกี่ถุง?\nA: คอนกรีตผสมเอง 1 คิว ใช้ปูนประมาณ 7-8 ถุง\n\nQ: ปูนสำเร็จรูปกับปูนถุงต่างกันยังไง?\nA: สำเร็จรูปผสมน้ำใช้ได้เลย ปูนถุงต้องผสมทรายเอง", category: "faq", tags: ["ปูน", "FAQ"] },
       { title: "คำถามเรื่องเหล็ก", content: "❓ FAQ เหล็ก:\n\nQ: เหล็ก SD40 กับ SR24 ต่างกันยังไง?\nA: SD40 = ข้ออ้อย กำลังสูง ใช้งานโครงสร้าง SR24 = เหล็กกลม กำลังต่ำกว่า ใช้งานรัดปลอก\n\nQ: เหล็ก 1 ตัน ได้กี่เส้น?\nA: 12mm ≈ 90 เส้น | 16mm ≈ 50 เส้น | 20mm ≈ 32 เส้น\n\nQ: เหล็กสนิมใช้ได้มั้ย?\nA: สนิมผิวเล็กน้อยใช้ได้ (คอนกรีตหุ้ม) แต่ถ้าเป็นร่อง/ผุ ไม่ควรใช้\n\nQ: สั่งตัดเหล็กได้มั้ย?\nA: ได้ครับ คิดค่าตัด 2 บาท/เส้น แจ้งขนาดล่วงหน้า 1 วัน", category: "faq", tags: ["เหล็ก", "FAQ"] },
       { title: "คำถามเรื่องจัดส่ง", content: "❓ FAQ จัดส่ง:\n\nQ: ส่งรถอะไร?\nA: รถ 6 ล้อ (3 ตัน) หรือ 10 ล้อ (15 ตัน) ตามปริมาณ\n\nQ: ส่งวันอาทิตย์ได้มั้ย?\nA: ได้ จ่ายค่าล่วงเวลา +500 บาท\n\nQ: ส่งต่างจังหวัดได้มั้ย?\nA: ได้ ส่งทั่วประเทศ คิดค่าขนส่งตามระยะทาง+น้ำหนัก\n\nQ: มีเครนยกมั้ย?\nA: รถ 10 ล้อ มีเครนยก +1,500 บาท\n\nQ: สั่งด่วนได้มั้ย?\nA: ได้ สั่งก่อน 10:00 ส่งบ่ายวันเดียวกัน ค่าด่วน +200", category: "faq", tags: ["จัดส่ง", "ขนส่ง", "FAQ"] },
-      { title: "ข้อมูลร้าน", content: "🏪 ข้อมูลร้าน:\n\nชื่อ: ร้านวัสดุก่อสร้าง SML\nที่อยู่: 123 ถ.พหลโยธิน ต.คลองหนึ่ง อ.คลองหลวง ปทุมธานี 12120\nเปิด: จ-ส 7:00-17:00 (หยุดวันอาทิตย์)\nโทร: 081-234-5678\nLINE: @smlconstruct\nFacebook: SML วัสดุก่อสร้าง\nInstagram: @sml_construct\n\nบริการ: ขายปลีก-ส่ง วัสดุก่อสร้างทุกชนิด\nจัดส่งทั่วประเทศ ผ่อน 0% สำหรับลูกค้าเครดิต\nมีช่างพันธมิตร แนะนำฟรี", category: "faq", tags: ["ร้าน", "ติดต่อ", "ที่อยู่"] },
+      { title: "ข้อมูลร้าน", content: "🏪 ข้อมูลร้าน:\n\nชื่อ: ร้านวัสดุก่อสร้าง SML\nที่อยู่: 123 ถ.พหลโยธิน ต.คลองหนึ่ง อ.คลองหลวง ปทุมธานี 12120\nเปิด: จ-ส 7:00-17:00 (หยุดวันอาทิตย์)\nโทร: 081-234-5678\nLINE: @smlconstruct\n\nบริการ: ขายปลีก-ส่ง วัสดุก่อสร้างทุกชนิด\nจัดส่งทั่วประเทศ ผ่อน 0% สำหรับลูกค้าเครดิต\nมีช่างพันธมิตร แนะนำฟรี", category: "faq", tags: ["ร้าน", "ติดต่อ", "ที่อยู่"] },
     ].map(kb => ({
       ...kb,
       active: true,
@@ -578,7 +552,7 @@ export async function POST() {
       // sales-opportunity
       { type: "sales-opportunity", priority: "opportunity", title: "ผู้รับเหมา 8 รายสนใจซื้อล็อตใหญ่!", detail: "AI วิเคราะห์ผู้รับเหมา 8 รายที่มีโอกาสซื้อสูง (score 70+)\nส่วนใหญ่ถามราคาปูน+เหล็ก ยอดรวมประมาณ 500,000 บาท", action: "ส่งใบเสนอราคา + โปรผู้รับเหมา ปิดการขาย", sourceIds: [] },
       { type: "sales-opportunity", priority: "opportunity", title: "กลุ่มสั่งปูนรวม ยอดเพิ่ม 40%", detail: "กลุ่มผู้รับเหมาสั่งรวม มียอดเพิ่ม 40% จากเดือนก่อน\nสินค้ายอดนิยม: ปูนตราเสือ + เหล็กข้ออ้อย 12mm", action: "เตรียมสต็อก + เสนอเครดิต 30 วัน", sourceIds: [] },
-      { type: "sales-opportunity", priority: "info", title: "ลูกค้า Facebook เพิ่มขึ้น 60%", detail: "ลูกค้าจาก Facebook เพิ่มขึ้น 60% สัปดาห์นี้ ส่วนใหญ่มาจากโพสต์โปรปูนราคาพิเศษ", action: "ทำโพสต์โปรเพิ่ม + Boost Post งบ 500 บาท", sourceIds: [] },
+      { type: "sales-opportunity", priority: "info", title: "ลูกค้า LINE เพิ่มขึ้น 60%", detail: "ลูกค้าจาก LINE เพิ่มขึ้น 60% สัปดาห์นี้ ส่วนใหญ่มาจากแชร์โปรปูนราคาพิเศษ", action: "แชร์โปรเพิ่มในกลุ่ม LINE", sourceIds: [] },
       // team-coaching
       { type: "team-coaching", priority: "info", title: "SML-วิภา ตอบเร็วที่สุดในทีม", detail: "SML-วิภา ตอบเฉลี่ย 3 นาที ลูกค้าให้ sentiment 90+\nเป็นตัวอย่างที่ดีสำหรับทีม", action: "ชมเชย + ให้เป็น mentor พนักงานใหม่", sourceIds: [] },
       { type: "team-coaching", priority: "warning", title: "SML-พิมพ์ ปิดการขายน้อยกว่าเพื่อน 50%", detail: "SML-พิมพ์ conversion rate 12% (ทีมเฉลี่ย 25%)\nส่วนใหญ่ลูกค้าค้างที่ stage quoting", action: "อบรมเทคนิคปิดการขาย + ให้ SML-วิภา สอน", sourceIds: [] },
@@ -775,20 +749,20 @@ export async function POST() {
         aiReplyKeywords: [],
       },
       {
-        sourceId: rooms[5]?.sourceId || "fb_0003",
+        sourceId: rooms[5]?.sourceId || "U0003",
         sourceType: "user",
-        groupName: "คุณวิภา — Facebook",
-        botName: "น้องกุ้ง FB",
+        groupName: "คุณวิภา — สอบถามราคา",
+        botName: "น้องกุ้ง",
         systemPrompt: "ตอบเฉพาะเรื่องสินค้าและราคา ถ้าถามเรื่องอื่นให้บอกว่า รอพนักงานตอบนะครับ ห้ามตอบเรื่องการเมือง ศาสนา",
         aiReplyMode: "keyword",
         aiReplyKeywords: ["ราคา", "เท่าไหร่", "สต็อก", "มีของ", "สั่ง"],
       },
       {
-        sourceId: rooms[10]?.sourceId || "ig_0004",
+        sourceId: rooms[10]?.sourceId || "U0004",
         sourceType: "user",
-        groupName: "คุณณัฐ — Instagram",
-        botName: "น้องกุ้ง IG",
-        systemPrompt: "ตอบสั้น กระชับ ใช้ emoji เยอะ เหมาะกับ Instagram ถ้าลูกค้าสนใจให้ส่งลิงก์ catalog",
+        groupName: "คุณณัฐ — ลูกค้าประจำ",
+        botName: "น้องกุ้ง",
+        systemPrompt: "ตอบสั้น กระชับ ใช้ emoji เยอะ ถ้าลูกค้าสนใจให้ส่งลิงก์ catalog",
         aiReplyMode: "mention",
         aiReplyKeywords: [],
       },
@@ -811,7 +785,7 @@ export async function POST() {
         aiReplyKeywords: [],
       },
       {
-        sourceId: rooms[20]?.sourceId || "fb_0007",
+        sourceId: rooms[20]?.sourceId || "U0007",
         sourceType: "user",
         groupName: "คุณเฉลิม — ต่อเติมบ้าน",
         botName: "ที่ปรึกษาก่อสร้าง",
@@ -838,9 +812,9 @@ export async function POST() {
         aiReplyKeywords: ["ราคา", "ปูน", "สต็อก", "เท่าไหร่", "กี่ถุง", "โปร", "ส่ง"],
       },
       {
-        sourceId: rooms[30]?.sourceId || "ig_0010",
+        sourceId: rooms[30]?.sourceId || "U0010",
         sourceType: "user",
-        groupName: "คุณมาลี — Instagram DM",
+        groupName: "คุณมาลี — แชทส่วนตัว",
         botName: "น้องกุ้ง",
         systemPrompt: "ตอบทุกข้อความ แต่ถ้าลูกค้าถามเรื่องราคาส่งหรือเครดิต ให้บอกว่าต้องคุยกับฝ่ายขายโดยตรง พร้อมส่งเบอร์โทร 081-234-5678",
         aiReplyMode: "auto",
@@ -864,7 +838,7 @@ export async function POST() {
       { title: "ทักทายลูกค้าใหม่", content: "สวัสดีครับ ยินดีให้บริการครับ 🙏 สนใจวัสดุก่อสร้างตัวไหนบอกได้เลยนะครับ", category: "greeting", usageCount: randInt(10, 50) },
       { title: "ทักทายลูกค้าเก่า", content: "สวัสดีครับ กลับมาอีกแล้ว 😊 มีอะไรให้ช่วยครับ? สินค้าใหม่เข้าเยอะเลยครับ", category: "greeting", usageCount: randInt(5, 30) },
       { title: "ทักทาย VIP", content: "สวัสดีครับ ยินดีต้อนรับลูกค้า VIP ครับ 🌟 มีสิทธิพิเศษส่วนลด 10% ทุกรายการ วันนี้สนใจอะไรครับ?", category: "greeting", usageCount: randInt(3, 20) },
-      { title: "ทักทาย IG/FB", content: "สวัสดีค่ะ ขอบคุณที่ทักมานะคะ 💕 สนใจสินค้าตัวไหนส่งรายละเอียดให้เลยค่ะ", category: "greeting", usageCount: randInt(5, 25) },
+      { title: "ทักทายลูกค้า", content: "สวัสดีค่ะ ขอบคุณที่ทักมานะคะ 💕 สนใจสินค้าตัวไหนส่งรายละเอียดให้เลยค่ะ", category: "greeting", usageCount: randInt(5, 25) },
       { title: "ตอบนอกเวลา", content: "สวัสดีครับ ขณะนี้อยู่นอกเวลาทำการ (จ-ส 7:00-17:00) จะตอบกลับโดยเร็วที่สุดครับ 🙏", category: "greeting", usageCount: randInt(10, 40) },
       // ราคา (pricing)
       { title: "ราคาปูนตราเสือ", content: "ปูนซีเมนต์ตราเสือ ประเภท 1\n• 1-99 ถุง: 135 บาท/ถุง\n• 100+ ถุง: 128 บาท/ถุง\n• 500+ ถุง: 122 บาท/ถุง\nสนใจจำนวนเท่าไหร่ครับ?", category: "pricing", usageCount: randInt(20, 80) },
@@ -974,14 +948,14 @@ export async function POST() {
         stats: { triggered: 35, replied: 15, converted: 4 },
       },
       {
-        name: "ลูกค้า Facebook ไม่ตอบ 2 วัน",
+        name: "ลูกค้า LINE ไม่ตอบ 2 วัน",
         trigger: "no_reply_days",
         triggerDays: 2,
         triggerStage: "",
         messages: [
           { dayOffset: 0, template: "สวัสดีค่ะ {{name}} 😊 สนใจสินค้าตัวไหนบอกได้เลยนะคะ ตอบทุกคำถามค่ะ" },
         ],
-        aiGenerate: false, platform: "facebook",
+        aiGenerate: false, platform: "line",
         status: "active",
         stats: { triggered: 30, replied: 12, converted: 3 },
       },
@@ -1020,7 +994,7 @@ export async function POST() {
         customerId: c.sourceId,
         customerName: c.name,
         sourceId: c.rooms?.[0] || c.sourceId,
-        platform: c.rooms?.[0]?.startsWith("fb_") ? "facebook" : c.rooms?.[0]?.startsWith("ig_") ? "instagram" : "line",
+        platform: "line",
         currentStep: st === "pending" ? 0 : 1,
         totalSteps: 2,
         status: st,

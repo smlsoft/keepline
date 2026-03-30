@@ -231,7 +231,7 @@ export default function TemplatesPage() {
           <p className="text-amber-400 font-medium mb-1">💡 วิธีใช้งาน</p>
           <p className="text-xs theme-text-muted leading-relaxed">
             กด <span className="text-amber-300 font-medium">⚡ Quick Reply</span> ที่ด้านล่างของแต่ละการ์ดแชทบนแดชบอร์ด
-            เพื่อเลือกข้อความสำเร็จรูป แล้วคัดลอกไปวางในช่องแชท LINE / Facebook / Instagram
+            เพื่อเลือกข้อความสำเร็จรูป แล้วคัดลอกไปวางในช่องแชท LINE
           </p>
         </div>
       </main>

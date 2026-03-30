@@ -4,19 +4,6 @@ import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-interface PlatformIds {
-  line?: string | string[];
-  facebook?: string | string[];
-  instagram?: string | string[];
-}
-
-// Normalize platformIds — รองรับทั้ง string เดิม และ array ใหม่
-function toIdArray(val: string | string[] | undefined): string[] {
-  if (!val) return [];
-  if (Array.isArray(val)) return val.filter(Boolean);
-  return val ? [val] : [];
-}
-
 interface Customer {
   _id: string;
   name: string;
@@ -27,9 +14,6 @@ interface Customer {
   phone?: string;
   email?: string;
   lineId?: string;
-  facebookId?: string;
-  instagramId?: string;
-  platformIds?: PlatformIds;
   address?: string;
   notes?: string;
   avatarUrl?: string;
@@ -89,9 +73,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
   const [position, setPosition] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [lineIds, setLineIds] = useState<string[]>([]);
-  const [facebookIds, setFacebookIds] = useState<string[]>([]);
-  const [instagramIds, setInstagramIds] = useState<string[]>([]);
+  const [lineId, setLineId] = useState("");
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
@@ -109,12 +91,6 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
   const [taskNotes, setTaskNotes] = useState("");
   const [taskSaving, setTaskSaving] = useState(false);
   const [taskSaved, setTaskSaved] = useState(false);
-  // Merge
-  const [showMergeModal, setShowMergeModal] = useState(false);
-  const [mergeSearch, setMergeSearch] = useState("");
-  const [mergeResults, setMergeResults] = useState<Customer[]>([]);
-  const [merging, setMerging] = useState(false);
-  const [mergeTarget, setMergeTarget] = useState<Customer | null>(null);
 
   useEffect(() => {
     fetch(`/dashboard/api/customers/${id}`)
@@ -128,9 +104,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
           setPosition(d.position || "");
           setPhone(d.phone || "");
           setEmail(d.email || "");
-          setLineIds(toIdArray(d.platformIds?.line).length > 0 ? toIdArray(d.platformIds?.line) : d.lineId ? [d.lineId] : []);
-          setFacebookIds(toIdArray(d.platformIds?.facebook).length > 0 ? toIdArray(d.platformIds?.facebook) : d.facebookId ? [d.facebookId] : []);
-          setInstagramIds(toIdArray(d.platformIds?.instagram).length > 0 ? toIdArray(d.platformIds?.instagram) : d.instagramId ? [d.instagramId] : []);
+          setLineId(d.lineId || "");
           setAddress(d.address || "");
           setNotes(d.notes || "");
           setAvatarUrl(d.avatarUrl || "");
@@ -153,11 +127,6 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
       body: JSON.stringify({
         firstName, lastName, company, position,
         phone, email, address, notes, avatarUrl,
-        platformIds: {
-          line: lineIds.filter(Boolean),
-          facebook: facebookIds.filter(Boolean),
-          instagram: instagramIds.filter(Boolean),
-        },
         customTags: customTags.split(",").map((t) => t.trim()).filter(Boolean),
         dealValue: dealValue !== "" ? parseFloat(dealValue) : undefined,
         expectedCloseDate: expectedCloseDate || undefined,
@@ -191,33 +160,6 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
     setTaskSaved(true);
     setTaskTitle(""); setTaskDueDate(""); setTaskPriority("medium"); setTaskNotes("");
     setTimeout(() => { setTaskSaved(false); setShowTaskModal(false); }, 1200);
-  };
-
-  // Merge search
-  const handleMergeSearch = async (q: string) => {
-    setMergeSearch(q);
-    if (q.length < 2) { setMergeResults([]); return; }
-    try {
-      const r = await fetch(`/dashboard/api/customers?q=${encodeURIComponent(q)}`);
-      const data = await r.json();
-      // ไม่แสดงตัวเอง
-      setMergeResults((data || []).filter((c: Customer) => c._id !== id).slice(0, 5));
-    } catch { setMergeResults([]); }
-  };
-
-  const handleMerge = async (targetId: string) => {
-    if (!confirm("รวมลูกค้า 2 คนนี้เป็นคนเดียวกัน?\nข้อมูลจะรวมมาที่ลูกค้าปัจจุบัน และลบอีกรายออก")) return;
-    setMerging(true);
-    try {
-      await fetch("/dashboard/api/customers/merge", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ primaryId: id, secondaryId: targetId }),
-      });
-      // reload
-      window.location.reload();
-    } catch {}
-    setMerging(false);
   };
 
   const saveAssignedTo = async (updated: string[]) => {
@@ -470,69 +412,18 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
               className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text resize-none" style={{ background: "var(--bg-primary)" }} />
           </div>
 
-          {/* Channel IDs Section — รองรับหลาย ID ต่อ platform */}
+          {/* Channel IDs Section */}
           <div className="mt-6 pt-4 border-t theme-border">
-            <h3 className="text-xs font-bold theme-text-muted mb-3 uppercase tracking-wide">🔗 ช่องทาง (Platform IDs)</h3>
+            <h3 className="text-xs font-bold theme-text-muted mb-3 uppercase tracking-wide">🔗 ช่องทาง LINE</h3>
             <div className="space-y-4">
-              {/* LINE */}
               <div>
                 <label className="block text-[11px] theme-text-muted mb-1">
-                  <span className="inline-flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-green-500 inline-block" /> LINE ({lineIds.length})</span>
+                  <span className="inline-flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-green-500 inline-block" /> LINE ID</span>
                 </label>
-                <div className="space-y-1">
-                  {lineIds.map((id, i) => (
-                    <div key={i} className="flex gap-1">
-                      <input type="text" value={id}
-                        onChange={(e) => { const arr = [...lineIds]; arr[i] = e.target.value; setLineIds(arr); }}
-                        placeholder="Uxxxxxxxxxx"
-                        className="flex-1 px-3 py-1.5 rounded-lg border theme-border text-sm theme-bg theme-text font-mono text-xs" style={{ background: "var(--bg-primary)" }} />
-                      <button onClick={() => setLineIds(lineIds.filter((_, j) => j !== i))}
-                        className="px-2 text-red-400 hover:text-red-300 text-sm">✕</button>
-                    </div>
-                  ))}
-                  <button onClick={() => setLineIds([...lineIds, ""])}
-                    className="text-[11px] text-green-400 hover:text-green-300 px-1">+ เพิ่ม LINE ID</button>
-                </div>
-              </div>
-              {/* Facebook */}
-              <div>
-                <label className="block text-[11px] theme-text-muted mb-1">
-                  <span className="inline-flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-blue-500 inline-block" /> Facebook ({facebookIds.length})</span>
-                </label>
-                <div className="space-y-1">
-                  {facebookIds.map((id, i) => (
-                    <div key={i} className="flex gap-1">
-                      <input type="text" value={id}
-                        onChange={(e) => { const arr = [...facebookIds]; arr[i] = e.target.value; setFacebookIds(arr); }}
-                        placeholder="fb_xxxxxxxxxx"
-                        className="flex-1 px-3 py-1.5 rounded-lg border theme-border text-sm theme-bg theme-text font-mono text-xs" style={{ background: "var(--bg-primary)" }} />
-                      <button onClick={() => setFacebookIds(facebookIds.filter((_, j) => j !== i))}
-                        className="px-2 text-red-400 hover:text-red-300 text-sm">✕</button>
-                    </div>
-                  ))}
-                  <button onClick={() => setFacebookIds([...facebookIds, ""])}
-                    className="text-[11px] text-blue-400 hover:text-blue-300 px-1">+ เพิ่ม Facebook ID</button>
-                </div>
-              </div>
-              {/* Instagram */}
-              <div>
-                <label className="block text-[11px] theme-text-muted mb-1">
-                  <span className="inline-flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 inline-block" /> Instagram ({instagramIds.length})</span>
-                </label>
-                <div className="space-y-1">
-                  {instagramIds.map((id, i) => (
-                    <div key={i} className="flex gap-1">
-                      <input type="text" value={id}
-                        onChange={(e) => { const arr = [...instagramIds]; arr[i] = e.target.value; setInstagramIds(arr); }}
-                        placeholder="ig_xxxxxxxxxx"
-                        className="flex-1 px-3 py-1.5 rounded-lg border theme-border text-sm theme-bg theme-text font-mono text-xs" style={{ background: "var(--bg-primary)" }} />
-                      <button onClick={() => setInstagramIds(instagramIds.filter((_, j) => j !== i))}
-                        className="px-2 text-red-400 hover:text-red-300 text-sm">✕</button>
-                    </div>
-                  ))}
-                  <button onClick={() => setInstagramIds([...instagramIds, ""])}
-                    className="text-[11px] text-pink-400 hover:text-pink-300 px-1">+ เพิ่ม Instagram ID</button>
-                </div>
+                <input type="text" value={lineId}
+                  onChange={(e) => setLineId(e.target.value)}
+                  placeholder="Uxxxxxxxxxx"
+                  className="w-full px-3 py-1.5 rounded-lg border theme-border text-sm theme-bg theme-text font-mono text-xs" style={{ background: "var(--bg-primary)" }} />
               </div>
             </div>
             {(customer.rooms || []).length > 0 && (
@@ -540,9 +431,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                 <p className="text-[10px] theme-text-muted mb-1">ห้องสนทนาที่เชื่อมอยู่ ({customer.rooms.length})</p>
                 <div className="flex flex-wrap gap-1">
                   {customer.rooms.map((r) => {
-                    const pl = r.startsWith("fb_") ? "FB" : r.startsWith("ig_") ? "IG" : "LINE";
-                    const plColor = pl === "FB" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" : pl === "IG" ? "bg-pink-500/10 text-pink-400 border-pink-500/20" : "bg-green-500/10 text-green-400 border-green-500/20";
-                    return <span key={r} className={`text-[10px] px-2 py-0.5 rounded-lg border font-mono ${plColor}`}>{pl}: {r.substring(0, 16)}{r.length > 16 ? "..." : ""}</span>;
+                    return <span key={r} className="text-[10px] px-2 py-0.5 rounded-lg border font-mono bg-green-500/10 text-green-400 border-green-500/20">LINE: {r.substring(0, 16)}{r.length > 16 ? "..." : ""}</span>;
                   })}
                 </div>
               </div>
@@ -552,11 +441,6 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                 className="text-xs px-3 py-1.5 rounded-lg bg-indigo-900/30 text-indigo-400 border border-indigo-700/30 hover:bg-indigo-800/40 transition">
                 📜 ดูสนทนาทั้งหมด
               </Link>
-              <button onClick={() => setShowMergeModal(true)}
-                className="text-xs px-3 py-1.5 rounded-lg bg-amber-900/30 text-amber-400 border border-amber-700/30 hover:bg-amber-800/40 transition">
-                🔀 รวมลูกค้า (Merge)
-              </button>
-              <p className="text-[10px] theme-text-muted mt-1 w-full">รวมลูกค้าจากช่องทางอื่นที่เป็นคนเดียวกัน</p>
             </div>
           </div>
 
@@ -610,64 +494,6 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
         </div>
       </main>
 
-      {/* Merge Modal */}
-      {showMergeModal && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md rounded-2xl border theme-border p-6 space-y-4" style={{ background: "var(--bg-card)" }}>
-            <div className="flex items-center justify-between">
-              <h2 className="font-bold text-lg">🔀 รวมลูกค้า</h2>
-              <button onClick={() => setShowMergeModal(false)} className="theme-text-muted hover:theme-text text-xl">&times;</button>
-            </div>
-            <p className="text-xs theme-text-secondary">
-              ค้นหาลูกค้าอีกคนที่เป็นคนเดียวกัน แล้วรวมข้อมูลมาที่ <strong>{firstName || customer.name}</strong>
-            </p>
-            <input
-              type="text"
-              value={mergeSearch}
-              onChange={(e) => handleMergeSearch(e.target.value)}
-              placeholder="พิมพ์ชื่อลูกค้า..."
-              className="w-full px-3 py-2 rounded-lg theme-input border text-sm"
-              autoFocus
-            />
-            <div className="max-h-60 overflow-y-auto space-y-1">
-              {mergeResults.map((c) => (
-                <div key={c._id} className="flex items-center justify-between p-2 rounded-lg hover:theme-bg-hover transition">
-                  <div className="flex items-center gap-2 min-w-0">
-                    {c.avatarUrl ? (
-                      <img src={c.avatarUrl} alt="" className="w-8 h-8 rounded-full object-cover shrink-0" />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white shrink-0">
-                        {(c.firstName || c.name).substring(0, 2)}
-                      </div>
-                    )}
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium truncate">{c.firstName ? `${c.firstName} ${c.lastName || ""}`.trim() : c.name}</p>
-                      <div className="flex items-center gap-1">
-                        {(c.rooms || []).map((r) => {
-                          const pl = r.startsWith("fb_") ? "FB" : r.startsWith("ig_") ? "IG" : "LINE";
-                          const color = pl === "FB" ? "bg-blue-500" : pl === "IG" ? "bg-pink-500" : "bg-green-500";
-                          return <span key={r} className={`w-2 h-2 rounded-full ${color}`} title={`${pl}: ${r}`} />;
-                        })}
-                        <span className="text-[10px] theme-text-muted ml-1">{c.totalMessages} msg</span>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleMerge(c._id)}
-                    disabled={merging}
-                    className="shrink-0 px-3 py-1 text-xs bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition disabled:opacity-50"
-                  >
-                    {merging ? "..." : "รวม"}
-                  </button>
-                </div>
-              ))}
-              {mergeSearch.length >= 2 && mergeResults.length === 0 && (
-                <p className="text-center text-xs theme-text-muted py-4">ไม่พบลูกค้า</p>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

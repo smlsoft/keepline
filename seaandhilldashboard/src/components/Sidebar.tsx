@@ -57,7 +57,6 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: "/crm", icon: "👥", label: "CRM" },
       { href: "/scorecard", icon: "🏆", label: "คะแนนลูกค้า" },
-      { href: "/merge", icon: "🔀", label: "รวมลูกค้า" },
       { href: "/auto-closer", icon: "🤝", label: "ติดตามปิดการขาย" },
     ],
   },

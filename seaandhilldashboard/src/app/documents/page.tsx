@@ -36,8 +36,6 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }
 
 const PLATFORM_BADGE: Record<string, { label: string; color: string }> = {
   line: { label: "LINE", color: "bg-green-600" },
-  facebook: { label: "FB", color: "bg-blue-600" },
-  instagram: { label: "IG", color: "bg-pink-600" },
 };
 
 interface Doc {

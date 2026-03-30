@@ -159,8 +159,6 @@ export default function BroadcastPage() {
                     className="w-full px-3 py-2.5 rounded-xl border text-sm" style={{ background: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }}>
                     <option value="all">ทุกช่องทาง</option>
                     <option value="line">LINE</option>
-                    <option value="facebook">Facebook</option>
-                    <option value="instagram">Instagram</option>
                   </select>
                 </div>
               </div>

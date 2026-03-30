@@ -21,8 +21,6 @@ export function useNotificationContext() {
 
 const PLATFORM_ICONS: Record<string, { emoji: string; color: string }> = {
   line: { emoji: "💚", color: "bg-green-500" },
-  facebook: { emoji: "💙", color: "bg-blue-500" },
-  instagram: { emoji: "💜", color: "bg-pink-500" },
 };
 
 export function NotificationProvider({ children }: { children: ReactNode }) {

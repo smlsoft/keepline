@@ -90,18 +90,6 @@ const PLATFORM_CONFIG: Record<string, {
     placeholder: "พิมพ์ข้อความ LINE…",
     capabilities: "ข้อความ · รูป · สติกเกอร์ · วิดีโอ · เสียง · ตำแหน่ง · Flex",
   },
-  facebook: {
-    label: "Facebook", icon: "💙", color: "text-blue-400", badgeBg: "bg-blue-600", dot: "bg-blue-400",
-    borderColor: "border-blue-500", headerBg: "bg-blue-950/60", sendBg: "bg-blue-600", sendHover: "hover:bg-blue-500",
-    placeholder: "พิมพ์ข้อความ Messenger…",
-    capabilities: "ข้อความ · รูป (เร็วๆ นี้)",
-  },
-  instagram: {
-    label: "Instagram", icon: "💜", color: "text-pink-400", badgeBg: "bg-gradient-to-r from-purple-600 to-pink-600", dot: "bg-pink-400",
-    borderColor: "border-pink-500", headerBg: "bg-pink-950/40", sendBg: "bg-gradient-to-r from-purple-600 to-pink-600", sendHover: "hover:brightness-110",
-    placeholder: "พิมพ์ข้อความ Instagram DM…",
-    capabilities: "ข้อความ · รูป (เร็วๆ นี้)",
-  },
 };
 
 const MAX_PANELS = 4;
@@ -121,12 +109,10 @@ function timeAgo(dateStr: string | null): string {
 
 function getInitials(name: string): string {
   if (!name) return "?";
-  return name.replace(/^(fb_|ig_)/, "").toUpperCase().substring(0, 2);
+  return name.toUpperCase().substring(0, 2);
 }
 
-function avatarBg(platform: string): string {
-  if (platform === "facebook") return "bg-blue-600";
-  if (platform === "instagram") return "bg-pink-600";
+function avatarBg(_platform: string): string {
   return "bg-green-600";
 }
 

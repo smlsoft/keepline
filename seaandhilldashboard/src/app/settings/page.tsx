@@ -457,44 +457,6 @@ export default function SettingsPage() {
           </div>
         </section>
 
-        {/* Facebook / Instagram */}
-        <section className="theme-bg-secondary border theme-border rounded-2xl p-6">
-          <SectionHeader icon="📘" title="Facebook / Instagram" subtitle="ตั้งค่าจาก Meta Business Suite" />
-          <div className="space-y-4">
-            <MaskedField
-              label="Page Access Token (โทเค็นเพจ)"
-              maskedValue={account?.fbConfig?.pageAccessToken || ""}
-              placeholder="EAAxxxxxxxx..."
-              onSave={async (val) => { await saveField({ fbConfig: { pageAccessToken: val } }); }}
-              saving={globalSaving}
-            />
-            <MaskedField
-              label="App Secret (รหัสลับแอป)"
-              maskedValue={account?.fbConfig?.appSecret || ""}
-              placeholder="App Secret"
-              onSave={async (val) => { await saveField({ fbConfig: { appSecret: val } }); }}
-              saving={globalSaving}
-            />
-            <MaskedField
-              label="Verify Token (โทเค็นยืนยัน)"
-              maskedValue={account?.fbConfig?.verifyToken || ""}
-              placeholder="ตั้งเองได้เลย เช่น my-verify-token"
-              onSave={async (val) => { await saveField({ fbConfig: { verifyToken: val } }); }}
-              saving={globalSaving}
-              mono={false}
-            />
-            <div className="flex items-center gap-2 pt-2 border-t theme-border">
-              {account?.fbConfig?.configured ? (
-                <span className="text-xs text-green-400 flex items-center gap-1">
-                  <span className="w-2 h-2 bg-green-500 rounded-full inline-block" />
-                  Facebook ตั้งค่าแล้ว — Instagram ใช้ token เดียวกัน
-                </span>
-              ) : (
-                <span className="text-xs theme-text-muted">ยังไม่ได้ตั้งค่า</span>
-              )}
-            </div>
-          </div>
-        </section>
 
         {/* Telegram */}
         <section className="theme-bg-secondary border theme-border rounded-2xl p-6">

@@ -199,7 +199,7 @@ export default function OnboardingPage() {
                   {[
                     { icon: "🍃", label: "เชื่อมฐานข้อมูล MongoDB Atlas", desc: "สำหรับเก็บข้อความแชท" },
                     { icon: "🤖", label: "ตั้งค่า AI API Key", desc: "OpenRouter (จำเป็น) + ตัวอื่นเสริม" },
-                    { icon: "💬", label: "เชื่อมช่องทาง (ข้ามได้)", desc: "LINE / Facebook / Instagram" },
+                    { icon: "💬", label: "เชื่อมช่องทาง (ข้ามได้)", desc: "LINE" },
                   ].map(({ icon, label, desc }) => (
                     <div key={label} className="flex items-start gap-3">
                       <span className="text-lg mt-0.5">{icon}</span>
@@ -461,51 +461,6 @@ export default function OnboardingPage() {
                   )}
                 </div>
 
-                {/* Facebook / Instagram */}
-                <div className="theme-bg-secondary border theme-border rounded-2xl p-5 space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 bg-blue-900/40 rounded-xl flex items-center justify-center text-lg">📘</div>
-                    <div>
-                      <p className="font-semibold text-sm">Facebook / Instagram</p>
-                      <p className="text-xs theme-text-muted">Meta Business Suite</p>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-xs theme-text-muted mb-1 block">Page Access Token</label>
-                    <input
-                      type="password"
-                      value={fbToken}
-                      onChange={(e) => setFbToken(e.target.value)}
-                      placeholder="EAAxxxxxxxx..."
-                      className="w-full px-4 py-2.5 theme-input border rounded-xl text-sm focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition font-mono"
-                      autoComplete="off"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="text-xs theme-text-muted mb-1 block">App Secret</label>
-                      <input
-                        type="password"
-                        value={fbSecret}
-                        onChange={(e) => setFbSecret(e.target.value)}
-                        placeholder="App Secret"
-                        className="w-full px-4 py-2.5 theme-input border rounded-xl text-sm focus:outline-none focus:border-blue-500/50 transition font-mono"
-                        autoComplete="off"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs theme-text-muted mb-1 block">Verify Token</label>
-                      <input
-                        type="text"
-                        value={fbVerify}
-                        onChange={(e) => setFbVerify(e.target.value)}
-                        placeholder="ตั้งเองได้เลย"
-                        className="w-full px-4 py-2.5 theme-input border rounded-xl text-sm focus:outline-none focus:border-blue-500/50 transition"
-                        autoComplete="off"
-                      />
-                    </div>
-                  </div>
-                </div>
               </div>
 
               <div className="flex gap-3">
@@ -549,7 +504,6 @@ export default function OnboardingPage() {
                   { icon: "🍃", label: "MongoDB Atlas", status: mongoUri ? "✅ เชื่อมแล้ว" : "⚠️ ยังไม่ได้ตั้งค่า", ok: !!mongoUri },
                   { icon: "🤖", label: "OpenRouter API Key", status: openrouterKey ? "✅ ตั้งค่าแล้ว" : "⚠️ ยังไม่ได้ตั้งค่า", ok: !!openrouterKey },
                   { icon: "💬", label: "LINE OA", status: lineToken ? "✅ เชื่อมแล้ว" : "⏭ ข้ามไป", ok: !!lineToken },
-                  { icon: "📘", label: "Facebook/Instagram", status: fbToken ? "✅ เชื่อมแล้ว" : "⏭ ข้ามไป", ok: !!fbToken },
                 ].map(({ icon, label, status, ok }) => (
                   <div key={label} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">

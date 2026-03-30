@@ -104,7 +104,7 @@ const BROADCASTS = [
 
 // ─── Customer Scores ───
 const TIERS = ["vip", "hot_lead", "active", "at_risk", "dormant"] as const;
-const PLATFORMS = ["line", "facebook", "instagram"] as const;
+const PLATFORMS = ["line"] as const;
 const NAMES = [
   "สมชาย สุขสมบูรณ์", "วิภา จันทร์เพ็ง", "ธนากร ทองดี", "สุดา แก้วมณี", "ชัยวัฒน์ พลอยงาม",
   "นภา สว่างจิต", "ประเสริฐ ใจดี", "กัลยา บุญมา", "พิมพ์ ศรีสุข", "อนุชา รุ่งเรือง",
@@ -161,7 +161,7 @@ export async function POST() {
       const lifetimeValue = Math.round(r() * 100);
       const churnRisk = Math.round(r() * 80);
       const overall = Math.round((engagement + purchaseIntent + lifetimeValue + (100 - churnRisk)) / 4);
-      const prefix = platform === "line" ? (r() > 0.5 ? "C" : "U") : platform === "facebook" ? "fb_" : "ig_";
+      const prefix = r() > 0.5 ? "C" : "U";
       const sourceId = `${prefix}${String(1000 + i).padStart(6, "0")}`;
 
       return {
@@ -240,7 +240,7 @@ export async function POST() {
     for (let i = 0; i < 20; i++) {
       const name = NAMES[i % NAMES.length];
       const platform = PLATFORMS[i % PLATFORMS.length];
-      const prefix = platform === "line" ? "U" : platform === "facebook" ? "fb_" : "ig_";
+      const prefix = "U";
       const status = statuses[Math.floor(r() * statuses.length)];
       queue.push({
         ruleId: `rule_${(i % rules.length) + 1}`,

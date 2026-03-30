@@ -118,7 +118,7 @@ export default function ConfigPage() {
       <header className="border-b theme-border px-3 md:px-6 py-4 sticky top-0 theme-bg backdrop-blur z-10">
         <div>
           <h1 className="text-base font-bold">🔗 ช่องทางเชื่อมต่อ</h1>
-          <p className="text-xs theme-text-secondary">ตั้งค่า LINE, Facebook, Instagram, Telegram</p>
+          <p className="text-xs theme-text-secondary">ตั้งค่า LINE, Telegram</p>
         </div>
       </header>
 

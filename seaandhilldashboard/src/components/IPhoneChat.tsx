@@ -199,15 +199,7 @@ export default function IPhoneChat({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 min-w-0">
               <p className="text-white text-sm font-semibold truncate">{displayName}</p>
-              {group.platform === "facebook" && (
-                <span className="shrink-0 text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-600/80 text-white leading-none">FB</span>
-              )}
-              {group.platform === "instagram" && (
-                <span className="shrink-0 text-[9px] font-bold px-1.5 py-0.5 rounded bg-pink-600/80 text-white leading-none">IG</span>
-              )}
-              {(!group.platform || group.platform === "line") && (
-                <span className="shrink-0 text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-600/80 text-white leading-none">LINE</span>
-              )}
+              <span className="shrink-0 text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-600/80 text-white leading-none">LINE</span>
             </div>
             <div className="flex items-center gap-1 mt-0.5 flex-wrap">
               <ScoreBadge label="😊" data={group.customerSentiment || group.sentiment} type="sentiment" />

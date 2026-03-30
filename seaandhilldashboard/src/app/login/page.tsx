@@ -60,7 +60,7 @@ export default function LoginPage() {
             <p className="text-sm theme-text-secondary mt-1 text-center">
               น้องกุ้ง AI คุมทั้งระบบ
               <br />
-              <span className="theme-text-muted">LINE · Facebook · Instagram</span>
+              <span className="theme-text-muted">LINE</span>
             </p>
           </div>
 

@@ -23,8 +23,8 @@ interface RevenueData {
   won: { sum: number; count: number };
 }
 
-const PLATFORM_NAMES: Record<string, string> = { line: "LINE", facebook: "Facebook", instagram: "Instagram", unknown: "อื่นๆ" };
-const PLATFORM_COLORS: Record<string, string> = { LINE: "#06c755", Facebook: "#1877f2", Instagram: "#e1306c", "อื่นๆ": "#8b5cf6" };
+const PLATFORM_NAMES: Record<string, string> = { line: "LINE", unknown: "อื่นๆ" };
+const PLATFORM_COLORS: Record<string, string> = { LINE: "#06c755", "อื่นๆ": "#8b5cf6" };
 const STAGE_NAMES: Record<string, string> = { interested: "สนใจ", quoting: "เสนอราคา", negotiating: "ต่อรอง", following_up: "ติดตาม" };
 const DAY_NAMES = ["", "อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"];
 

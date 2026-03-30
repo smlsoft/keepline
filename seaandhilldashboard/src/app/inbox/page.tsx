@@ -63,8 +63,6 @@ interface ReplyTemplate {
 
 const PLATFORM_CONFIG: Record<string, { label: string; color: string; badgeBg: string; dot: string }> = {
   line:      { label: "LINE",      color: "text-green-400",  badgeBg: "bg-green-600",  dot: "bg-green-400" },
-  facebook:  { label: "Facebook",  color: "text-blue-400",   badgeBg: "bg-blue-600",   dot: "bg-blue-400" },
-  instagram: { label: "Instagram", color: "text-pink-400",   badgeBg: "bg-gradient-to-r from-purple-600 to-pink-600", dot: "bg-pink-400" },
 };
 
 const SENTIMENT_LABELS: Record<string, string> = {
@@ -110,13 +108,11 @@ function platformBadge(platform: string) {
 
 function getInitials(name: string): string {
   if (!name) return "?";
-  const clean = name.replace(/^(fb_|ig_)/, "").toUpperCase();
+  const clean = name.toUpperCase();
   return clean.substring(0, 2);
 }
 
-function avatarBg(platform: string): string {
-  if (platform === "facebook") return "bg-blue-600";
-  if (platform === "instagram") return "bg-pink-600";
+function avatarBg(_platform: string): string {
   return "bg-green-600";
 }
 

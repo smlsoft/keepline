@@ -111,7 +111,7 @@ const SECTIONS: Section[] = [
     id: "crm",
     icon: "👥",
     title: "CRM ลูกค้า",
-    desc: "จัดการ Pipeline, รวมลูกค้าซ้ำ, มอบหมาย staff",
+    desc: "จัดการ Pipeline, มอบหมาย staff",
     items: [
       {
         title: "Pipeline การขาย",
@@ -132,7 +132,7 @@ AI ย้าย stage ให้อัตโนมัติจากเนื้�
         content: `แต่ละลูกค้ามี:
 • ชื่อ-นามสกุล, บริษัท, ตำแหน่ง
 • เบอร์โทร, อีเมล, ที่อยู่
-• Platform IDs — LINE, Facebook, Instagram (หลายตัวได้)
+• LINE ID
 • ห้องสนทนาที่เชื่อม (rooms)
 • Tags อัตโนมัติจาก AI (ถามราคา, สนใจสินค้า, VIP, ร้องเรียน ฯลฯ)
 • Tags กำหนดเอง
@@ -140,22 +140,6 @@ AI ย้าย stage ให้อัตโนมัติจากเนื้�
 • ผู้ดูแล (assignedTo) — มอบหมาย staff ได้
 • Sentiment + Purchase Intent (AI วิเคราะห์)
 • จำนวนข้อความทั้งหมด`,
-      },
-      {
-        title: "รวมลูกค้าซ้ำ (Merge)",
-        content: `ลูกค้าคนเดียว อาจทักมาทั้ง LINE, Facebook, Instagram:
-
-ระบบค้นหาซ้ำอัตโนมัติ:
-• ชื่อเหมือนกัน 100%
-• เบอร์โทร/Email เดียวกัน
-• ชื่อคล้ายกัน (4 ตัวอักษรแรกเหมือน)
-
-วิธีรวม:
-1. ไปหน้า "🔀 รวมลูกค้า"
-2. ระบบแสดงคู่ที่ซ้ำ → กด "รวม → ตัวหลัก"
-3. หรือกด "✋ รวมเอง" → ค้นหา 2 คนมารวม
-4. หลังรวม: ห้องสนทนา + tags + notes + platformIds รวมกัน
-5. ประวัติแชทไม่หาย — รวมทั้งหมดเป็นลูกค้าเดียว`,
       },
     ],
     link: { label: "ไป CRM", href: "/crm" },
@@ -199,7 +183,7 @@ Tab ย่อย:
         title: "6 Tabs กราฟ",
         content: `📊 ภาพรวม:
 • ข้อความรายวัน (Line Chart) — แนวโน้ม 7 วัน
-• สัดส่วน Platform (Pie) — LINE / Facebook / Instagram
+• สัดส่วน Platform (Pie) — LINE
 • Sentiment (Donut) — ดี / ปานกลาง / แย่
 • Purchase Intent (Donut) — ไม่สนใจ / เริ่มสนใจ / สนใจซื้อ
 
@@ -617,7 +601,7 @@ Tips:
 1. ไปหน้า "📢 ส่งข้อความ"
 2. เลือกกลุ่มเป้าหมาย:
    • ทั้งหมด — ส่งทุกคน
-   • ตาม Platform — LINE / Facebook / Instagram
+   • ตาม Platform — LINE
    • ตาม Pipeline — สนใจ / เสนอราคา / ต่อรอง
    • ตาม Tag — VIP, ลูกค้าเก่า, ผู้รับเหมา ฯลฯ
    • กำหนดเอง — เลือกลูกค้ารายคน
@@ -853,11 +837,6 @@ Role ที่มี:
 • Channel Secret
 • ทดสอบเชื่อมต่อ + ดูข้อมูล bot
 
-📘 Facebook Config:
-• Page Access Token
-• App Secret
-• Verify Token
-
 📱 Telegram:
 • Bot Token
 • Chat ID`,
@@ -905,7 +884,7 @@ Role ที่มี:
     items: [
       {
         title: "Architecture",
-        content: `LINE / Facebook / Instagram
+        content: `LINE
   ↓ webhook
 Caddy (Auto HTTPS + Reverse Proxy)
   ↓
@@ -1043,7 +1022,7 @@ export default function GuidePage() {
                 </div>
               </div>
               <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                ระบบ CRM อัจฉริยะรวม LINE, Facebook, Instagram ในจอเดียว AI วิเคราะห์ทุกข้อความ แนะนำคำตอบ จำลูกค้าทุกคน
+                ระบบ CRM อัจฉริยะสำหรับ LINE AI วิเคราะห์ทุกข้อความ แนะนำคำตอบ จำลูกค้าทุกคน
                 พร้อม Analytics Dashboard, Payment Tracking, Document Intelligence, Real-time Notifications
               </p>
             </div>

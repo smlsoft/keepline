@@ -172,11 +172,8 @@ export default function ScoreCardPage() {
                         <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium border ${t.bg}`}>
                           {t.icon} {t.label}
                         </span>
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
-                          s.platform === "line" ? "bg-green-600/20 text-green-400" :
-                          s.platform === "facebook" ? "bg-blue-600/20 text-blue-400" : "bg-pink-600/20 text-pink-400"
-                        }`}>
-                          {s.platform === "line" ? "LINE" : s.platform === "facebook" ? "FB" : "IG"}
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-full font-medium bg-green-600/20 text-green-400">
+                          LINE
                         </span>
                       </div>
 

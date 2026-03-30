@@ -1,0 +1,50 @@
+# ==============================================
+# Sea and Hill LINE Group — Caddy mode (shared with openclawminicrm)
+# ใช้: docker compose -f docker-compose.caddy.yml up -d --build
+# ==============================================
+
+services:
+  openclaw:
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: seaandhill-openclaw
+    restart: always
+    volumes: ["./openclaw:/home/node/.openclaw"]
+    env_file: [.env]
+    environment: ["HOME=/home/node", "TZ=Asia/Bangkok", "OPENCLAW_ALLOW_INSECURE_PRIVATE_WS=1"]
+    command: ["node", "openclaw.mjs", "gateway", "--bind", "lan", "--port", "18789"]
+    depends_on: [agent]
+    networks: [default, caddy_net]
+    deploy: {resources: {limits: {memory: 512M, cpus: "0.5"}}}
+
+  agent:
+    build: {context: ./proxy, dockerfile: Dockerfile}
+    container_name: seaandhill-agent
+    restart: always
+    env_file: [.env]
+    environment: ["PORT=3000", "NODE_ENV=production"]
+    networks: [default, caddy_net]
+    deploy: {resources: {limits: {memory: 512M, cpus: "0.5"}}}
+
+  dashboard:
+    build:
+      context: ./seaandhilldashboard
+      dockerfile: Dockerfile.prod
+    container_name: seaandhill-dashboard
+    restart: always
+    env_file: [.env]
+    environment: ["PORT=3001", "NODE_ENV=production", "AGENT_URL=http://agent:3000"]
+    depends_on: [agent]
+    networks: [default, caddy_net]
+    deploy: {resources: {limits: {memory: 512M, cpus: "0.5"}}}
+
+  edge-tts:
+    image: travisvn/openai-edge-tts:latest
+    container_name: seaandhill-edge-tts
+    restart: always
+    environment: ["PORT=5050", "REQUIRE_API_KEY=false"]
+    deploy: {resources: {limits: {memory: 128M, cpus: "0.25"}}}
+
+networks:
+  caddy_net:
+    external: true
+    name: openclawminicrm_default

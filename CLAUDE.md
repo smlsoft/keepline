@@ -93,11 +93,13 @@ chat_analytics  { sourceId, sentiment, purchaseIntent }
 - **CI/CD:** GitHub Actions → SSH → Hetzner
 - **คู่มือ:** `docs/DEPLOY-HETZNER.md`
 
-## Design Rules
+## Design Rules (บังคับทุกหน้า)
+- **ภาษาไทยเท่านั้น** — ทุก label, button, placeholder, error message, tooltip ต้องเป็นภาษาไทย ห้ามใช้ภาษาอังกฤษ (ยกเว้นชื่อเฉพาะ เช่น LINE, CRM, AI)
 - **Mobile First** — ออกแบบ UI สำหรับมือถือก่อน แล้วขยายไป desktop
 - **Bottom Tabs 5 ปุ่ม:** หน้าหลัก | ปฏิทินภาษี | แชท | ลูกค้า | เพิ่มเติม
-- **ตัวอักษรใหญ่** — เหมาะสำหรับคนอายุมาก (text-xs=13px, text-sm=15px)
-- **ลด padding/margin** — กระชับ ไม่เปลืองพื้นที่
+- **ตัวอักษรใหญ่** — เหมาะสำหรับคนอายุมาก (text-xs=13px, text-sm=15px, text-base=17px)
+- **ลด padding/margin ให้น้อยที่สุด** — p-2 แทน p-4, gap-1 แทน gap-3, py-1 แทน py-3 กระชับทุกจุด
+- **Spacing มาตรฐาน:** card=p-2 md:p-3, header=py-2 px-3, modal=p-3, gap=gap-1.5, mb=mb-1
 
 ## สิ่งที่ห้ามทำ
 - ห้ามลบ folder/service โดยไม่ถามบอสก่อน

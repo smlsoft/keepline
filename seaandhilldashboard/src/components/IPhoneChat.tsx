@@ -18,6 +18,7 @@ interface Message {
   hasAudio?: boolean;
   hasSticker?: boolean;
   hasLocation?: boolean;
+  file?: { fileName: string; fileSize: number; r2Key?: string; fileUrl?: string } | null;
   sendMethod?: string;
   isAutoReply?: boolean;
   createdAt?: string;
@@ -334,6 +335,20 @@ export default function IPhoneChat({
                       )}
                       {msg.audioUrl?.startsWith("line-content") && (
                         <div className="flex items-center gap-1.5 my-1 text-xs text-sky-400">🎵 เสียง (ดูใน LINE)</div>
+                      )}
+
+                      {/* File */}
+                      {msg.file && msg.file.fileUrl && (
+                        <a
+                          href={msg.file.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 my-1 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition text-xs"
+                        >
+                          <span className="text-lg">📎</span>
+                          <span className="flex-1 truncate">{msg.file.fileName}</span>
+                          <span className="text-[10px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
+                        </a>
                       )}
 
                       {/* Location */}

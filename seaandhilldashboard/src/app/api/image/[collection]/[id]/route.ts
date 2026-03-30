@@ -19,6 +19,12 @@ export async function GET(
       return NextResponse.json({ error: "not found" }, { status: 404 });
     }
 
+    // ถ้าเป็น /api/media/ URL → redirect ไป
+    if (doc.imageUrl.startsWith("/api/media/")) {
+      return NextResponse.redirect(new URL(doc.imageUrl, _request.url));
+    }
+
+    // Legacy: base64 format
     const match = doc.imageUrl.match(/^data:(.+);base64,(.+)$/);
     if (!match) {
       return NextResponse.json({ error: "invalid format" }, { status: 400 });

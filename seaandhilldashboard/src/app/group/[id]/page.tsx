@@ -10,6 +10,14 @@ interface Message {
   content: string;
   messageType: string;
   imageUrl?: string | null;
+  videoUrl?: string | null;
+  audioUrl?: string | null;
+  file?: { fileName: string; fileSize: number; r2Key?: string; fileUrl?: string } | null;
+  sticker?: { packageId?: string; stickerId?: string; stickerUrl?: string } | null;
+  location?: { title?: string; address?: string; latitude: number; longitude: number } | null;
+  hasImage?: boolean;
+  hasVideo?: boolean;
+  hasAudio?: boolean;
   createdAt?: string;
 }
 
@@ -140,6 +148,30 @@ export default function GroupPage({ params }: { params: Promise<{ id: string }> 
                         onClick={() => setZoomImage(msg.imageUrl!)}
                       />
                     </div>
+                  )}
+
+                  {/* Video */}
+                  {msg.videoUrl && !msg.videoUrl.startsWith("line-content") && (
+                    <video src={msg.videoUrl} controls className="rounded-lg max-w-full max-h-48 mb-2" />
+                  )}
+
+                  {/* Audio */}
+                  {msg.audioUrl && !msg.audioUrl.startsWith("line-content") && (
+                    <audio src={msg.audioUrl} controls className="max-w-full mb-2" />
+                  )}
+
+                  {/* File */}
+                  {msg.file && msg.file.fileUrl && (
+                    <a
+                      href={msg.file.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 mb-2 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition text-xs"
+                    >
+                      <span className="text-lg">📎</span>
+                      <span className="flex-1 truncate">{msg.file.fileName}</span>
+                      <span className="text-[10px] opacity-60">{msg.file.fileSize > 1024 * 1024 ? `${(msg.file.fileSize / 1024 / 1024).toFixed(1)}MB` : `${Math.round(msg.file.fileSize / 1024)}KB`}</span>
+                    </a>
                   )}
 
                   {/* Text */}

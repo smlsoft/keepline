@@ -5,13 +5,23 @@
  */
 const express = require("express");
 const http = require("http");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const rateLimit = require("express-rate-limit");
 const { uploadToR2, getR2SignedUrl, isR2Ready } = require("./r2");
 const app = express();
+
+// === Shared Utilities ===
+const THAI_MONTHS = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+function formatThaiDate(d) {
+  const date = new Date(d);
+  return `${date.getDate()} ${THAI_MONTHS[date.getMonth()]}`;
+}
+function toObjectId(id) {
+  try { return new ObjectId(id); } catch { return id; }
+}
 
 // === Rate Limiters (Security) ===
 const aiLimiter = rateLimit({
@@ -2817,6 +2827,213 @@ function startAdvisorCron() {
   console.log("[น้องกุ้ง] 🦐 AI Advisor — monitor ทุก 1 ชม.");
 }
 
+// === Deadline Reminder Cron — แจ้งเตือนงานใกล้ครบกำหนด ทุกวัน 09:00 ===
+let lastDeadlineReminderDate = "";
+async function runDeadlineReminder() {
+  try {
+    const database = await getDB();
+    if (!database) return;
+
+    const now = new Date();
+    const threeDaysLater = new Date(now.getTime() + 3 * 86400000);
+
+    // หางานที่ใกล้ครบกำหนด (ภายใน 3 วัน) หรือเลยกำหนดแล้ว
+    const workItems = await database.collection("work_items").find({
+      status: { $in: ["pending", "in_progress"] },
+      dueDate: { $lte: threeDaysLater },
+    }).toArray();
+
+    if (workItems.length === 0) {
+      console.log("[Reminder] ไม่มีงานใกล้ครบกำหนด");
+      return;
+    }
+
+    // อัพเดตงานที่เลยกำหนดเป็น "late"
+    const overdueItems = workItems.filter(w => w.status === "pending" && new Date(w.dueDate) < now);
+    if (overdueItems.length > 0) {
+      const overdueIds = overdueItems.map(w => w._id);
+      await database.collection("work_items").updateMany(
+        { _id: { $in: overdueIds } },
+        { $set: { status: "late" } }
+      );
+      console.log(`[Reminder] อัพเดต ${overdueIds.length} งานเป็นสถานะ "late"`);
+    }
+
+    // จัดกลุ่มตาม staff
+    const staffMap = {};
+    for (const item of workItems) {
+      if (!item.assignedStaffId) continue;
+      if (!staffMap[item.assignedStaffId]) staffMap[item.assignedStaffId] = [];
+      staffMap[item.assignedStaffId].push(item);
+    }
+
+    // ดึง lineUserId ของ staff ทั้งหมด
+    const staffIds = Object.keys(staffMap);
+    if (staffIds.length === 0) {
+      console.log("[Reminder] ไม่มี staff ที่ต้องแจ้งเตือน");
+      return;
+    }
+
+    const staffDocs = await database.collection("staff").find({
+      _id: { $in: staffIds.map(toObjectId) },
+    }).toArray();
+
+    // สร้าง map staffId → lineUserId
+    const staffLineMap = {};
+    for (const s of staffDocs) {
+      if (s.lineUserId) staffLineMap[s._id.toString()] = s.lineUserId;
+    }
+
+    let totalSent = 0;
+    let staffNotified = 0;
+
+    for (const [staffId, items] of Object.entries(staffMap)) {
+      const lineUserId = staffLineMap[staffId];
+      if (!lineUserId) continue;
+
+      const lines = items.map(item => {
+        const due = new Date(item.dueDate);
+        const diffDays = Math.ceil((due.getTime() - now.getTime()) / 86400000);
+        const daysText = diffDays <= 0 ? "เลยกำหนด" : `อีก ${diffDays} วัน`;
+        return `• ${item.deadlineName || item.name || "งาน"} — ${item.customerName || "ไม่ระบุ"} — ${formatThaiDate(due)} (${daysText})`;
+      });
+
+      const message = `📋 สรุปงานใกล้ครบกำหนด:\n${lines.join("\n")}`;
+      const sent = await sendLinePush(lineUserId, [{ type: "text", text: message }]);
+      if (sent) {
+        totalSent += items.length;
+        staffNotified++;
+      }
+    }
+
+    console.log(`[Reminder] ส่งแจ้งเตือน ${totalSent} รายการ ให้ ${staffNotified} คน`);
+  } catch (e) {
+    console.error("[Reminder] Deadline error:", e.message);
+  }
+}
+
+function startDeadlineReminderCron() {
+  setInterval(() => {
+    const now = new Date();
+    const todayKey = now.toISOString().split("T")[0];
+    if (now.getHours() === 9 && now.getMinutes() === 0 && lastDeadlineReminderDate !== todayKey) {
+      lastDeadlineReminderDate = todayKey;
+      console.log("[Cron] ⏰ ถึงเวลาแจ้งเตือน deadline (09:00)");
+      runDeadlineReminder();
+    }
+  }, 60000);
+  console.log("[Cron] Deadline reminder scheduled at 09:00");
+}
+
+// === Document Reminder Cron — แจ้งเตือนเอกสาร ทุกวัน 10:00 ===
+let lastDocReminderDate = "";
+const docReminderSentToday = new Set(); // track ลูกค้าที่ส่งแล้ววันนี้
+
+async function runDocumentReminder() {
+  try {
+    const database = await getDB();
+    if (!database) return;
+
+    const now = new Date();
+    const currentPeriod = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const threeDaysLater = new Date(now.getTime() + 3 * 86400000);
+
+    // Reset daily tracking
+    docReminderSentToday.clear();
+
+    // หาเอกสารที่ยังไม่ได้ส่ง — overdue หรือใกล้ครบกำหนด
+    const checklists = await database.collection("document_checklists").find({
+      period: currentPeriod,
+      "items.status": "waiting",
+    }).toArray();
+
+    if (checklists.length === 0) {
+      console.log("[DocReminder] ไม่มีเอกสารที่ต้องแจ้งเตือน");
+      return;
+    }
+
+    // กรองเฉพาะ checklist ที่มีรายการต้องแจ้ง + เตรียมข้อมูล
+    const actionable = [];
+    let overdueUpdated = 0;
+
+    for (const checklist of checklists) {
+      const pendingItems = (checklist.items || []).filter(item => {
+        if (item.status !== "waiting" || !item.dueDate) return false;
+        const due = new Date(item.dueDate);
+        return due < now || due <= threeDaysLater;
+      });
+      if (pendingItems.length === 0) continue;
+
+      // อัพเดตรายการที่เลยกำหนดเป็น "overdue"
+      const overdueItemNames = pendingItems
+        .filter(item => new Date(item.dueDate) < now)
+        .map(item => item.name);
+
+      if (overdueItemNames.length > 0) {
+        await database.collection("document_checklists").updateOne(
+          { _id: checklist._id },
+          { $set: { "items.$[elem].status": "overdue" } },
+          { arrayFilters: [{ "elem.name": { $in: overdueItemNames }, "elem.status": "waiting" }] }
+        );
+        overdueUpdated += overdueItemNames.length;
+      }
+
+      if (checklist.customerId) {
+        actionable.push({ customerId: checklist.customerId, pendingItems });
+      }
+    }
+
+    // Batch-fetch ลูกค้าทั้งหมดในครั้งเดียว (แก้ N+1)
+    const uniqueCustIds = [...new Set(actionable.map(a => a.customerId.toString()))];
+    const customerDocs = uniqueCustIds.length > 0
+      ? await database.collection("customers").find({
+          _id: { $in: uniqueCustIds.map(toObjectId) },
+        }).toArray()
+      : [];
+    const custMap = {};
+    for (const c of customerDocs) {
+      if (c.lineUserId) custMap[c._id.toString()] = c.lineUserId;
+    }
+
+    let totalSent = 0;
+    for (const { customerId, pendingItems } of actionable) {
+      const custKey = customerId.toString();
+      if (docReminderSentToday.has(custKey)) continue;
+      const lineUserId = custMap[custKey];
+      if (!lineUserId) continue;
+
+      const docList = pendingItems.map(item => `• ${item.name}`).join("\n");
+      const message = `สวัสดีค่ะ 🙏\nรบกวนส่งเอกสารสำหรับเดือน ${currentPeriod}:\n${docList}\nส่งผ่าน LINE ได้เลยค่ะ`;
+
+      const sent = await sendLinePush(lineUserId, [{ type: "text", text: message }]);
+      if (sent) {
+        docReminderSentToday.add(custKey);
+        totalSent++;
+      }
+    }
+
+    if (overdueUpdated > 0) {
+      console.log(`[DocReminder] อัพเดต ${overdueUpdated} รายการเป็น "overdue"`);
+    }
+    console.log(`[DocReminder] ส่งแจ้งเตือนเอกสาร ${totalSent} ลูกค้า`);
+  } catch (e) {
+    console.error("[DocReminder] Error:", e.message);
+  }
+}
+
+function startDocumentReminderCron() {
+  setInterval(() => {
+    const now = new Date();
+    const todayKey = now.toISOString().split("T")[0];
+    if (now.getHours() === 10 && now.getMinutes() === 0 && lastDocReminderDate !== todayKey) {
+      lastDocReminderDate = todayKey;
+      console.log("[Cron] 📄 ถึงเวลาแจ้งเตือนเอกสาร (10:00)");
+      runDocumentReminder();
+    }
+  }, 60000);
+  console.log("[Cron] Document reminder scheduled at 10:00");
+}
+
 // API: ดึงคำแนะนำล่าสุด
 app.get("/advice", async (req, res) => {
   const database = await getDB();
@@ -4922,6 +5139,10 @@ getDB().then(async () => {
   // Start daily summary cron
   startDailyCron();
   startAdvisorCron();
+  // Tax deadline reminders — ทุกวัน 09:00
+  startDeadlineReminderCron();
+  // Document reminders — ทุกวัน 10:00
+  startDocumentReminderCron();
 
   app.listen(PORT, () => {
     console.log(`[Agent] Running on port ${PORT}`);

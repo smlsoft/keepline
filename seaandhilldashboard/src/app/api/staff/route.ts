@@ -10,23 +10,24 @@ export async function GET(request: NextRequest) {
     const withAvailable = searchParams.get("withAvailable") === "true";
 
     // Run both queries in parallel when withAvailable is requested
-    const [staffDocs, allLineUserIds] = await Promise.all([
+    const [staffDocs, customers] = await Promise.all([
       db.collection("staff").find().sort({ name: 1 }).toArray(),
       withAvailable
-        ? db.collection("groups_meta").distinct("members")
+        ? db.collection("customers").find({ lineUserId: { $ne: null } }).project({ name: 1, lineUserId: 1, avatarUrl: 1 }).sort({ name: 1 }).toArray()
         : Promise.resolve(null),
     ]);
 
     const staff = staffDocs.map((s) => ({ ...s, _id: s._id.toString() }));
     const result: any = { staff };
 
-    if (allLineUserIds) {
+    if (customers) {
       const linkedIds = new Set(
         staffDocs.filter((s) => s.lineUserId).map((s) => s.lineUserId)
       );
-      result.availableLineUserIds = allLineUserIds.filter(
-        (uid: string) => !linkedIds.has(uid)
-      );
+      // ลูกค้าที่ยังไม่ได้เป็นพนักงาน — แสดงชื่อ + lineUserId ให้เลือก
+      result.availableCustomers = customers
+        .filter((c: any) => !linkedIds.has(c.lineUserId))
+        .map((c: any) => ({ name: c.name, lineUserId: c.lineUserId, avatarUrl: c.avatarUrl }));
     }
 
     return NextResponse.json(result);

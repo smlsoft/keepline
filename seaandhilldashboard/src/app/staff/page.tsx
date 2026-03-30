@@ -14,9 +14,10 @@ interface Staff {
   createdAt: string;
 }
 
-interface AvailableMember {
+interface AvailableCustomer {
+  name: string;
   lineUserId: string;
-  displayName: string;
+  avatarUrl?: string;
 }
 
 const ROLES: Record<string, { label: string; color: string }> = {
@@ -40,7 +41,7 @@ const EMPTY_FORM = {
 
 export default function StaffPage() {
   const [staffList, setStaffList] = useState<Staff[]>([]);
-  const [available, setAvailable] = useState<AvailableMember[]>([]);
+  const [available, setAvailable] = useState<AvailableCustomer[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
@@ -54,7 +55,7 @@ export default function StaffPage() {
       const res = await fetch("/dashboard/api/staff?withAvailable=true");
       const data = await res.json();
       if (Array.isArray(data.staff)) setStaffList(data.staff);
-      if (Array.isArray(data.available)) setAvailable(data.available);
+      if (Array.isArray(data.availableCustomers)) setAvailable(data.availableCustomers);
     } catch {}
     setLoading(false);
   }, []);
@@ -136,7 +137,7 @@ export default function StaffPage() {
   const editingStaff = editId ? staffList.find((s) => s._id === editId) : null;
   const needsCurrentLine = editingStaff?.lineUserId && !available.some((a) => a.lineUserId === editingStaff.lineUserId);
   const availableForDropdown = needsCurrentLine
-    ? [...available, { lineUserId: editingStaff.lineUserId, displayName: editingStaff.name }]
+    ? [...available, { name: editingStaff.name, lineUserId: editingStaff.lineUserId }]
     : available;
 
   if (loading) {
@@ -198,19 +199,29 @@ export default function StaffPage() {
               </div>
 
               <div>
-                <label className="block text-[13px] theme-text-muted mb-1">LINE userId</label>
+                <label className="block text-[13px] theme-text-muted mb-1">เลือกจากลูกค้าที่มี (เชื่อม LINE)</label>
                 <select
                   value={form.lineUserId}
-                  onChange={(e) => setForm((p) => ({ ...p, lineUserId: e.target.value }))}
+                  onChange={(e) => {
+                    const selected = availableForDropdown.find(c => c.lineUserId === e.target.value);
+                    setForm((p) => ({
+                      ...p,
+                      lineUserId: e.target.value,
+                      name: selected?.name || p.name,
+                    }));
+                  }}
                   className="w-full px-3 py-2 rounded-lg theme-bg-secondary border theme-border text-sm theme-text"
                 >
-                  <option value="">-- ยังไม่เชื่อม LINE --</option>
-                  {availableForDropdown.map((m) => (
-                    <option key={m.lineUserId} value={m.lineUserId}>
-                      {m.displayName} ({m.lineUserId.slice(0, 8)}...)
+                  <option value="">-- เลือกลูกค้า --</option>
+                  {availableForDropdown.map((c) => (
+                    <option key={c.lineUserId} value={c.lineUserId}>
+                      {c.name}
                     </option>
                   ))}
                 </select>
+                {available.length === 0 && !editId && (
+                  <p className="text-[12px] text-amber-400 mt-1">ยังไม่มีลูกค้าในระบบ — ส่งข้อความใน LINE ก่อนเพื่อสร้างข้อมูล</p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-3">

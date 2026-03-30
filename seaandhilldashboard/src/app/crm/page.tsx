@@ -65,6 +65,7 @@ type FilterStage = string;
 export default function CrmPage() {
   const { data: session } = useSession();
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [staffLineUserIds, setStaffLineUserIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [stageFilter, setStageFilter] = useState<FilterStage>("all");
   const [search, setSearch] = useState("");
@@ -72,9 +73,16 @@ export default function CrmPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const r = await fetch("/dashboard/api/customers");
+      const [r, sr] = await Promise.all([
+        fetch("/dashboard/api/customers"),
+        fetch("/dashboard/api/staff"),
+      ]);
       const d = await r.json();
+      const sd = await sr.json();
       if (Array.isArray(d)) setCustomers(d);
+      if (Array.isArray(sd.staff)) {
+        setStaffLineUserIds(new Set(sd.staff.filter((s: any) => s.lineUserId && s.active).map((s: any) => s.lineUserId)));
+      }
     } catch {}
     setLoading(false);
   }, []);
@@ -237,7 +245,12 @@ export default function CrmPage() {
                             {c.name.substring(0, 2)}
                           </div>
                           <div>
-                            <p className="font-medium text-sm hover:underline">{c.name}</p>
+                            <p className="font-medium text-sm hover:underline">
+                              {c.name}
+                              {c.lineUserId && staffLineUserIds.has(c.lineUserId) && (
+                                <span className="ml-1.5 text-[11px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-medium">👔 พนักงาน</span>
+                              )}
+                            </p>
                             {c.phone && <p className="text-[13px] theme-text-muted">{c.phone}</p>}
                             {c.company && <p className="text-[13px] theme-text-muted">{c.company}</p>}
                           </div>

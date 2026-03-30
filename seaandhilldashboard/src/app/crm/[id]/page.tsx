@@ -20,6 +20,8 @@ interface Customer {
   tags: string[];
   customTags?: string[];
   rooms: string[];
+  groups?: { sourceId: string; groupName: string; messageCount: number; lastActiveAt: string }[];
+  lineUserId?: string;
   totalMessages: number;
   pipelineStage: string;
   lastSentiment: { score: number; level: string; reason?: string } | null;
@@ -411,6 +413,29 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
               placeholder="บันทึกเพิ่มเติม..."
               className="w-full px-3 py-2 rounded-lg border theme-border text-sm theme-bg theme-text resize-none" style={{ background: "var(--bg-primary)" }} />
           </div>
+
+          {/* Groups Section */}
+          {customer.groups && customer.groups.length > 0 && (
+            <div className="mt-6 pt-4 border-t theme-border">
+              <h3 className="text-xs font-bold theme-text-muted mb-3 uppercase tracking-wide">👥 กลุ่มที่อยู่ ({customer.groups.length})</h3>
+              <div className="space-y-2">
+                {customer.groups.map((g) => (
+                  <Link key={g.sourceId} href={`/dashboard/group/${g.sourceId}`}
+                    className="flex items-center justify-between px-3 py-2 rounded-lg theme-bg hover:bg-white/5 transition border theme-border">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/30 font-medium">
+                        {g.groupName}
+                      </span>
+                      <span className="text-[10px] theme-text-muted">{g.messageCount} ข้อความ</span>
+                    </div>
+                    <span className="text-[10px] theme-text-muted">
+                      {g.lastActiveAt ? new Date(g.lastActiveAt).toLocaleString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : ""}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Channel IDs Section */}
           <div className="mt-6 pt-4 border-t theme-border">

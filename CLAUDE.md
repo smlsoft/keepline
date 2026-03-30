@@ -100,6 +100,7 @@ chat_analytics  { sourceId, sentiment, purchaseIntent }
 - **ตัวอักษรใหญ่** — เหมาะสำหรับคนอายุมาก (text-xs=13px, text-sm=15px, text-base=17px)
 - **ลด padding/margin ให้น้อยที่สุด** — p-2 แทน p-4, gap-1 แทน gap-3, py-1 แทน py-3 กระชับทุกจุด
 - **Spacing มาตรฐาน:** card=p-2 md:p-3, header=py-2 px-3, modal=p-3, gap=gap-1.5, mb=mb-1
+- **แสดงข้อมูลให้มากที่สุด** — ใช้ทุก pixel ให้คุ้ม ไม่เว้นที่ว่างเปล่า ใช้ table/grid แน่น, badge เล็กกระชับ, ยัดข้อมูลเข้า 1 บรรทัดให้ได้มากที่สุด ไม่ต้องสวยแต่ต้องใช้งานได้จริง
 
 ## สิ่งที่ห้ามทำ
 - ห้ามลบ folder/service โดยไม่ถามบอสก่อน

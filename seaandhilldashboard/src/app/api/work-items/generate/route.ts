@@ -6,78 +6,84 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   try {
     const db = await getDB();
-    const body = await request.json();
-    const period = body.period;
+    const { period } = await request.json();
 
-    if (!period || !/^\d{4}-\d{2}$/.test(period)) {
+    if (!period) {
       return NextResponse.json(
-        { error: "period ต้องอยู่ในรูปแบบ YYYY-MM" },
+        { error: "period is required (e.g. 2026-04)" },
         { status: 400 }
       );
     }
 
-    const [existing, customers, deadlines] = await Promise.all([
-      db.collection("work_items").countDocuments({ period }),
-      db.collection("customers").find({ status: { $ne: "inactive" } }).toArray(),
-      db.collection("tax_deadlines").find({}).sort({ dayOfMonth: 1 }).toArray(),
+    const [customers, deadlines] = await Promise.all([
+      db.collection("customer_services").find({ status: "active" }).toArray(),
+      db.collection("tax_deadlines").find({ active: true }).toArray(),
     ]);
 
-    if (existing > 0) {
-      return NextResponse.json(
-        { error: "เดือนนี้สร้างงานแล้ว", count: existing },
-        { status: 409 }
-      );
-    }
+    const now = new Date();
+    const periodParts = period.split("-").map(Number);
+    const [periodYear, periodMonth] = periodParts;
 
-    if (deadlines.length === 0) {
-      return NextResponse.json(
-        { error: "ยังไม่มีข้อมูลกำหนดภาษี กรุณาเพิ่มข้อมูลก่อน" },
-        { status: 400 }
-      );
-    }
+    // Build all upsert operations first, then execute in bulk
+    const ops: any[] = [];
 
-    const [year, month] = period.split("-").map(Number);
-    const workItems: any[] = [];
+    for (const cs of customers) {
+      const activeServices: string[] = cs.services || [];
 
-    for (const customer of customers) {
-      const pkgs = customer.servicePackages || customer.taxTypes || [];
-      if (!Array.isArray(pkgs) || pkgs.length === 0) continue;
+      for (const dl of deadlines) {
+        const applicable: string[] = dl.applicableServices || [];
+        if (!activeServices.some((s: string) => applicable.includes(s))) continue;
 
-      for (const pkg of pkgs) {
-        const deadlineName = typeof pkg === "string" ? pkg : pkg.name || pkg.deadlineName;
-        if (!deadlineName) continue;
+        let dueDate: Date;
+        if (dl.frequency === "monthly" && dl.dueDayOfMonth) {
+          const nextMonth = periodMonth + 1;
+          const year = nextMonth > 12 ? periodYear + 1 : periodYear;
+          const month = nextMonth > 12 ? 1 : nextMonth;
+          dueDate = new Date(year, month - 1, dl.dueDayOfMonth);
+        } else if (dl.fiscalYearEnd && dl.daysAfter != null) {
+          const [feM, feD] = (dl.fiscalYearEnd as string).split("-").map(Number);
+          const base = new Date(periodYear, feM - 1, feD);
+          dueDate = new Date(base.getTime() + dl.daysAfter * 24 * 60 * 60 * 1000);
+        } else {
+          dueDate = new Date(periodYear, periodMonth, 0); // last day of period month
+        }
 
-        const deadline = deadlines.find(
-          (d) => d.name === deadlineName || d.code === deadlineName
-        );
-        const dayOfMonth = deadline?.dayOfMonth || 15;
-        const dueDate = new Date(year, month - 1, dayOfMonth);
+        const status = dueDate < now ? "late" : "pending";
 
-        workItems.push({
-          period,
-          customerId: customer._id.toString(),
-          customerName: customer.name || customer.customerName || "",
-          deadlineName: deadline?.name || deadlineName,
-          deadlineCode: deadline?.code || deadlineName,
-          dueDate,
-          status: "pending",
-          assignee: customer.assignee || customer.staff || "",
-          notes: "",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+        ops.push({
+          updateOne: {
+            filter: {
+              customerId: cs.customerId || cs._id.toString(),
+              deadlineId: dl._id.toString(),
+              period,
+            },
+            update: {
+              $set: {
+                customerName: cs.customerName || cs.name || "",
+                deadlineName: dl.name || "",
+                dueDate,
+                assignedStaffId: cs.assignedStaffId || null,
+                assignedStaffName: cs.assignedStaffName || "",
+                updatedAt: now,
+              },
+              $setOnInsert: {
+                status,
+                notes: "",
+                submittedAt: null,
+                createdAt: now,
+              },
+            },
+            upsert: true,
+          },
         });
       }
     }
 
-    if (workItems.length === 0) {
-      return NextResponse.json(
-        { message: "ไม่พบลูกค้าที่มีแพ็คเกจบริการ", count: 0 },
-        { status: 200 }
-      );
+    if (ops.length > 0) {
+      await db.collection("work_items").bulkWrite(ops);
     }
 
-    await db.collection("work_items").insertMany(workItems);
-    return NextResponse.json({ count: workItems.length });
+    return NextResponse.json({ generated: ops.length });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

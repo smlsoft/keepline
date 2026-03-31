@@ -16,6 +16,8 @@
 
 [ดูตัวอย่าง](https://keepline.satistang.com/dashboard/kung-room) · [คู่มือ](https://keepline.satistang.com/dashboard/guide) · [แจ้งปัญหา](https://github.com/smlsoft/keepline/issues)
 
+<img src="landing/images/thai-sme-banner.png" alt="SMEs ไทยใช้ Keep Line" width="600">
+
 </div>
 
 ---
@@ -40,6 +42,8 @@
 
 ## คุณสมบัติหลัก
 
+<img src="landing/images/ai-chat-concept.png" alt="AI วิเคราะห์แชท" width="400" align="right">
+
 ### เก็บแชทตลอดชีวิต
 - **ข้อความ + รูป + สติกเกอร์ + ไฟล์** --- เก็บทุกอย่างจาก LINE OA & Group
 - **ค้นหาย้อนหลังได้ทันที** --- หาแชทเก่าเมื่อปีที่แล้วก็เจอ
@@ -55,6 +59,8 @@
 - **ตรวจสลิปอัตโนมัติ** --- AI ตรวจจับสลิปโอนเงิน ยืนยัน/ปฏิเสธ
 - **จำแนกเอกสารอัตโนมัติ** --- AI แยกบัญชี/เอกสาร/ภาพ + confidence score
 - **เตือนนัดหมาย** --- ปฏิทินนัดยื่นภาษี ส่งเอกสาร ติดตามงาน
+
+<br clear="both">
 
 ### ตามลูกค้าอัตโนมัติ
 - **AI เตือนลูกค้าเสี่ยงหาย** 3/7/30 วัน --- ก่อนที่จะสายเกินไป
@@ -88,16 +94,52 @@
 - **ตอบแชท** → model เร็ว ราคาถูก | **วิเคราะห์เอกสาร** → Vision AI ระดับสูง | **AI Advisor** → model ฉลาดสุด
 - **ไม่ต้องตั้งค่าเอง** --- ระบบเลือกให้เหมาะกับงานแต่ละประเภท
 
-### MCP Server (Read-Only)
-- **เปิดให้ AI ภายนอกเข้ามาอ่านข้อมูล** ผ่าน MCP Protocol (SSE transport)
-- **17 tools:** ลูกค้า, แชท, เอกสาร, สลิป, นัดหมาย, พนักงาน, KPI, AI Advice, ค่าใช้จ่าย AI ฯลฯ
-- **Read-Only เท่านั้น** --- AI ภายนอกดูข้อมูลได้ แต่แก้ไขไม่ได้
-- **ต้องมี API Key** --- ปลอดภัย 100% ไม่มี Key เข้าไม่ได้
-- **Endpoint:** `/mcp/sse` (SSE) + `/mcp/messages` (JSON-RPC)
-
 ### ปลอดภัย + PDPA
 - **Google OAuth** + Audit Log + PII Masking
 - **ข้อมูลอยู่ใน server ของคุณ** --- ไม่ส่งออกไปที่ไหน
+
+---
+
+## MCP Server --- เปิดให้ AI ภายนอกเข้ามาอ่านข้อมูล
+
+<img src="landing/images/thai-sme-hero.png" alt="MCP Server เชื่อมต่อ AI" width="300" align="right">
+
+> AI ภายนอก (Claude, GPT, Gemini) เข้ามาอ่านข้อมูลลูกค้า แชท เอกสาร ผ่าน MCP Protocol --- **Read-Only + API Key ปลอดภัย 100%**
+
+### ทำไมต้องมี MCP?
+
+| ประโยชน์ | รายละเอียด |
+|---------|-----------|
+| 🧠 **AI เข้าใจธุรกิจคุณ** | AI อ่านข้อมูลจริงแล้ววิเคราะห์ตรงจุด ไม่ใช่คำตอบกว้างๆ |
+| 🔄 **เชื่อมต่อ AI ตัวไหนก็ได้** | Claude Code, Cursor, Windsurf หรือ AI ใหม่ในอนาคต |
+| 🔒 **Read-Only + API Key** | ดูได้แก้ไม่ได้ ต้องมี Key ถึงเข้าถึงได้ ปลอดภัย 100% |
+| ⚡ **17 Tools ครอบคลุมทุกข้อมูล** | ลูกค้า, แชท, เอกสาร, สลิป, นัดหมาย, พนักงาน, KPI ฯลฯ |
+
+### ตัวอย่างการใช้งานจริง
+
+```
+คุณ: "สรุปลูกค้าที่เสี่ยงหายให้หน่อย"
+→ AI ดึง list_customers + get_kpi ผ่าน MCP แล้วสรุปให้
+
+คุณ: "วิเคราะห์ยอดขายเดือนนี้เทียบกับเดือนก่อน"
+→ AI ดึง get_analytics + list_payments ผ่าน MCP แล้ววิเคราะห์แนวโน้ม
+
+คุณ: "เช็คงานภาษีเดือนนี้ที่ยังค้าง"
+→ AI ดึง list_tax_deadlines + list_tasks ผ่าน MCP แล้วสรุปงานค้าง
+
+คุณ: "หาแชทที่ลูกค้าพูดถึงสินค้า X"
+→ AI ดึง search_messages ผ่าน MCP ค้นหาทั้งระบบ
+```
+
+### เชื่อมต่อ
+
+```
+MCP Endpoint: https://your-domain.com/mcp/sse
+Transport: SSE + JSON-RPC
+Auth: API Key required
+```
+
+<br clear="both">
 
 ---
 
@@ -109,6 +151,10 @@ LINE OA (DM + Group)
 Caddy (Auto HTTPS)
   |
 Agent (Docker) → AI + RAG → reply + เก็บทุกข้อความ
+  |                         ↑
+  |                    MCP Server (Read-Only, 17 tools)
+  |                         ↑
+  |                    AI ภายนอก (Claude, GPT, Gemini)
   |
 MongoDB (ข้อมูลเป็นของคุณ)
   |
@@ -125,6 +171,7 @@ Dashboard (Next.js) → Google Login → CRM + แชท + รายงาน
 | Dashboard | Next.js 16 + Tailwind CSS |
 | Database | MongoDB 7 (เก็บแชทตลอดชีวิต) |
 | AI | OpenRouter (auto-discover free models) |
+| MCP | SSE transport + JSON-RPC (Read-Only) |
 | Auth | Google OAuth (NextAuth) |
 | Deploy | Docker Compose + Caddy + DigitalOcean VPS |
 
@@ -158,6 +205,7 @@ docker compose up -d --build
 |--------|------|
 | Keep Line ทุกฟีเจอร์ | **ฟรี** (Open Source) |
 | AI ฟรี (OpenRouter, SambaNova, Gemini) | **ฟรี** |
+| MCP Server (17 tools) | **ฟรี** |
 | MongoDB (Docker, local) | **ฟรี** (ไม่จำกัด) |
 | LINE OA & Group | **ฟรี** |
 | **รวม** | **ค่า VPS ~$24/เดือน เท่านั้น** |
@@ -222,6 +270,8 @@ docker compose up -d --build
 ---
 
 <div align="center">
+
+<img src="landing/images/thai-sme-hero.png" alt="Keep Line" width="200">
 
 **Keep Line** --- เก็บประวัติแชท LINE OA & Group ตลอดชีวิต
 

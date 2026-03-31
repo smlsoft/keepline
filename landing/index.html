@@ -53,58 +53,88 @@
     }
   </script>
   <style>
-    body { font-family: 'Prompt', sans-serif; }
-    .gradient-text { background: linear-gradient(135deg, #06C755, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .gradient-bg { background: linear-gradient(135deg, #06C755, #06b6d4); }
-    .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-    .problem-card { background: linear-gradient(135deg, #1e1e2e, #2a2a3e); border: 1px solid rgba(239,68,68,0.3); }
-    .solution-card { background: linear-gradient(135deg, #1e2e1e, #1e3e2e); border: 1px solid rgba(6,199,85,0.3); }
-    .feature-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s; }
-    .feature-card:hover { background: rgba(6,199,85,0.05); border-color: rgba(6,199,85,0.3); transform: translateY(-2px); }
+    body { font-family: 'Prompt', sans-serif; background-color: #fcfbfa; color: #1e293b; overflow-x: hidden; }
+    .gradient-text { background: linear-gradient(135deg, #06C755, #f59e0b); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .gradient-bg { background: linear-gradient(135deg, #06C755, #0ea5e9); }
+    .gold-gradient { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+    .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.4); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    /* Thai subtle pattern via background image data uri */
+    .thai-pattern { background-image: url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M20 0l20 20-20 20L0 20z" fill="rgba(6,199,85,0.02)" fill-rule="evenodd"/%3E%3C/svg%3E'); }
+    .problem-card { background: #fff; border: 1px solid rgba(239, 68, 68, 0.1); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+    .solution-card { background: #fff; border: 1px solid rgba(6, 199, 85, 0.2); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+    .feature-card { background: #fff; border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+    .feature-card:hover { border-color: rgba(6, 199, 85, 0.3); transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
     @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     .float { animation: float 3s ease-in-out infinite; }
+    .hero-bg { position: relative; }
+    .hero-bg::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at top right, rgba(6,199,85,0.1), transparent 50%), radial-gradient(circle at bottom left, rgba(245,158,11,0.1), transparent 50%); z-index: -1; }
   </style>
 </head>
-<body class="bg-[#0a0a0f] text-white min-h-screen">
+<body class="thai-pattern">
 
   <!-- Nav -->
   <nav class="fixed top-0 w-full z-50 glass">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center text-white font-bold text-sm">KL</div>
-        <span class="font-bold text-lg">Keep Line</span>
+        <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center text-slate-900 font-bold text-sm shadow-md">KL</div>
+        <span class="font-bold text-lg text-slate-800">Keep Line</span>
       </div>
-      <div class="flex items-center gap-3">
-        <a href="https://github.com/smlsoft/keepline" target="_blank" class="text-sm text-gray-400 hover:text-white transition">GitHub</a>
-        <a href="/dashboard/kung-room" class="gradient-bg text-white px-4 py-1.5 rounded-full text-sm font-medium hover:opacity-90 transition">ดูตัวอย่าง</a>
+      <div class="flex items-center gap-4">
+        <a href="https://github.com/smlsoft/keepline" target="_blank" class="text-sm text-slate-500 hover:text-slate-800 transition font-medium">GitHub</a>
+        <a href="/dashboard/kung-room" class="gradient-bg text-slate-900 px-5 py-2 rounded-full text-sm font-medium hover:opacity-90 transition shadow-lg shadow-green-500/30">ดูตัวอย่าง</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="pt-28 pb-16 px-4">
-    <div class="max-w-4xl mx-auto text-center">
-      <div class="inline-block px-4 py-1 rounded-full glass text-sm text-cyan-400 mb-6">
-        Open Source เพื่อการศึกษา --- ใช้ฟรี ไม่มีเงื่อนไข
+  <!-- Hero with Thai Image -->
+  <section class="pt-32 pb-16 px-4 hero-bg overflow-hidden relative">
+    <div class="absolute top-0 w-full h-full -z-10 blur-3xl opacity-30 pointer-events-none">
+      <div class="absolute top-20 right-20 w-96 h-96 bg-green-200 rounded-full mix-blend-multiply filter"></div>
+      <div class="absolute bottom-10 left-10 w-72 h-72 bg-amber-100 rounded-full mix-blend-multiply filter"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12">
+      <!-- Left Content -->
+      <div class="flex-1 text-center lg:text-left">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-green-100 text-sm text-green-700 mb-6 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          Open Source เพื่อคนไทย --- ใช้ฟรี ไม่มีเงื่อนไข
+        </div>
+        <h1 class="text-5xl lg:text-7xl font-extrabold leading-[1.15] tracking-tight mb-6 text-slate-900">
+          เก็บประวัติแชท<br>
+          <span class="gradient-text">LINE OA & Group</span><br>
+          ตลอดชีวิต
+        </h1>
+        <p class="text-lg lg:text-xl text-slate-600 mb-4 max-w-2xl mx-auto lg:mx-0 font-medium">
+          ไม่มีหาย ไม่มีหมดอายุ ไม่มีลบอัตโนมัติ
+        </p>
+        <p class="text-base text-slate-500 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+          AI ตามลูกค้าอัตโนมัติ --- ตามงานพนักงาน --- CRM ครบจบในที่เดียว<br>
+          ออกแบบมาเพื่อ <strong class="text-amber-600">SMEs ไทย</strong> และ <strong class="text-blue-600">สำนักงานบัญชี</strong> โดยเฉพาะ
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <a href="/dashboard/kung-room" class="gradient-bg text-slate-900 px-8 py-3.5 rounded-2xl font-bold text-lg hover:-translate-y-1 transition-all duration-300 shadow-xl shadow-green-500/30">
+            ดูตัวอย่าง DEMO
+          </a>
+          <a href="https://github.com/smlsoft/keepline" target="_blank" class="bg-white text-slate-700 border border-slate-200 px-8 py-3.5 rounded-2xl font-bold text-lg hover:bg-slate-50 hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md">
+            ดู Source Code
+          </a>
+        </div>
       </div>
-      <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-        เก็บประวัติแชท<br>
-        <span class="gradient-text">LINE OA & Group ตลอดชีวิต</span>
-      </h1>
-      <p class="text-lg md:text-xl text-gray-400 mb-4 max-w-2xl mx-auto">
-        ไม่มีหาย ไม่มีหมดอายุ ไม่มีลบอัตโนมัติ
-      </p>
-      <p class="text-base text-gray-500 mb-8 max-w-2xl mx-auto">
-        AI ตามลูกค้าอัตโนมัติ --- ตามงานพนักงาน --- CRM ครบจบในที่เดียว<br>
-        สำหรับ <strong class="text-gray-300">SMEs ไทย</strong> และ <strong class="text-gray-300">สำนักงานบัญชี</strong>
-      </p>
-      <div class="flex flex-col sm:flex-row gap-3 justify-center">
-        <a href="/dashboard/kung-room" class="gradient-bg text-white px-8 py-3 rounded-xl font-semibold text-lg hover:opacity-90 transition shadow-lg shadow-green-500/20">
-          ดูตัวอย่าง
-        </a>
-        <a href="https://github.com/smlsoft/keepline" target="_blank" class="glass text-white px-8 py-3 rounded-xl font-semibold text-lg hover:bg-white/10 transition">
-          GitHub
-        </a>
+      
+      <!-- Right Image (Thai Banner) -->
+      <div class="flex-1 relative w-full lg:w-auto mt-8 lg:mt-0">
+        <div class="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-green-900/10 ring-1 ring-black/5 transform rotate-1 hover:rotate-0 transition duration-500">
+          <img src="/images/thai-sme-banner.png" alt="SMEs ไทยสร้างยอดขายด้วย Keep Line" class="w-full h-full object-cover">
+          <!-- Decorators -->
+          <div class="absolute -bottom-6 -left-6 glass px-6 py-4 rounded-2xl shadow-xl flex items-center gap-4 animate-bounce" style="animation-duration: 4s;">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-2xl">📈</div>
+            <div>
+              <p class="text-sm font-bold text-slate-800">ยอดขายเพิ่ม</p>
+              <p class="text-xs text-green-600">+45% ในเดือนแรก</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -112,31 +142,31 @@
   <!-- Problem -->
   <section class="py-16 px-4">
     <div class="max-w-4xl mx-auto">
-      <h2 class="text-2xl md:text-3xl font-bold text-center mb-4">
-        <span class="text-red-400">ปัญหา</span> ที่ Keep Line แก้
+      <h2 class="text-2xl md:text-3xl font-bold text-center mb-4 text-slate-800">
+        <span class="text-red-500">ปัญหา</span> ที่ Keep Line แก้
       </h2>
-      <p class="text-center text-gray-400 mb-10">LINE เก็บแชทแค่ 30 วัน ทั้ง OA และ Group --- หลังจากนั้นหายหมด ไม่มีวันกู้คืน</p>
+      <p class="text-center text-slate-500 mb-10">LINE เก็บแชทแค่ 30 วัน ทั้ง OA และ Group --- หลังจากนั้นหายหมด ไม่มีวันกู้คืน</p>
 
       <div class="grid md:grid-cols-2 gap-4">
-        <div class="problem-card rounded-xl p-5">
-          <div class="text-red-400 text-2xl mb-2">30 วัน</div>
-          <h3 class="font-semibold mb-1">แชทลูกค้าหายหมด</h3>
-          <p class="text-sm text-gray-400">LINE ลบแชทอัตโนมัติหลัง 30 วัน ทั้ง OA และ Group ลืมว่าคุยอะไรไว้ ลูกค้ารู้สึกไม่ใส่ใจ</p>
+        <div class="problem-card rounded-xl p-5 shadow-sm">
+          <div class="text-red-500 text-2xl mb-2">30 วัน</div>
+          <h3 class="font-bold text-slate-800 mb-1">แชทลูกค้าหายหมด</h3>
+          <p class="text-sm text-slate-500">LINE ลบแชทอัตโนมัติหลัง 30 วัน ทั้ง OA และ Group ลืมว่าคุยอะไรไว้ ลูกค้ารู้สึกไม่ใส่ใจ</p>
         </div>
-        <div class="problem-card rounded-xl p-5">
-          <div class="text-red-400 text-2xl mb-2">ไม่มีหลักฐาน</div>
-          <h3 class="font-semibold mb-1">ตรวจสอบย้อนหลังไม่ได้</h3>
-          <p class="text-sm text-gray-400">สำนักงานบัญชีต้องการหลักฐานการสื่อสาร ยื่นภาษี ส่งเอกสาร แต่แชทหายแล้ว</p>
+        <div class="problem-card rounded-xl p-5 shadow-sm">
+          <div class="text-red-500 text-2xl mb-2">ไม่มีหลักฐาน</div>
+          <h3 class="font-bold text-slate-800 mb-1">ตรวจสอบย้อนหลังไม่ได้</h3>
+          <p class="text-sm text-slate-500">สำนักงานบัญชีต้องการหลักฐานการสื่อสาร ยื่นภาษี ส่งเอกสาร แต่แชทหายแล้ว</p>
         </div>
-        <div class="problem-card rounded-xl p-5">
-          <div class="text-red-400 text-2xl mb-2">ลูกค้าหาย</div>
-          <h3 class="font-semibold mb-1">ไม่รู้ว่าใครไม่ได้ติดต่อนานแล้ว</h3>
-          <p class="text-sm text-gray-400">ลูกค้าเก่าหายไปเงียบๆ ไม่มีระบบเตือน กว่าจะรู้ก็สายเกินไป</p>
+        <div class="problem-card rounded-xl p-5 shadow-sm">
+          <div class="text-red-500 text-2xl mb-2">ลูกค้าหาย</div>
+          <h3 class="font-bold text-slate-800 mb-1">ไม่รู้ว่าใครไม่ได้ติดต่อนานแล้ว</h3>
+          <p class="text-sm text-slate-500">ลูกค้าเก่าหายไปเงียบๆ ไม่มีระบบเตือน กว่าจะรู้ก็สายเกินไป</p>
         </div>
-        <div class="problem-card rounded-xl p-5">
-          <div class="text-red-400 text-2xl mb-2">คนลาออก</div>
-          <h3 class="font-semibold mb-1">ข้อมูลลูกค้าหายไปด้วย</h3>
-          <p class="text-sm text-gray-400">พนักงานลาออก ความรู้เรื่องลูกค้าหายหมด คนใหม่ต้องเริ่มนับหนึ่ง</p>
+        <div class="problem-card rounded-xl p-5 shadow-sm">
+          <div class="text-red-500 text-2xl mb-2">คนลาออก</div>
+          <h3 class="font-bold text-slate-800 mb-1">ข้อมูลลูกค้าหายไปด้วย</h3>
+          <p class="text-sm text-slate-500">พนักงานลาออก ความรู้เรื่องลูกค้าหายหมด คนใหม่ต้องเริ่มนับหนึ่ง</p>
         </div>
       </div>
     </div>
@@ -145,31 +175,31 @@
   <!-- Solution -->
   <section class="py-16 px-4">
     <div class="max-w-4xl mx-auto">
-      <h2 class="text-2xl md:text-3xl font-bold text-center mb-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-center mb-4 text-slate-800">
         <span class="gradient-text">Keep Line</span> แก้ได้ทุกข้อ
       </h2>
-      <p class="text-center text-gray-400 mb-10">เก็บทุกข้อความจาก LINE OA & Group ตลอดชีวิต + AI ช่วยตามงานให้</p>
+      <p class="text-center text-slate-500 mb-10">เก็บทุกข้อความจาก LINE OA & Group ตลอดชีวิต + AI ช่วยตามงานให้</p>
 
       <div class="grid md:grid-cols-2 gap-4">
         <div class="solution-card rounded-xl p-5">
           <div class="text-line text-2xl mb-2">ตลอดชีวิต</div>
-          <h3 class="font-semibold mb-1">เก็บแชทไม่มีวันหมดอายุ</h3>
-          <p class="text-sm text-gray-400">ข้อความ รูป สติกเกอร์ ไฟล์ --- เก็บทุกอย่าง ค้นหาย้อนหลังได้ทันที แม้จะผ่านไปหลายปี</p>
+          <h3 class="font-bold text-slate-800 mb-1">เก็บแชทไม่มีวันหมดอายุ</h3>
+          <p class="text-sm text-slate-500">ข้อความ รูป สติกเกอร์ ไฟล์ --- เก็บทุกอย่าง ค้นหาย้อนหลังได้ทันที แม้จะผ่านไปหลายปี</p>
         </div>
         <div class="solution-card rounded-xl p-5">
           <div class="text-line text-2xl mb-2">AI ตามลูกค้า</div>
-          <h3 class="font-semibold mb-1">ไม่มีลูกค้าตกหล่น</h3>
-          <p class="text-sm text-gray-400">AI เตือนลูกค้าเสี่ยงหาย 3/7/30 วัน ร่างข้อความดึงกลับ ติดตามสลิปค้าง Lead Scoring อัตโนมัติ</p>
+          <h3 class="font-bold text-slate-800 mb-1">ไม่มีลูกค้าตกหล่น</h3>
+          <p class="text-sm text-slate-500">AI เตือนลูกค้าเสี่ยงหาย 3/7/30 วัน ร่างข้อความดึงกลับ ติดตามสลิปค้าง Lead Scoring อัตโนมัติ</p>
         </div>
         <div class="solution-card rounded-xl p-5">
           <div class="text-line text-2xl mb-2">ตามงานพนักงาน</div>
-          <h3 class="font-semibold mb-1">รู้ว่าใครทำอะไร</h3>
-          <p class="text-sm text-gray-400">KPI Dashboard แชทตอบกี่ราย ปิดการขายกี่ราย AI โค้ชทีม สรุปรายวันอัตโนมัติ</p>
+          <h3 class="font-bold text-slate-800 mb-1">รู้ว่าใครทำอะไร</h3>
+          <p class="text-sm text-slate-500">KPI Dashboard แชทตอบกี่ราย ปิดการขายกี่ราย AI โค้ชทีม สรุปรายวันอัตโนมัติ</p>
         </div>
         <div class="solution-card rounded-xl p-5">
           <div class="text-line text-2xl mb-2">ข้อมูลเป็นของคุณ</div>
-          <h3 class="font-semibold mb-1">ไม่โดน lock-in</h3>
-          <p class="text-sm text-gray-400">เก็บใน MongoDB ของคุณเอง Open Source ฟรี 100% ติดตั้งบน server ของคุณ</p>
+          <h3 class="font-bold text-slate-800 mb-1">ไม่โดน lock-in</h3>
+          <p class="text-sm text-slate-500">เก็บใน MongoDB ของคุณเอง Open Source ฟรี 100% ติดตั้งบน server ของคุณ</p>
         </div>
       </div>
     </div>
@@ -178,70 +208,75 @@
   <!-- Features -->
   <section class="py-16 px-4">
     <div class="max-w-5xl mx-auto">
-      <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">
+      <h2 class="text-2xl md:text-3xl font-bold text-center mb-10 text-slate-800">
         คุณสมบัติครบ <span class="gradient-text">จบในที่เดียว</span>
       </h2>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div class="feature-card rounded-xl p-5">
           <div class="text-2xl mb-2">💬</div>
-          <h3 class="font-semibold mb-1">เก็บแชท LINE OA & Group</h3>
-          <p class="text-sm text-gray-400">ข้อความ รูป สติกเกอร์ ไฟล์ จากทั้ง DM และกลุ่ม เก็บตลอดชีวิต ค้นหาย้อนหลังได้</p>
+          <h3 class="font-bold text-slate-800 mb-1">เก็บแชท LINE OA & Group</h3>
+          <p class="text-sm text-slate-500">ข้อความ รูป สติกเกอร์ ไฟล์ จากทั้ง DM และกลุ่ม เก็บตลอดชีวิต ค้นหาย้อนหลังได้</p>
         </div>
         <div class="feature-card rounded-xl p-5">
           <div class="text-2xl mb-2">🤖</div>
-          <h3 class="font-semibold mb-1">AI ตอบอัตโนมัติ</h3>
-          <p class="text-sm text-gray-400">AI อ่านแชท แนะนำคำตอบ ตอบแทนเมื่อไม่อยู่ + Knowledge Base</p>
+          <h3 class="font-bold text-slate-800 mb-1">AI ตอบอัตโนมัติ</h3>
+          <p class="text-sm text-slate-500">AI อ่านแชท แนะนำคำตอบ ตอบแทนเมื่อไม่อยู่ + Knowledge Base</p>
         </div>
         <div class="feature-card rounded-xl p-5">
           <div class="text-2xl mb-2">📊</div>
-          <h3 class="font-semibold mb-1">CRM + Pipeline</h3>
-          <p class="text-sm text-gray-400">ข้อมูลลูกค้า สถานะการขาย มอบหมายพนักงาน ครบวงจร</p>
+          <h3 class="font-bold text-slate-800 mb-1">CRM + Pipeline</h3>
+          <p class="text-sm text-slate-500">ข้อมูลลูกค้า สถานะการขาย มอบหมายพนักงาน ครบวงจร</p>
         </div>
         <div class="feature-card rounded-xl p-5">
           <div class="text-2xl mb-2">🔔</div>
-          <h3 class="font-semibold mb-1">ตามลูกค้าอัตโนมัติ</h3>
-          <p class="text-sm text-gray-400">เตือนลูกค้าเสี่ยงหาย ติดตามสลิปค้าง Lead Scoring 0-100</p>
+          <h3 class="font-bold text-slate-800 mb-1">ตามลูกค้าอัตโนมัติ</h3>
+          <p class="text-sm text-slate-500">เตือนลูกค้าเสี่ยงหาย ติดตามสลิปค้าง Lead Scoring 0-100</p>
         </div>
         <div class="feature-card rounded-xl p-5">
           <div class="text-2xl mb-2">👥</div>
-          <h3 class="font-semibold mb-1">ตามงานพนักงาน</h3>
-          <p class="text-sm text-gray-400">KPI Dashboard AI โค้ชทีม สรุปรายวัน มอบหมายลูกค้า</p>
+          <h3 class="font-bold text-slate-800 mb-1">ตามงานพนักงาน</h3>
+          <p class="text-sm text-slate-500">KPI Dashboard AI โค้ชทีม สรุปรายวัน มอบหมายลูกค้า</p>
         </div>
         <div class="feature-card rounded-xl p-5">
           <div class="text-2xl mb-2">🧾</div>
-          <h3 class="font-semibold mb-1">ตรวจสลิป + จำแนกเอกสาร</h3>
-          <p class="text-sm text-gray-400">AI ตรวจจับสลิปโอนเงิน จำแนกเอกสาร 14 ประเภทอัตโนมัติ (สลิป, ใบเสนอราคา, ใบแจ้งหนี้, สัญญา ฯลฯ)</p>
+          <h3 class="font-bold text-slate-800 mb-1">ตรวจสลิป + จำแนกเอกสาร</h3>
+          <p class="text-sm text-slate-500">AI ตรวจจับสลิปโอนเงิน จำแนกเอกสาร 14 ประเภทอัตโนมัติ (สลิป, ใบเสนอราคา, ใบแจ้งหนี้, สัญญา ฯลฯ)</p>
         </div>
         <div class="feature-card rounded-xl p-5">
           <div class="text-2xl mb-2">📄</div>
-          <h3 class="font-semibold mb-1">AI อ่าน + เข้าใจเอกสาร</h3>
-          <p class="text-sm text-gray-400">ลูกค้าส่งรูปเอกสารมาใน LINE --- AI อ่าน วิเคราะห์ สรุปให้ทันที ไม่ต้องเปิดอ่านเอง ไม่ว่าจะเป็นใบเสนอราคา สัญญา แบบก่อสร้าง สเปคสินค้า</p>
+          <h3 class="font-bold text-slate-800 mb-1">AI อ่าน + เข้าใจเอกสาร</h3>
+          <p class="text-sm text-slate-500">ลูกค้าส่งรูปเอกสารมาใน LINE --- AI อ่าน วิเคราะห์ สรุปให้ทันที ไม่ต้องเปิดอ่านเอง ไม่ว่าจะเป็นใบเสนอราคา สัญญา แบบก่อสร้าง สเปคสินค้า</p>
         </div>
         <div class="feature-card rounded-xl p-5">
           <div class="text-2xl mb-2">📅</div>
-          <h3 class="font-semibold mb-1">นัดหมาย + เตือน</h3>
-          <p class="text-sm text-gray-400">ปฏิทินนัดยื่นภาษี ส่งเอกสาร ติดตามงาน แจ้งเตือนล่วงหน้า</p>
+          <h3 class="font-bold text-slate-800 mb-1">นัดหมาย + เตือน</h3>
+          <p class="text-sm text-slate-500">ปฏิทินนัดยื่นภาษี ส่งเอกสาร ติดตามงาน แจ้งเตือนล่วงหน้า</p>
         </div>
         <div class="feature-card rounded-xl p-5">
           <div class="text-2xl mb-2">📈</div>
-          <h3 class="font-semibold mb-1">Analytics + รายงาน</h3>
-          <p class="text-sm text-gray-400">กราฟภาพรวม ยอดขาย ทีมงาน ค่าใช้จ่าย ลูกค้า</p>
+          <h3 class="font-bold text-slate-800 mb-1">Analytics + รายงาน</h3>
+          <p class="text-sm text-slate-500">กราฟภาพรวม ยอดขาย ทีมงาน ค่าใช้จ่าย ลูกค้า</p>
+        </div>
+        <div class="feature-card rounded-xl p-5">
+          <div class="text-2xl mb-2">🔌</div>
+          <h3 class="font-semibold mb-1">MCP Server (Read-Only)</h3>
+          <p class="text-sm text-gray-400">เปิดให้ AI ภายนอก (Claude, GPT ฯลฯ) เข้ามาอ่านข้อมูลลูกค้า แชท เอกสาร ผ่าน MCP Protocol --- 17 tools, read-only ปลอดภัย</p>
         </div>
         <div class="feature-card rounded-xl p-5">
           <div class="text-2xl mb-2">🔒</div>
-          <h3 class="font-semibold mb-1">ปลอดภัย + PDPA</h3>
-          <p class="text-sm text-gray-400">Google OAuth Audit Log PII Masking ข้อมูลอยู่ใน server ของคุณ</p>
+          <h3 class="font-bold text-slate-800 mb-1">ปลอดภัย + PDPA</h3>
+          <p class="text-sm text-slate-500">Google OAuth Audit Log PII Masking ข้อมูลอยู่ใน server ของคุณ</p>
         </div>
         <div class="feature-card rounded-xl p-5">
           <div class="text-2xl mb-2">🧠</div>
-          <h3 class="font-semibold mb-1">AI จำลูกค้าทุกคน</h3>
-          <p class="text-sm text-gray-400">AI จดจำประวัติ ความชอบ สินค้าที่เคยถาม ปัญหาที่เคยแจ้ง --- ลูกค้าทักมาอีกที AI รู้ทุกอย่างไม่ต้องถามซ้ำ</p>
+          <h3 class="font-bold text-slate-800 mb-1">AI จำลูกค้าทุกคน</h3>
+          <p class="text-sm text-slate-500">AI จดจำประวัติ ความชอบ สินค้าที่เคยถาม ปัญหาที่เคยแจ้ง --- ลูกค้าทักมาอีกที AI รู้ทุกอย่างไม่ต้องถามซ้ำ</p>
         </div>
         <div class="feature-card rounded-xl p-5">
           <div class="text-2xl mb-2">📢</div>
-          <h3 class="font-semibold mb-1">Broadcast แยกกลุ่มเป้าหมาย</h3>
-          <p class="text-sm text-gray-400">ส่งข้อความหาลูกค้าหลายคนพร้อมกัน แยกตาม Pipeline, Tag, คะแนน --- ส่งโปรตรงกลุ่ม ไม่รบกวนคนที่ไม่สนใจ</p>
+          <h3 class="font-bold text-slate-800 mb-1">Broadcast แยกกลุ่มเป้าหมาย</h3>
+          <p class="text-sm text-slate-500">ส่งข้อความหาลูกค้าหลายคนพร้อมกัน แยกตาม Pipeline, Tag, คะแนน --- ส่งโปรตรงกลุ่ม ไม่รบกวนคนที่ไม่สนใจ</p>
         </div>
       </div>
     </div>
@@ -250,19 +285,19 @@
   <!-- Who is it for -->
   <section class="py-16 px-4">
     <div class="max-w-5xl mx-auto">
-      <h2 class="text-2xl md:text-3xl font-bold text-center mb-3">
+      <h2 class="text-2xl md:text-3xl font-bold text-center mb-3 text-slate-800">
         เหมาะกับใคร?
       </h2>
-      <p class="text-center text-gray-400 mb-4 text-sm">LINE OA มี 6 ล้านบัญชี 90% เป็น SME — รักษาลูกค้าเก่าต้นทุนต่ำกว่าหาใหม่ <strong class="text-gray-300">5 เท่า</strong></p>
-      <p class="text-center text-gray-500 mb-10 text-xs">เรียงตามจำนวนผู้ใช้ LINE OA มากที่สุดในไทย (ข้อมูล LINE for Business 2025)</p>
+      <p class="text-center text-slate-500 mb-4 text-sm">LINE OA มี 6 ล้านบัญชี 90% เป็น SME — รักษาลูกค้าเก่าต้นทุนต่ำกว่าหาใหม่ <strong class="text-slate-600">5 เท่า</strong></p>
+      <p class="text-center text-slate-400 mb-10 text-xs">เรียงตามจำนวนผู้ใช้ LINE OA มากที่สุดในไทย (ข้อมูล LINE for Business 2025)</p>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
         <!-- #1 ความงาม — อันดับ 1 LINE OA ไทย -->
-        <div class="glass rounded-xl p-5 relative overflow-hidden">
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6 relative overflow-hidden">
           <div class="absolute top-0 right-0 bg-line text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-lg">#1 LINE OA</div>
-          <h3 class="text-lg font-bold text-fuchsia-400 mb-1">💄 ความงาม / คลินิก / สปา</h3>
+          <h3 class="text-lg font-bold text-slate-800 mb-1">💄 ความงาม / คลินิก / สปา</h3>
           <p class="text-xs text-line mb-2">+28% ยอดขาย | ลดต้นทุนหาลูกค้าใหม่ 5 เท่า</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>จำประวัติทรีตเมนต์ลูกค้าทุกคน ไม่ต้องถามซ้ำ</li>
             <li>นัดหมาย + เตือนล่วงหน้า ลดคนไม่มา 30%</li>
             <li>ลูกค้าหาย 30 วัน AI เตือนพร้อมโปร re-engage</li>
@@ -270,11 +305,11 @@
         </div>
 
         <!-- #2 แฟชั่น -->
-        <div class="glass rounded-xl p-5 relative overflow-hidden">
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6 relative overflow-hidden">
           <div class="absolute top-0 right-0 bg-line text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-lg">#2 LINE OA</div>
-          <h3 class="text-lg font-bold text-pink-400 mb-1">👗 แฟชั่น / เสื้อผ้า / รองเท้า</h3>
+          <h3 class="text-lg font-bold text-slate-800 mb-1">👗 แฟชั่น / เสื้อผ้า / รองเท้า</h3>
           <p class="text-xs text-line mb-2">+31% engagement | จำ size สไตล์ลูกค้า</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>จำ size สี สไตล์ที่ลูกค้าชอบ แนะนำตรงใจ</li>
             <li>Flash Sale ส่งโปร VIP ก่อนใคร ปิดการขายเร็วขึ้น</li>
             <li>Pre-order Limited จอง + ตรวจสลิปอัตโนมัติ</li>
@@ -282,11 +317,11 @@
         </div>
 
         <!-- #3 อาหาร F&B — โตสูงสุด 51% -->
-        <div class="glass rounded-xl p-5 relative overflow-hidden">
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6 relative overflow-hidden">
           <div class="absolute top-0 right-0 bg-line text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-lg">#3 โต 51%</div>
-          <h3 class="text-lg font-bold text-orange-400 mb-1">🍜 ร้านอาหาร / คาเฟ่ / เบเกอรี่</h3>
+          <h3 class="text-lg font-bold text-slate-800 mb-1">🍜 ร้านอาหาร / คาเฟ่ / เบเกอรี่</h3>
           <p class="text-xs text-line mb-2">โตเร็วสุด 51% | ลูกค้าเก่ากลับซื้อซ้ำ</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>รับออเดอร์ผ่าน LINE ไม่ตกหล่น จำเมนูโปรด</li>
             <li>ส่งโปรวันเกิด โปรเทศกาล ดึงลูกค้าเก่ากลับ</li>
             <li>ตรวจสลิปโอนเงินค่าอาหารอัตโนมัติ</li>
@@ -294,10 +329,10 @@
         </div>
 
         <!-- #4 แม่ค้าออนไลน์ -->
-        <div class="glass rounded-xl p-5">
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
           <h3 class="text-lg font-bold text-line mb-1">🛒 แม่ค้าพ่อค้าออนไลน์</h3>
           <p class="text-xs text-line mb-2">ลดออเดอร์ตกหล่น 90% | AI ตอบแทน 24/7</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>ค้นหาแชทเก่า "เคยสั่งอะไร" ได้ทันทีแม้ผ่านไปปี</li>
             <li>AI ตอบแทนเมื่อไม่ว่าง ลูกค้าไม่ต้องรอ</li>
             <li>ตรวจสลิปอัตโนมัติ ไม่ต้องเช็คเอง</li>
@@ -305,10 +340,10 @@
         </div>
 
         <!-- #5 ร้านค้าปลีก/ส่ง -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-amber-400 mb-1">🏬 ร้านค้าปลีก / ค้าส่ง</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-1">🏬 ร้านค้าปลีก / ค้าส่ง</h3>
           <p class="text-xs text-line mb-2">ลูกค้าสั่งซ้ำง่ายขึ้น | จัดกลุ่ม tier ส่วนลด</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>จำรายการสั่งซื้อเก่า ลูกค้าสั่งซ้ำได้ทันที</li>
             <li>แจ้งสินค้าเข้าใหม่ ราคาส่ง โปรพิเศษ</li>
             <li>ค้าส่ง — จัดกลุ่มลูกค้าตาม tier ส่วนลดต่างกัน</li>
@@ -316,10 +351,10 @@
         </div>
 
         <!-- #6 ทีมขาย/เซลล์ -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-yellow-400 mb-1">💼 ทีมขาย / เซลล์</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-1">💼 ทีมขาย / เซลล์</h3>
           <p class="text-xs text-line mb-2">เพิ่ม Conversion 25-95% | Lead Scoring อัตโนมัติ</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>Lead Scoring 0-100 รู้ว่าใครพร้อมซื้อ โฟกัสถูกคน</li>
             <li>Pipeline ขาย ตั้งแต่สนใจถึงปิดการขาย</li>
             <li>KPI วัดผลทีมขาย ใครปิดเก่ง ใครต้องปรับปรุง</li>
@@ -327,10 +362,10 @@
         </div>
 
         <!-- #7 สำนักงานบัญชี -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-cyan-400 mb-1">🏢 สำนักงานบัญชี / ภาษี</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-1">🏢 สำนักงานบัญชี / ภาษี</h3>
           <p class="text-xs text-line mb-2">ลดเวลาจัดเอกสาร 50% | ไม่พลาด deadline</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>เก็บหลักฐานสื่อสารกับลูกค้าตลอดชีวิต</li>
             <li>AI จำแนกเอกสารบัญชี/ภาษี 14 ประเภทอัตโนมัติ</li>
             <li>ปฏิทินเตือนนัดยื่นภาษี ส่งเอกสาร ไม่พลาด</li>
@@ -338,10 +373,10 @@
         </div>
 
         <!-- #8 เจ้าของกิจการ -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-indigo-400 mb-1">👔 เจ้าของกิจการ / MD</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-1">👔 เจ้าของกิจการ / MD</h3>
           <p class="text-xs text-line mb-2">รู้ทุกอย่างโดยไม่ต้องนั่งเฝ้า | AI สรุปให้ทุกวัน</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>รู้ว่าพนักงานตอบลูกค้ายังไง ดีหรือไม่ดี</li>
             <li>พนักงานลาออก ข้อมูลลูกค้าไม่หายไปด้วย</li>
             <li>AI สรุปรายงานทุกวัน ส่ง Telegram ให้</li>
@@ -349,10 +384,10 @@
         </div>
 
         <!-- #9 อสังหา/ประกัน -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-purple-400 mb-1">🏠 อสังหา / นายหน้า / ประกัน</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-1">🏠 อสังหา / นายหน้า / ประกัน</h3>
           <p class="text-xs text-line mb-2">Deal ใหญ่ ห้ามพลาด | เก็บแชทตลอดอายุสัญญา</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>ดูแลลูกค้าระยะยาว AI เตือนก่อนลูกค้าหาคู่แข่ง</li>
             <li>เก็บแชทเป็นหลักฐาน ตลอดอายุสัญญา</li>
             <li>มอบหมายลูกค้าให้ทีมดูแล ไม่ซ้ำซ้อน</li>
@@ -360,10 +395,10 @@
         </div>
 
         <!-- #10 ผู้รับเหมา -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-rose-400 mb-1">🏗️ ผู้รับเหมา / ช่าง / บริการ</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-1">🏗️ ผู้รับเหมา / ช่าง / บริการ</h3>
           <p class="text-xs text-line mb-2">เก็บรูปหน้างาน + เอกสาร ไม่หาย | นัดงานอัตโนมัติ</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>เก็บรูปหน้างาน เอกสาร สเปค ตลอดโปรเจกต์</li>
             <li>นัดเยี่ยมหน้างาน ส่งของ ติดตั้ง มีปฏิทิน</li>
             <li>ใบเสนอราคา ใบแจ้งหนี้ AI จำแนกให้</li>
@@ -371,10 +406,10 @@
         </div>
 
         <!-- #11 ท่องเที่ยว/ที่พัก -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-blue-400 mb-1">✈️ ท่องเที่ยว / ที่พัก / ทัวร์</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-1">✈️ ท่องเที่ยว / ที่พัก / ทัวร์</h3>
           <p class="text-xs text-line mb-2">ลูกค้าเก่าจองซ้ำ | จำความชอบทุกทริป</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>เก็บประวัติจอง ทริปเก่า ความชอบลูกค้า</li>
             <li>AI ตอบคำถามราคาห้อง แพ็คเกจ อัตโนมัติ</li>
             <li>ส่งข้อเสนอพิเศษช่วงเทศกาล Long Weekend</li>
@@ -382,10 +417,10 @@
         </div>
 
         <!-- #12 คลินิกแพทย์ -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-red-400 mb-1">🏥 โรงพยาบาล / คลินิกแพทย์</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-red-500 mb-1">🏥 โรงพยาบาล / คลินิกแพทย์</h3>
           <p class="text-xs text-line mb-2">ลดคนไม่มาตามนัด 30% | เตือนอัตโนมัติ</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>นัดหมายแพทย์ เตือนล่วงหน้า ลดคนไม่มา</li>
             <li>AI ตอบคำถามเบื้องต้น ช่วยคัดกรอง</li>
             <li>แจ้งเตือนนัดตรวจประจำปี ฉีดวัคซีน</li>
@@ -393,10 +428,10 @@
         </div>
 
         <!-- #13 อู่ซ่อมรถ -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-teal-400 mb-1">🚗 อู่ซ่อมรถ / ศูนย์บริการ</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-1">🚗 อู่ซ่อมรถ / ศูนย์บริการ</h3>
           <p class="text-xs text-line mb-2">ลูกค้ากลับมาเช็คระยะซ้ำ | เตือนอัตโนมัติ</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>เก็บประวัติซ่อม อะไหล่ ราคา ทุกคัน</li>
             <li>เตือนนัดเช็คระยะ เปลี่ยนถ่ายอัตโนมัติ</li>
             <li>ลูกค้าส่งรูปอาการรถมา เก็บไว้ไม่หาย</li>
@@ -404,10 +439,10 @@
         </div>
 
         <!-- #14 ฟิตเนส/สอน -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-lime-400 mb-1">🏋️ ฟิตเนส / โยคะ / สอนพิเศษ</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-1">🏋️ ฟิตเนส / โยคะ / สอนพิเศษ</h3>
           <p class="text-xs text-line mb-2">ต่ออายุสมาชิก AI เตือนก่อนหมด | ลดยกเลิก</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>จัดคลาส นัดหมาย เตือนล่วงหน้าอัตโนมัติ</li>
             <li>เก็บประวัติสมาชิก แพ็คเกจ วันหมดอายุ</li>
             <li>ส่งตารางเรียน โปรโมชั่นสมาชิกใหม่</li>
@@ -415,10 +450,10 @@
         </div>
 
         <!-- #15 โรงเรียน -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-emerald-400 mb-1">🎓 โรงเรียน / สถาบันสอน</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-1">🎓 โรงเรียน / สถาบันสอน</h3>
           <p class="text-xs text-line mb-2">เก็บแชท Group ผู้ปกครอง | ตรวจสอบย้อนหลัง</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>สื่อสารผู้ปกครองผ่าน LINE Group เก็บทุกข้อความ</li>
             <li>แจ้งข่าว ส่งเอกสาร นัดประชุมผู้ปกครอง</li>
             <li>AI ตอบคำถามซ้ำๆ อัตโนมัติ</li>
@@ -426,10 +461,10 @@
         </div>
 
         <!-- #16 กฎหมาย -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-violet-400 mb-1">⚖️ สำนักงานกฎหมาย / ทนาย</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-1">⚖️ สำนักงานกฎหมาย / ทนาย</h3>
           <p class="text-xs text-line mb-2">เก็บหลักฐานสื่อสาร | นัดขึ้นศาลไม่พลาด</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>เก็บประวัติสื่อสารกับลูกความ เป็นหลักฐาน</li>
             <li>นัดขึ้นศาล นัดประชุม เตือนล่วงหน้า</li>
             <li>เอกสารสำคัญ AI จำแนกให้ ค้นหาง่าย</li>
@@ -437,10 +472,10 @@
         </div>
 
         <!-- #17 นิติบุคคล -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-cyan-300 mb-1">🏘️ นิติบุคคล / หมู่บ้าน / คอนโด</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-cyan-600 mb-1">🏘️ นิติบุคคล / หมู่บ้าน / คอนโด</h3>
           <p class="text-xs text-line mb-2">เก็บแชท Group ลูกบ้าน | แจ้งซ่อมติดตามได้</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>สื่อสารลูกบ้านผ่าน LINE Group เก็บทุกข้อความ</li>
             <li>แจ้งซ่อม แจ้งปัญหา ติดตามสถานะได้</li>
             <li>ประกาศส่วนกลาง ค่าส่วนกลาง ตรวจสลิป</li>
@@ -448,10 +483,10 @@
         </div>
 
         <!-- #18 คลินิกสัตว์ -->
-        <div class="glass rounded-xl p-5">
-          <h3 class="text-lg font-bold text-pink-400 mb-1">🐾 คลินิกสัตว์ / เพ็ทช็อป</h3>
+        <div class="bg-white border border-slate-100 shadow-lg rounded-xl p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-1">🐾 คลินิกสัตว์ / เพ็ทช็อป</h3>
           <p class="text-xs text-line mb-2">เตือนวัคซีน ตรวจสุขภาพ | ลูกค้ากลับซื้อซ้ำ</p>
-          <ul class="space-y-1 text-sm text-gray-300">
+          <ul class="space-y-1 text-sm text-slate-600">
             <li>เก็บประวัติสัตว์เลี้ยงทุกตัว อาการ ยา วัคซีน</li>
             <li>เตือนนัดฉีดวัคซีน ตรวจสุขภาพ อาบน้ำ</li>
             <li>ส่งโปรโมชั่นกรูมมิ่ง อาหารสัตว์</li>
@@ -465,16 +500,16 @@
   <!-- Pricing -->
   <section class="py-16 px-4">
     <div class="max-w-4xl mx-auto">
-      <h2 class="text-2xl md:text-3xl font-bold text-center mb-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-center mb-4 text-slate-800">
         <span class="gradient-text">ฟรี 100%</span> --- Open Source
       </h2>
-      <p class="text-center text-gray-400 mb-10">เริ่มต้นฟรี อัพเกรด AI เมื่อพร้อม</p>
+      <p class="text-center text-slate-500 mb-10">เริ่มต้นฟรี อัพเกรด AI เมื่อพร้อม</p>
 
       <div class="grid md:grid-cols-2 gap-6">
         <!-- Free Plan -->
         <div class="glass rounded-2xl p-6 text-left">
           <div class="text-center mb-5">
-            <div class="text-xs text-gray-400 mb-1">เริ่มต้น</div>
+            <div class="text-xs text-slate-500 mb-1">เริ่มต้น</div>
             <span class="text-4xl font-extrabold gradient-text">ฟรี</span>
           </div>
           <ul class="space-y-2.5 text-sm">
@@ -488,35 +523,35 @@
           </ul>
           <div class="mt-5 p-3 rounded-xl text-xs" style="background: rgba(6,199,85,0.08); border: 1px solid rgba(6,199,85,0.2);">
             <p class="text-line font-medium mb-1">AI ฟรี ใช้ได้ทันที</p>
-            <p class="text-gray-400">OpenRouter (10+ models ฟรี), SambaNova, Gemini --- เหมาะสำหรับเริ่มต้น ตอบลูกค้าได้ดี</p>
+            <p class="text-slate-500">OpenRouter (10+ models ฟรี), SambaNova, Gemini --- เหมาะสำหรับเริ่มต้น ตอบลูกค้าได้ดี</p>
           </div>
-          <p class="text-xs text-gray-500 mt-3 text-center">ค่าใช้จ่ายเดียว: VPS ~$24/เดือน</p>
+          <p class="text-xs text-slate-400 mt-3 text-center">ค่าใช้จ่ายเดียว: VPS ~$24/เดือน</p>
         </div>
 
         <!-- Pro AI -->
         <div class="rounded-2xl p-6 text-left relative overflow-hidden" style="background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(6,199,85,0.1)); border: 1px solid rgba(99,102,241,0.3);">
           <div class="absolute top-0 right-0 bg-indigo-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg">แนะนำ</div>
           <div class="text-center mb-5">
-            <div class="text-xs text-gray-400 mb-1">ฉลาดขึ้น</div>
-            <span class="text-4xl font-extrabold text-indigo-400">AI Pro</span>
+            <div class="text-xs text-slate-500 mb-1">ฉลาดขึ้น</div>
+            <span class="text-4xl font-extrabold text-indigo-600">AI Pro</span>
           </div>
           <ul class="space-y-2.5 text-sm">
-            <li class="flex items-center gap-2"><span class="text-indigo-400">&#10003;</span> ทุกอย่างในแพ็คฟรี +</li>
-            <li class="flex items-center gap-2"><span class="text-indigo-400">★</span> <strong>GPT-4o / Claude</strong> --- ตอบฉลาดกว่า เข้าใจบริบทลึก</li>
-            <li class="flex items-center gap-2"><span class="text-indigo-400">★</span> <strong>วิเคราะห์แม่นขึ้น</strong> --- sentiment, intent, เอกสาร</li>
-            <li class="flex items-center gap-2"><span class="text-indigo-400">★</span> <strong>ตอบภาษาไทยดีขึ้น</strong> --- เข้าใจสำนวน ภาษาพูด</li>
-            <li class="flex items-center gap-2"><span class="text-indigo-400">★</span> <strong>ตรวจสลิปแม่นขึ้น</strong> --- Vision AI ระดับสูง</li>
-            <li class="flex items-center gap-2"><span class="text-indigo-400">★</span> <strong>AI Advisor ฉลาดขึ้น</strong> --- คำแนะนำมีคุณภาพ</li>
+            <li class="flex items-center gap-2"><span class="text-indigo-600">&#10003;</span> ทุกอย่างในแพ็คฟรี +</li>
+            <li class="flex items-center gap-2"><span class="text-indigo-600">★</span> <strong>GPT-4o / Claude</strong> --- ตอบฉลาดกว่า เข้าใจบริบทลึก</li>
+            <li class="flex items-center gap-2"><span class="text-indigo-600">★</span> <strong>วิเคราะห์แม่นขึ้น</strong> --- sentiment, intent, เอกสาร</li>
+            <li class="flex items-center gap-2"><span class="text-indigo-600">★</span> <strong>ตอบภาษาไทยดีขึ้น</strong> --- เข้าใจสำนวน ภาษาพูด</li>
+            <li class="flex items-center gap-2"><span class="text-indigo-600">★</span> <strong>ตรวจสลิปแม่นขึ้น</strong> --- Vision AI ระดับสูง</li>
+            <li class="flex items-center gap-2"><span class="text-indigo-600">★</span> <strong>AI Advisor ฉลาดขึ้น</strong> --- คำแนะนำมีคุณภาพ</li>
           </ul>
           <div class="mt-5 p-3 rounded-xl text-xs" style="background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);">
-            <p class="text-indigo-400 font-medium mb-1">ค่า AI ตามการใช้จริง</p>
-            <p class="text-gray-400 leading-relaxed">
+            <p class="text-indigo-600 font-medium mb-1">ค่า AI ตามการใช้จริง</p>
+            <p class="text-slate-500 leading-relaxed">
               เพิ่ม API Key จาก OpenAI, Anthropic, หรือ Groq --- จ่ายตามจำนวนข้อความ<br>
-              ตัวอย่าง: ร้านค้าแชทวันละ 100 ข้อความ ≈ <strong class="text-gray-300">200-500 บาท/เดือน</strong><br>
-              สำนักงานบัญชี + วิเคราะห์เอกสาร ≈ <strong class="text-gray-300">500-1,500 บาท/เดือน</strong>
+              ตัวอย่าง: ร้านค้าแชทวันละ 100 ข้อความ ≈ <strong class="text-slate-600">200-500 บาท/เดือน</strong><br>
+              สำนักงานบัญชี + วิเคราะห์เอกสาร ≈ <strong class="text-slate-600">500-1,500 บาท/เดือน</strong>
             </p>
           </div>
-          <p class="text-xs text-gray-500 mt-3 text-center">ใส่ API Key เมื่อไหร่ก็ได้ --- อัพเกรดทันที ไม่ต้อง restart</p>
+          <p class="text-xs text-slate-400 mt-3 text-center">ใส่ API Key เมื่อไหร่ก็ได้ --- อัพเกรดทันที ไม่ต้อง restart</p>
         </div>
       </div>
 
@@ -526,26 +561,26 @@
           <div class="text-3xl">🧠</div>
           <div>
             <h3 class="text-lg font-bold text-white">AI เลือก Model เองอัตโนมัติ</h3>
-            <p class="text-xs text-gray-400">ประหยัดค่าใช้จ่าย + เพิ่มประสิทธิภาพ --- ไม่ต้องตั้งค่าเอง</p>
+            <p class="text-xs text-slate-500">ประหยัดค่าใช้จ่าย + เพิ่มประสิทธิภาพ --- ไม่ต้องตั้งค่าเอง</p>
           </div>
         </div>
         <div class="grid sm:grid-cols-3 gap-4 mb-4">
           <div class="rounded-xl p-3" style="background: rgba(6,199,85,0.06); border: 1px solid rgba(6,199,85,0.15);">
             <p class="text-xs font-medium text-line mb-1">ตอบแชทลูกค้า</p>
-            <p class="text-xs text-gray-400">ใช้ model เร็ว ราคาถูก เพราะต้องตอบทันที ไม่ต้องคิดลึก</p>
+            <p class="text-xs text-slate-500">ใช้ model เร็ว ราคาถูก เพราะต้องตอบทันที ไม่ต้องคิดลึก</p>
           </div>
           <div class="rounded-xl p-3" style="background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.15);">
-            <p class="text-xs font-medium text-indigo-400 mb-1">วิเคราะห์เอกสาร / สลิป</p>
-            <p class="text-xs text-gray-400">ใช้ Vision AI ระดับสูง เพราะต้องอ่านรูป ตัวเลข ข้อความแม่นยำ</p>
+            <p class="text-xs font-medium text-indigo-600 mb-1">วิเคราะห์เอกสาร / สลิป</p>
+            <p class="text-xs text-slate-500">ใช้ Vision AI ระดับสูง เพราะต้องอ่านรูป ตัวเลข ข้อความแม่นยำ</p>
           </div>
           <div class="rounded-xl p-3" style="background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.15);">
-            <p class="text-xs font-medium text-amber-400 mb-1">AI Advisor / สรุปรายวัน</p>
-            <p class="text-xs text-gray-400">ใช้ model ฉลาดสุด เพราะต้องวิเคราะห์ลึก วางกลยุทธ์ แนะนำ</p>
+            <p class="text-xs font-medium text-amber-600 mb-1">AI Advisor / สรุปรายวัน</p>
+            <p class="text-xs text-slate-500">ใช้ model ฉลาดสุด เพราะต้องวิเคราะห์ลึก วางกลยุทธ์ แนะนำ</p>
           </div>
         </div>
-        <div class="flex items-center gap-2 text-xs text-gray-400">
+        <div class="flex items-center gap-2 text-xs text-slate-500">
           <span class="text-line">⚡</span>
-          <span>ระบบเลือก AI ให้เหมาะกับงานแต่ละประเภท --- งานง่ายใช้ model ถูก งานยากใช้ model เก่ง <strong class="text-gray-300">ประหยัดค่า AI ได้ 40-60%</strong> เทียบกับใช้ model แพงทุกงาน</span>
+          <span>ระบบเลือก AI ให้เหมาะกับงานแต่ละประเภท --- งานง่ายใช้ model ถูก งานยากใช้ model เก่ง <strong class="text-slate-600">ประหยัดค่า AI ได้ 40-60%</strong> เทียบกับใช้ model แพงทุกงาน</span>
         </div>
       </div>
     </div>
@@ -554,60 +589,64 @@
   <!-- Open Source -->
   <section class="py-16 px-4">
     <div class="max-w-3xl mx-auto">
-      <div class="glass rounded-2xl p-6 md:p-8 text-center">
-        <div class="text-4xl mb-4">🎓</div>
-        <h2 class="text-xl md:text-2xl font-bold mb-3">Open Source <span class="gradient-text">เพื่อการศึกษา</span></h2>
-        <p class="text-sm text-gray-300 leading-relaxed mb-4">
-          Keep Line เป็นโปรเจกต์ Open Source ภายใต้ <strong class="text-white">MIT License</strong><br>
+      <div class="glass rounded-2xl p-6 md:p-8 text-center bg-white shadow-xl shadow-slate-200/50">
+        <div class="text-5xl mb-5">🎓</div>
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-3 text-slate-800">Open Source <span class="gradient-text">เพื่อการศึกษา</span></h2>
+        <p class="text-base text-slate-600 leading-relaxed mb-6">
+          Keep Line เป็นโปรเจกต์ Open Source ภายใต้ <strong class="text-amber-600">MIT License</strong><br>
           <strong class="text-line">เอาไปใช้ฟรีได้เลย</strong> --- ไม่ต้องขออนุญาต ไม่มีค่าลิขสิทธิ์ ไม่มีเงื่อนไขซ่อน
         </p>
-        <div class="grid sm:grid-cols-3 gap-3 text-left mb-5">
-          <div class="rounded-xl p-3" style="background: rgba(6,199,85,0.06); border: 1px solid rgba(6,199,85,0.15);">
-            <p class="text-xs font-medium text-line mb-1">นักศึกษา / นักพัฒนา</p>
-            <p class="text-xs text-gray-400">Fork ไปศึกษา เรียนรู้ Next.js, MongoDB, AI, LINE API ได้ทั้งระบบ</p>
+        <div class="grid sm:grid-cols-3 gap-4 text-left mb-6">
+          <div class="rounded-xl p-4 bg-green-50/50 border border-green-100">
+            <p class="text-sm font-bold text-green-700 mb-1">นักศึกษา / นักพัฒนา</p>
+            <p class="text-xs text-slate-500">Fork ไปศึกษา เรียนรู้ Next.js, MongoDB, AI, LINE API ได้ทั้งระบบ</p>
           </div>
-          <div class="rounded-xl p-3" style="background: rgba(6,199,85,0.06); border: 1px solid rgba(6,199,85,0.15);">
-            <p class="text-xs font-medium text-line mb-1">SMEs / ร้านค้า</p>
-            <p class="text-xs text-gray-400">ติดตั้งใช้งานจริงในธุรกิจ ปรับแต่งตามต้องการ ไม่จำกัดจำนวนลูกค้า</p>
+          <div class="rounded-xl p-4 bg-green-50/50 border border-green-100">
+            <p class="text-sm font-bold text-green-700 mb-1">SMEs / ร้านค้า</p>
+            <p class="text-xs text-slate-500">ติดตั้งใช้งานจริงในธุรกิจ ปรับแต่งตามต้องการ ไม่จำกัดจำนวนลูกค้า</p>
           </div>
-          <div class="rounded-xl p-3" style="background: rgba(6,199,85,0.06); border: 1px solid rgba(6,199,85,0.15);">
-            <p class="text-xs font-medium text-line mb-1">Software House</p>
-            <p class="text-xs text-gray-400">นำไปต่อยอดเป็นโปรดักต์ของตัวเอง ขายเป็น SaaS ได้เลย</p>
+          <div class="rounded-xl p-4 bg-green-50/50 border border-green-100">
+            <p class="text-sm font-bold text-green-700 mb-1">Software House</p>
+            <p class="text-xs text-slate-500">นำไปต่อยอดเป็นโปรดักต์ของตัวเอง ขายเป็น SaaS ได้เลย</p>
           </div>
         </div>
-        <p class="text-xs text-gray-500">source code ทั้งหมดอยู่บน GitHub --- clone ได้เลย ไม่ต้องสมัคร ไม่ต้องจ่าย</p>
+        <p class="text-xs text-slate-400 font-medium">source code ทั้งหมดอยู่บน GitHub --- clone ได้เลย ไม่ต้องสมัคร ไม่ต้องจ่าย</p>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
-  <section class="py-16 px-4">
-    <div class="max-w-3xl mx-auto text-center">
-      <h2 class="text-2xl md:text-3xl font-bold mb-4">
-        พร้อมเก็บแชท LINE OA & Group <span class="gradient-text">ตลอดชีวิต</span> หรือยัง?
+  <section class="py-20 px-4 hero-bg">
+    <div class="max-w-4xl mx-auto text-center glass rounded-3xl p-10 md:p-14 border border-green-100 shadow-2xl shadow-green-900/5 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-green-50 rounded-bl-full -z-10 mix-blend-multiply"></div>
+      <div class="absolute bottom-0 left-0 w-64 h-64 bg-amber-50 rounded-tr-full -z-10 mix-blend-multiply"></div>
+      
+      <h2 class="text-3xl md:text-5xl font-extrabold mb-6 text-slate-900 leading-tight">
+        พร้อมเก็บแชท LINE OA & Group <br><span class="gradient-text">ตลอดชีวิต</span> หรือยัง?
       </h2>
-      <p class="text-gray-400 mb-8">ติดตั้งง่าย Docker Compose คำสั่งเดียว --- Open Source เพื่อการศึกษา</p>
-      <div class="flex flex-col sm:flex-row gap-3 justify-center">
-        <a href="/dashboard/kung-room" class="gradient-bg text-white px-8 py-3 rounded-xl font-semibold text-lg hover:opacity-90 transition shadow-lg shadow-green-500/20">
-          ดู Demo
+      <p class="text-slate-600 mb-10 text-lg md:text-xl font-medium">ติดตั้งง่าย Docker Compose คำสั่งเดียว --- <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded">ฟรีตลอดชีพ</span></p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/dashboard/kung-room" class="gradient-bg text-white px-8 py-4 rounded-2xl font-bold text-lg hover:-translate-y-1 transition-all duration-300 shadow-xl shadow-green-500/30">
+          ดูตัวอย่าง DEMO
         </a>
-        <a href="https://github.com/smlsoft/keepline" target="_blank" class="glass text-white px-8 py-3 rounded-xl font-semibold text-lg hover:bg-white/10 transition">
-          ดูบน GitHub
+        <a href="https://github.com/smlsoft/keepline" target="_blank" class="bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-slate-50 hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md">
+          ดู Source Code บน GitHub
         </a>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="border-t border-white/10 py-8 px-4">
-    <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-      <div class="flex items-center gap-2">
-        <div class="w-6 h-6 gradient-bg rounded flex items-center justify-center text-white text-xs font-bold">KL</div>
-        <span>Keep Line --- เก็บประวัติแชท LINE OA & Group ตลอดชีวิต</span>
+  <footer class="border-t border-slate-200 py-8 px-4 bg-white mt-10">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500 font-medium">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center text-white text-xs font-bold shadow-md">KL</div>
+        <span>Keep Line --- เก็บประวัติแชท LINE OA & Group ตลอดชีวิต เพื่อ SMEs ไทย</span>
       </div>
-      <div class="flex items-center gap-4">
-        <a href="https://github.com/smlsoft/keepline" target="_blank" class="hover:text-white transition">GitHub</a>
-        <span>Open Source --- MIT License</span>
+      <div class="flex items-center gap-6">
+        <a href="https://github.com/smlsoft/keepline" target="_blank" class="hover:text-green-600 transition">GitHub</a>
+        <span class="px-3 py-1 bg-slate-100 rounded-full text-slate-600 text-xs shadow-inner">Open Source --- MIT License</span>
+
       </div>
     </div>
   </footer>

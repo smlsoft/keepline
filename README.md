@@ -88,6 +88,12 @@
 - **ตอบแชท** → model เร็ว ราคาถูก | **วิเคราะห์เอกสาร** → Vision AI ระดับสูง | **AI Advisor** → model ฉลาดสุด
 - **ไม่ต้องตั้งค่าเอง** --- ระบบเลือกให้เหมาะกับงานแต่ละประเภท
 
+### MCP Server (Read-Only)
+- **เปิดให้ AI ภายนอกเข้ามาอ่านข้อมูล** ผ่าน MCP Protocol (SSE transport)
+- **17 tools:** ลูกค้า, แชท, เอกสาร, สลิป, นัดหมาย, พนักงาน, KPI, AI Advice, ค่าใช้จ่าย AI ฯลฯ
+- **Read-Only เท่านั้น** --- AI ภายนอกดูข้อมูลได้ แต่แก้ไขไม่ได้
+- **Endpoint:** `/mcp/sse` (SSE) + `/mcp/messages` (JSON-RPC)
+
 ### ปลอดภัย + PDPA
 - **Google OAuth** + Audit Log + PII Masking
 - **ข้อมูลอยู่ใน server ของคุณ** --- ไม่ส่งออกไปที่ไหน

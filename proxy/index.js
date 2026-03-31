@@ -11,6 +11,7 @@ const path = require("path");
 const fs = require("fs");
 const rateLimit = require("express-rate-limit");
 const { uploadToR2, getR2SignedUrl, isR2Ready } = require("./r2");
+const { setupMCPServer } = require("./mcp-server");
 const app = express();
 
 // === Shared Utilities ===
@@ -5180,10 +5181,14 @@ getDB().then(async () => {
   // Document reminders — ทุกวัน 10:00
   startDocumentReminderCron();
 
+  // Setup MCP Server (Read-Only)
+  setupMCPServer(app, getDB);
+
   app.listen(PORT, () => {
     console.log(`[Agent] Running on port ${PORT}`);
     console.log(`[Agent] AI: OpenRouter(free) → SambaNova → Groq → Cerebras`);
     console.log(`[Agent] Tools: ${AGENT_TOOLS.length} built-in + ${mcpTools.length} MCP`);
     console.log(`[Agent] RAG: Vector Search → Keyword → Recent (3-tier)`);
+    console.log(`[Agent] MCP Server: /mcp/sse (read-only)`);
   });
 });

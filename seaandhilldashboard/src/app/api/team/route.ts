@@ -5,30 +5,19 @@ import { getDB } from "@/lib/mongodb";
 export async function GET() {
   try {
     const user = await getAuthUser();
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const db = await getDB();
 
-    // หา team ของ user
-    const membership = await db
-      .collection("team_members")
-      .findOne({ userId: user.id, role: "admin" });
-
-    if (!membership) {
-      // user ไม่ใช่ admin ของ team ไหนเลย → ดึง team ที่เป็นสมาชิก
-      const myMembership = await db.collection("team_members").findOne({ userId: user.id });
-      if (!myMembership) {
-        return NextResponse.json({ members: [] });
+    // หา team — ถ้ามี user ให้หาจาก owner, ถ้าไม่มี (demo) ให้หา team แรก
+    let team;
+    if (user) {
+      const emailDoc = await db.collection("user_emails").findOne({ email: user.email });
+      if (emailDoc) {
+        team = await db.collection("teams").findOne({ ownerId: emailDoc.userId });
       }
     }
-
-    // ดึง team ที่ user เป็น admin หรือ owner
-    const emailDoc = await db.collection("user_emails").findOne({ email: user.email });
-    if (!emailDoc) return NextResponse.json({ members: [] });
-
-    const team = await db.collection("teams").findOne({ ownerId: emailDoc.userId });
+    if (!team) {
+      team = await db.collection("teams").findOne();
+    }
     if (!team) return NextResponse.json({ members: [] });
 
     // ดึง team_members ทั้งหมดใน team
@@ -37,22 +26,16 @@ export async function GET() {
       .find({ teamId: team._id })
       .toArray();
 
-    // ดึง user info สำหรับแต่ละ member
-    const memberDetails = await Promise.all(
-      teamMembers.map(async (m) => {
-        const userDoc = await db.collection("users").findOne({ _id: m.userId });
-        const emailEntry = await db.collection("user_emails").findOne({ userId: m.userId, isPrimary: true });
-        return {
-          _id: m._id.toString(),
-          userId: m.userId,
-          email: emailEntry?.email || "",
-          name: userDoc?.name || "",
-          image: userDoc?.image || "",
-          role: m.role,
-          addedAt: m.addedAt,
-        };
-      })
-    );
+    // map member details — ใช้ข้อมูลจาก team_members ตรงๆ
+    const memberDetails = teamMembers.map((m) => ({
+      _id: m._id.toString(),
+      userId: m.userId || "",
+      email: m.email || "",
+      name: m.name || "",
+      image: "",
+      role: m.role,
+      addedAt: m.addedAt || m.joinedAt,
+    }));
 
     return NextResponse.json({ members: memberDetails, teamId: team._id });
   } catch (err) {

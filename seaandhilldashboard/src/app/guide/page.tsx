@@ -61,17 +61,17 @@ const SECTIONS: Section[] = [
 9. ทดสอบ: ส่งข้อความใน LINE OA → ดูใน Dashboard ถ้าขึ้นแสดงว่าสำเร็จ`,
       },
       {
-        title: "4. เชื่อม Telegram",
-        content: `สำหรับรับ AI Advice ส่วนตัวจาก "น้องกุ้ง":
+        title: "4. เชื่อม Telegram (ถ้าต้องการ)",
+        content: `สำหรับรับ AI Advice ผ่าน Telegram:
 
 1. เปิด Telegram → ค้นหา @BotFather → พิมพ์ /newbot
-2. ตั้งชื่อ bot เช่น "SML น้องกุ้ง" → ตั้ง username เช่น sml_kung_bot
+2. ตั้งชื่อ bot เช่น "Keep Line Bot" → ตั้ง username
 3. BotFather จะส่ง Bot Token มา (รูปแบบ 123456:ABC-DEF...)
 4. ใส่ใน .env ที่ TELEGRAM_BOT_TOKEN=
 5. Restart Docker → เปิดเบราว์เซอร์ไปที่: https://keepline.satistang.com/setup-telegram-webhook
 6. ถ้าขึ้น {"ok":true} = สำเร็จ
-7. เปิด Telegram bot → ส่ง /start → น้องกุ้งตอบทันที
-8. ลอง: "สรุปแชทวันนี้" → น้องกุ้งวิเคราะห์ให้`,
+7. เปิด Telegram bot → ส่ง /start → AI ตอบทันที
+8. ลอง: "สรุปแชทวันนี้" → AI วิเคราะห์ให้`,
       },
     ],
     link: { label: "ไปตั้งค่า", href: "/settings" },
@@ -394,21 +394,21 @@ Toast หายเองหลัง 8 วินาที หรือกด X �
   },
   {
     id: "advice",
-    icon: "🦐",
-    title: "น้องกุ้ง Multi AI Agent",
-    desc: "13 บทบาท คุมทั้งระบบ 24/7 — Admin แค่ตอบลูกค้า",
+    icon: "🤖",
+    title: "AI Advisor อัตโนมัติ",
+    desc: "13 บทบาท ตามลูกค้า + ตามงานพนักงาน 24/7",
     items: [
       {
-        title: "น้องกุ้งคือใคร?",
-        content: `น้องกุ้ง 🦐 เป็นสมองกลางคุมระบบทั้งหมด ทำงานอัตโนมัติ 24/7 ไม่ต้องสั่ง
+        title: "AI Advisor คืออะไร?",
+        content: `AI Advisor เป็นสมองกลางคุมระบบทั้งหมด ทำงานอัตโนมัติ 24/7 ไม่ต้องสั่ง
 
-น้องกุ้ง 13 ตัว ทำงานพร้อมกัน แบ่งหน้าที่ชัดเจน:
+AI 13 บทบาท ทำงานพร้อมกัน แบ่งหน้าที่ชัดเจน:
 • Admin เป็นแค่คนตอบลูกค้า
-• น้องกุ้งจัดการที่เหลือทั้งหมด — วิเคราะห์ ติดตาม แจ้งเตือน สรุป
+• AI จัดการที่เหลือทั้งหมด — วิเคราะห์ ติดตาม แจ้งเตือน สรุป
 • ถ้าพบ CRITICAL → ส่ง Telegram แจ้งเจ้าของทันที`,
       },
       {
-        title: "5 บทบาทหลัก (เดิม)",
+        title: "5 บทบาทหลัก",
         content: `🔍 Problem Solver — ทุก 1 ชม.
 • วิเคราะห์ปัญหาลูกค้า หาต้นเหตุ เสนอ 5 ทางออก เลือกดีสุด
 • ลูกค้าหลุด > 7 วัน → เตือนทันที
@@ -466,7 +466,7 @@ Toast หายเองหลัง 8 วินาที หรือกด X �
 • แนะนำกลยุทธ์ราคาและโปรโมชั่น`,
       },
     ],
-    link: { label: "ไปน้องกุ้ง", href: "/advice" },
+    link: { label: "ไป AI Advisor", href: "/advice" },
   },
   {
     id: "kb",
@@ -545,7 +545,7 @@ Tips:
 
 กราฟ:
 • เทรนด์ยอดขายรายวัน (Line/Bar Chart)
-• ยอดขายแยก platform (LINE/FB/IG)
+• ยอดขายแยกพนักงาน
 • ยอดขายแยกพนักงาน
 • Top สินค้าขายดี
 
@@ -906,7 +906,7 @@ Dashboard (Next.js 16) → Auth → CRM + KPI + Analytics`,
 • Caddy Server — Reverse Proxy, Auto HTTPS (Let's Encrypt)
 • Docker Compose — Container Orchestration
 • AI Multi-Provider — OpenRouter, Groq, SambaNova, Cerebras, Gemini
-• LINE/Meta API — Webhook + Messaging
+• LINE Messaging API — Webhook + Reply/Push
 • SSE (Server-Sent Events) — Real-time Notifications`,
       },
       {
@@ -1018,12 +1018,12 @@ export default function GuidePage() {
                   style={{ boxShadow: "0 4px 16px rgba(99,102,241,0.3)" }}>💬</div>
                 <div>
                   <h2 className="text-base md:text-lg font-bold gradient-text">Keep Line</h2>
-                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>AI Chat Intelligence — Open Source เพื่อการศึกษา</p>
+                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>เก็บประวัติแชท LINE OA ตลอดชีวิต</p>
                 </div>
               </div>
               <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                ระบบ CRM อัจฉริยะสำหรับ LINE AI วิเคราะห์ทุกข้อความ แนะนำคำตอบ จำลูกค้าทุกคน
-                พร้อม Analytics Dashboard, Payment Tracking, Document Intelligence, Real-time Notifications
+                เก็บแชท LINE OA ตลอดชีวิต AI ตามลูกค้าอัตโนมัติ ตามงานพนักงาน
+                CRM สำหรับ SMEs ไทย และสำนักงานบัญชี — ตรวจสลิป จำแนกเอกสาร วิเคราะห์ทุกข้อความ
               </p>
             </div>
           </div>
@@ -1048,8 +1048,8 @@ export default function GuidePage() {
 
           {/* Footer */}
           <div className="card p-5 mt-10 text-center">
-            <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>Open Source เพื่อการศึกษา</p>
-            <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>Fork ไปพัฒนาต่อยอดได้เลย</p>
+            <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>Keep Line — Open Source ฟรี 100%</p>
+            <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>เก็บประวัติแชท LINE OA ตลอดชีวิต สำหรับ SMEs ไทย และสำนักงานบัญชี</p>
             <div className="flex items-center justify-center gap-3 mt-4 flex-wrap">
               <Link href="/" className="px-4 py-2 rounded-xl text-xs font-medium gradient-bg text-white hover:opacity-90 transition">📊 ไป Dashboard</Link>
               <Link href="/analytics" className="px-4 py-2 rounded-xl text-xs font-medium transition" style={{ background: "var(--primary-bg)", color: "var(--primary)" }}>📊 Analytics</Link>

@@ -1018,11 +1018,11 @@ export default function GuidePage() {
                   style={{ boxShadow: "0 4px 16px rgba(99,102,241,0.3)" }}>💬</div>
                 <div>
                   <h2 className="text-base md:text-lg font-bold gradient-text">Keep Line</h2>
-                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>เก็บประวัติแชท LINE OA ตลอดชีวิต</p>
+                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>เก็บประวัติแชท LINE OA & Group ตลอดชีวิต</p>
                 </div>
               </div>
               <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                เก็บแชท LINE OA ตลอดชีวิต AI ตามลูกค้าอัตโนมัติ ตามงานพนักงาน
+                เก็บแชท LINE OA & Group ตลอดชีวิต AI ตามลูกค้าอัตโนมัติ ตามงานพนักงาน
                 CRM สำหรับ SMEs ไทย และสำนักงานบัญชี — ตรวจสลิป จำแนกเอกสาร วิเคราะห์ทุกข้อความ
               </p>
             </div>
@@ -1049,7 +1049,7 @@ export default function GuidePage() {
           {/* Footer */}
           <div className="card p-5 mt-10 text-center">
             <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>Keep Line — Open Source ฟรี 100%</p>
-            <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>เก็บประวัติแชท LINE OA ตลอดชีวิต สำหรับ SMEs ไทย และสำนักงานบัญชี</p>
+            <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>เก็บประวัติแชท LINE OA & Group ตลอดชีวิต สำหรับ SMEs ไทย และสำนักงานบัญชี</p>
             <div className="flex items-center justify-center gap-3 mt-4 flex-wrap">
               <Link href="/" className="px-4 py-2 rounded-xl text-xs font-medium gradient-bg text-white hover:opacity-90 transition">📊 ไป Dashboard</Link>
               <Link href="/analytics" className="px-4 py-2 rounded-xl text-xs font-medium transition" style={{ background: "var(--primary-bg)", color: "var(--primary)" }}>📊 Analytics</Link>

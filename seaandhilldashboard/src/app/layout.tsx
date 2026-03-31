@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Keep Line — AI Chat Intelligence",
-  description: "ระบบ CRM อัจฉริยะ วิเคราะห์สนทนา LINE อัตโนมัติ",
+  title: "Keep Line — เก็บประวัติแชท LINE OA & Group ตลอดชีวิต",
+  description: "เก็บแชท LINE OA & Group ตลอดชีวิต AI ตามลูกค้า ตามงานพนักงาน CRM สำหรับ SMEs ไทย และสำนักงานบัญชี",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

@@ -647,10 +647,98 @@
       </div>
 
       <!-- วิธีเชื่อมต่อ -->
-      <div class="glass rounded-2xl p-5 text-center">
+      <div class="glass rounded-2xl p-5 text-center mb-10">
         <p class="text-sm text-slate-600 mb-2">เชื่อมต่อง่าย --- แค่เพิ่ม MCP Server URL ใน AI ที่ใช้</p>
         <code class="inline-block px-4 py-2 rounded-xl text-sm font-mono bg-slate-800 text-cyan-400">https://keepline.satistang.com/mcp/sse</code>
         <p class="text-xs text-slate-400 mt-2">SSE Transport | JSON-RPC | 17 Read-Only Tools | ต้องมี API Key ถึงจะเข้าถึงได้ --- ปลอดภัย 100%</p>
+      </div>
+
+      <!-- A2A: AI Agent to AI Agent -->
+      <div class="glass rounded-2xl p-6 md:p-8">
+        <div class="text-center mb-6">
+          <h3 class="text-xl md:text-2xl font-bold mb-2">
+            🤖 ↔ 🤖 <span class="gradient-text">AI Agent to AI Agent (A2A)</span>
+          </h3>
+          <p class="text-sm text-slate-500">ใช้ AI Agent ภายนอกเชื่อมเข้า Keep Line --- ทำงานร่วมกันอัตโนมัติ ไม่ต้องเปิด Dashboard เลย</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div class="rounded-xl p-4" style="background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.15);">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xl">💬</span>
+              <strong class="text-sm text-slate-800">Claude Desktop</strong>
+            </div>
+            <p class="text-xs text-slate-500 mb-2">เปิด Claude Desktop → Settings → MCP Servers → เพิ่ม Keep Line</p>
+            <div class="bg-slate-800 rounded-lg p-2 text-xs font-mono text-cyan-400 overflow-x-auto">
+              "keepline": {<br>
+              &nbsp;&nbsp;"url": "https://your-domain/mcp/sse"<br>
+              }
+            </div>
+            <p class="text-xs text-slate-400 mt-2">ถาม Claude ว่า "ลูกค้าคนไหนเสี่ยงหาย?" → Claude ดึงข้อมูลจาก Keep Line ตอบทันที</p>
+          </div>
+
+          <div class="rounded-xl p-4" style="background: rgba(6,199,85,0.06); border: 1px solid rgba(6,199,85,0.15);">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xl">👨‍💻</span>
+              <strong class="text-sm text-slate-800">Claude Code / Cursor / Windsurf</strong>
+            </div>
+            <p class="text-xs text-slate-500 mb-2">IDE + AI ที่เข้าถึงข้อมูลลูกค้าได้ตรง สร้าง report, แก้โค้ด, วิเคราะห์ข้อมูลจริง</p>
+            <div class="bg-slate-800 rounded-lg p-2 text-xs font-mono text-cyan-400 overflow-x-auto">
+              claude mcp add keepline \<br>
+              &nbsp;&nbsp;--transport sse \<br>
+              &nbsp;&nbsp;--url https://your-domain/mcp/sse
+            </div>
+            <p class="text-xs text-slate-400 mt-2">สั่ง "สร้าง report ยอดขายเดือนนี้" → AI ดึงข้อมูลจริงมาสร้างให้</p>
+          </div>
+
+          <div class="rounded-xl p-4" style="background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.15);">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xl">🦐</span>
+              <strong class="text-sm text-slate-800">OpenClaw / HiClaw / AI Agent อื่น</strong>
+            </div>
+            <p class="text-xs text-slate-500 mb-2">AI Agent ตัวอื่นเชื่อมเข้ามาอ่านข้อมูล Keep Line แล้วทำงานต่อเนื่อง</p>
+            <div class="bg-slate-800 rounded-lg p-2 text-xs font-mono text-cyan-400 overflow-x-auto">
+              MCP Server URL:<br>
+              https://your-domain/mcp/sse
+            </div>
+            <p class="text-xs text-slate-400 mt-2">AI Agent วิเคราะห์แชท → ส่งข้อมูลกลับ ERP → สร้างใบเสนอราคาอัตโนมัติ</p>
+          </div>
+        </div>
+
+        <!-- ตัวอย่าง A2A Workflow -->
+        <div class="rounded-xl p-5" style="background: rgba(99,102,241,0.04); border: 1px solid rgba(99,102,241,0.1);">
+          <h4 class="text-sm font-bold text-slate-800 mb-3">ตัวอย่าง A2A Workflow จริง</h4>
+          <div class="space-y-3 text-xs">
+            <div class="flex gap-3 items-start">
+              <span class="bg-line text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shrink-0 font-bold">1</span>
+              <div>
+                <strong class="text-slate-700">ลูกค้าทักใน LINE</strong>
+                <span class="text-slate-500"> → "สนใจปูนซีเมนต์ 200 ถุง ราคาเท่าไหร่"</span>
+              </div>
+            </div>
+            <div class="flex gap-3 items-start">
+              <span class="bg-indigo-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shrink-0 font-bold">2</span>
+              <div>
+                <strong class="text-slate-700">Keep Line เก็บแชท</strong>
+                <span class="text-slate-500"> → AI วิเคราะห์ sentiment + purchase intent + สร้าง customer profile</span>
+              </div>
+            </div>
+            <div class="flex gap-3 items-start">
+              <span class="bg-amber-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shrink-0 font-bold">3</span>
+              <div>
+                <strong class="text-slate-700">OpenClaw (AI Agent) เชื่อม MCP</strong>
+                <span class="text-slate-500"> → ดึงข้อมูลลูกค้า + ราคาสินค้าจาก ERP → สร้างใบเสนอราคาอัตโนมัติ</span>
+              </div>
+            </div>
+            <div class="flex gap-3 items-start">
+              <span class="bg-rose-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shrink-0 font-bold">4</span>
+              <div>
+                <strong class="text-slate-700">Claude Desktop ใช้วิเคราะห์</strong>
+                <span class="text-slate-500"> → เจ้าของถาม "สรุปลูกค้าวันนี้" → Claude ดึงข้อมูลจาก Keep Line ตอบทันที</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>

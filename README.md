@@ -139,6 +139,26 @@ Transport: SSE + JSON-RPC
 Auth: API Key required
 ```
 
+### AI Agent to AI Agent (A2A)
+
+ใช้ AI Agent ภายนอกเชื่อมเข้า Keep Line --- ทำงานร่วมกันอัตโนมัติ
+
+| AI Agent | วิธีเชื่อมต่อ | ตัวอย่าง |
+|----------|-------------|---------|
+| **Claude Desktop** | Settings → MCP Servers → เพิ่ม URL | ถาม "ลูกค้าคนไหนเสี่ยงหาย?" → ตอบจากข้อมูลจริง |
+| **Claude Code / Cursor / Windsurf** | `claude mcp add keepline --transport sse --url URL` | สั่ง "สร้าง report ยอดขาย" → ดึงข้อมูลจริงมาสร้าง |
+| **OpenClaw / HiClaw** | MCP Server URL | ดึงข้อมูลลูกค้า → สร้างใบเสนอราคาจาก ERP อัตโนมัติ |
+| **AI Agent อื่นๆ** | SSE transport + API Key | เชื่อมต่อได้ทุก AI ที่รองรับ MCP Protocol |
+
+**ตัวอย่าง A2A Workflow:**
+
+```
+1. ลูกค้าทักใน LINE → "สนใจปูนซีเมนต์ 200 ถุง"
+2. Keep Line เก็บแชท → AI วิเคราะห์ sentiment + purchase intent
+3. OpenClaw (AI Agent) เชื่อม MCP → ดึงข้อมูลลูกค้า + ราคาจาก ERP → สร้างใบเสนอราคาอัตโนมัติ
+4. Claude Desktop → เจ้าของถาม "สรุปลูกค้าวันนี้" → Claude ดึงข้อมูลจาก Keep Line ตอบทันที
+```
+
 <br clear="both">
 
 ---

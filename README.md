@@ -5,7 +5,8 @@
 ### เก็บประวัติแชท LINE OA & Group ตลอดชีวิต --- ไม่มีหาย ไม่มีหมดอายุ
 
 **ระบบ CRM อัจฉริยะสำหรับ SMEs ไทย และสำนักงานบัญชี**
-**LINE OA & Group + AI วิเคราะห์ + ตามลูกค้าอัตโนมัติ + ตามงานพนักงาน | ฟรี 100%**
+**LINE OA & Group + AI วิเคราะห์ + ตามลูกค้าอัตโนมัติ + ตามงานพนักงาน**
+**Open Source เพื่อการศึกษา --- เอาไปใช้ฟรี ไม่มีเงื่อนไข**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](docker-compose.caddy.yml)
@@ -13,7 +14,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248?logo=mongodb&logoColor=white)](#tech-stack)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white)](#tech-stack)
 
-[Demo](https://keepline.satistang.com/dashboard) · [คู่มือ](https://keepline.satistang.com/dashboard/guide) · [แจ้งปัญหา](https://github.com/smlsoft/keepline/issues)
+[ทดลองใช้งาน](https://keepline.satistang.com/dashboard) · [คู่มือ](https://keepline.satistang.com/dashboard/guide) · [แจ้งปัญหา](https://github.com/smlsoft/keepline/issues)
 
 </div>
 
@@ -72,11 +73,15 @@
 - **จำแนกเอกสาร 14 ประเภท** --- สลิป, ใบเสนอราคา, ใบแจ้งหนี้, สัญญา, แบบก่อสร้าง ฯลฯ
 - **ไม่ต้องเปิดอ่านเอง** --- AI สรุปสาระสำคัญ ยอดเงิน เงื่อนไข ให้อัตโนมัติ
 
+### AI จำลูกค้าทุกคน
+- **จดจำประวัติ ความชอบ สินค้าที่เคยถาม** ปัญหาที่เคยแจ้ง
+- **ลูกค้าทักมาอีกที AI รู้ทุกอย่าง** ไม่ต้องถามซ้ำ
+- **Knowledge Base** --- ใส่ข้อมูลร้าน AI ดึงไปตอบลูกค้าแม่นยำ
+
 ### AI วิเคราะห์อัตโนมัติ
 - **วิเคราะห์ความพอใจ / โอกาสซื้อ / แท็กอัตโนมัติ**
 - **AI แนะนำคำตอบ** --- กดปุ่มเดียว AI ร่างคำตอบให้
-- **Knowledge Base** --- ใส่ข้อมูลร้าน AI ดึงไปตอบลูกค้าแม่นยำ
-- **AI จำลูกค้ารายคน** --- ยิ่งใช้ยิ่งฉลาด
+- **Broadcast แยกกลุ่มเป้าหมาย** --- ส่งโปรตรงกลุ่มตาม Pipeline, Tag, คะแนน
 
 ---
 

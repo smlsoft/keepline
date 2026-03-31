@@ -501,8 +501,8 @@ export default function Sidebar() {
                 💬
               </div>
               <div className="min-w-0">
-                <h1 className="text-sm font-bold leading-tight" style={{ color: "var(--text-primary)" }}>OpenClaw</h1>
-                <p className="text-[13px] leading-tight" style={{ color: "var(--text-muted)" }}>Mini CRM</p>
+                <h1 className="text-sm font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Keep Line</h1>
+                <p className="text-[13px] leading-tight" style={{ color: "var(--text-muted)" }}>AI Chat Intelligence</p>
               </div>
             </div>
           </div>

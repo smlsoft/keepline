@@ -1,13 +1,13 @@
 #!/bin/bash
 # ==============================================
-# OpenClaw Mini CRM — Deploy to Hetzner VPS
+# Keep Line — Deploy to DigitalOcean VPS
 # Usage: ./scripts/deploy.sh
 # ==============================================
 set -e
 
 REMOTE_USER="${DEPLOY_USER:-root}"
 REMOTE_HOST="${DEPLOY_HOST}"
-REMOTE_DIR="/opt/seaandhilllinegroup"
+REMOTE_DIR="/opt/keepline"
 COMPOSE_FILE="docker-compose.prod.yml"
 
 if [ -z "$REMOTE_HOST" ]; then
@@ -16,7 +16,7 @@ if [ -z "$REMOTE_HOST" ]; then
   exit 1
 fi
 
-echo "=== OpenClaw Mini CRM Deploy to ${REMOTE_USER}@${REMOTE_HOST} ==="
+echo "=== Keep Line Deploy to ${REMOTE_USER}@${REMOTE_HOST} ==="
 
 # Step 1: Sync files (exclude secrets + runtime)
 echo "[1/4] Syncing files..."
@@ -51,4 +51,4 @@ ssh "${REMOTE_USER}@${REMOTE_HOST}" "cd ${REMOTE_DIR} && docker compose -f ${COM
 
 echo ""
 echo "=== Deploy complete! ==="
-echo "Dashboard: https://seaandhill.satistang.com/dashboard"
+echo "Dashboard: https://keepline.satistang.com/dashboard"

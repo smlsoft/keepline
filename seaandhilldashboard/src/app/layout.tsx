@@ -18,12 +18,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OpenClaw Mini CRM — AI Chat Intelligence",
-  description: "ระบบ Mini CRM อัจฉริยะ วิเคราะห์สนทนา LINE อัตโนมัติ",
+  title: "Keep Line — AI Chat Intelligence",
+  description: "ระบบ CRM อัจฉริยะ วิเคราะห์สนทนา LINE อัตโนมัติ",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "OpenClaw CRM",
+    title: "Keep Line",
   },
 };
 

@@ -1,17 +1,17 @@
 #!/bin/bash
 # ==============================================
-# OpenClaw Mini CRM — Setup SSL Certificate (Let's Encrypt)
+# Keep Line — Setup SSL Certificate (Let's Encrypt)
 # Usage: ./scripts/setup-ssl.sh YOUR_DOMAIN
 # ==============================================
 set -e
 
-DOMAIN="${1:-seaandhill.satistang.com}"
+DOMAIN="${1:-keepline.satistang.com}"
 EMAIL="${2:-admin@satistang.com}"
 
 echo "=== Setting up SSL for ${DOMAIN} ==="
 
 # Step 1: ใช้ nginx config แบบ HTTP-only ก่อน (ยังไม่มี cert)
-cat > /opt/seaandhilllinegroup/nginx/conf.d/default.conf << 'HTTPCONF'
+cat > /opt/keepline/nginx/conf.d/default.conf << 'HTTPCONF'
 server {
     listen 80;
     server_name _;

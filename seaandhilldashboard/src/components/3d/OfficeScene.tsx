@@ -1202,7 +1202,7 @@ function OfficeLayout({ agents, ttsEnabled }: Props) {
       {/* ป้าย */}
       <Html position={[0, 3.5, -7]} center distanceFactor={15}>
         <div style={{ textAlign: "center", fontFamily: "Prompt,sans-serif" }}>
-          <div style={{ color: "#818cf8", fontWeight: 700, fontSize: 20, textShadow: "0 0 20px rgba(129,140,248,0.5)" }}>🦐 OpenClaw Office</div>
+          <div style={{ color: "#818cf8", fontWeight: 700, fontSize: 20, textShadow: "0 0 20px rgba(129,140,248,0.5)" }}>🦐 Keep Line Office</div>
           <div style={{ color: "#64748b", fontSize: 12, marginTop: 4 }}>น้องกุ้ง 13 ตัว + CEO ทำงานให้คุณ 24/7</div>
         </div>
       </Html>

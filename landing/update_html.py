@@ -1,6 +1,6 @@
 import os
 
-html_path = 'd:\\code\\seaandhilllinegroup\\landing\\index.html'
+html_path = 'd:\\code\\keepline\\landing\\index.html'
 
 with open(html_path, 'r', encoding='utf-8') as f:
     content = f.read()
@@ -18,14 +18,14 @@ if '@phosphor-icons/web' not in content:
 content = content.replace('<div class="w-9 h-9 gradient-bg rounded-xl flex items-center justify-center text-lg shadow-lg glow-sm transition-transform group-hover:scale-105">\n          💬\n        </div>', '<div class="w-9 h-9 gradient-bg rounded-xl flex items-center justify-center text-lg shadow-lg glow-sm transition-transform group-hover:scale-105">\n          <i class="ph-fill ph-chat-teardrop-dots text-white"></i>\n        </div>')
 
 # Replace Hero Image
-old_hero_img = """<img src="/og-image.jpg" alt="OpenClaw Mini CRM — รวมทุกแชทในจอเดียว AI ช่วยตอบ ช่วยขาย ช่วยจำลูกค้า"
+old_hero_img = """<img src="/og-image.jpg" alt="Keep Line — รวมทุกแชทในจอเดียว AI ช่วยตอบ ช่วยขาย ช่วยจำลูกค้า"
         class="w-full max-w-md md:max-w-lg rounded-3xl shadow-2xl glow border border-white/5"
         style="box-shadow: 0 20px 60px rgba(99,102,241,0.15), 0 0 120px rgba(6,182,212,0.08);"
         loading="lazy" />"""
 
 new_hero_img = """<div class="relative w-full max-w-[280px] sm:max-w-md md:max-w-lg mx-auto">
         <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-        <img src="images/thai-sme-hero.png" alt="OpenClaw Mini CRM สำหรับ SME"
+        <img src="images/thai-sme-hero.png" alt="Keep Line สำหรับ SME"
           class="relative w-full rounded-3xl shadow-2xl border border-white/10"
           loading="lazy" />
       </div>"""

@@ -1,4 +1,4 @@
-name: Deploy to Hetzner
+name: Deploy to DigitalOcean
 
 on:
   push:
@@ -11,14 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy to Hetzner
+      - name: Deploy to DigitalOcean
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
-            cd /opt/seaandhilllinegroup
+            cd /opt/keepline
             git pull origin main
             docker compose -f docker-compose.prod.yml build --no-cache
             docker compose -f docker-compose.prod.yml up -d

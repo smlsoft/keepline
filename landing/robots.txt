@@ -4,4 +4,4 @@ Disallow: /dashboard/api/
 Disallow: /api/
 Disallow: /webhook
 
-Sitemap: https://seaandhill.satistang.com/sitemap.xml
+Sitemap: https://keepline.satistang.com/sitemap.xml

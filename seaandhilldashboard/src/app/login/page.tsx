@@ -55,7 +55,7 @@ export default function LoginPage() {
               💬
             </div>
             <h1 className="text-2xl font-bold theme-text tracking-tight">
-              OpenClaw Mini CRM
+              Keep Line
             </h1>
             <p className="text-sm theme-text-secondary mt-1 text-center">
               น้องกุ้ง AI คุมทั้งระบบ
@@ -85,7 +85,7 @@ export default function LoginPage() {
 
         {/* Version */}
         <p className="text-center text-xs theme-text-muted mt-4">
-          OpenClaw Mini CRM v1.0
+          Keep Line v1.0
         </p>
       </div>
     </div>

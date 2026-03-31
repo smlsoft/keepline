@@ -151,7 +151,7 @@ export default function OnboardingPage() {
           <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-cyan-500 rounded-lg flex items-center justify-center text-base shadow-lg shadow-indigo-500/20">
             💬
           </div>
-          <span className="font-bold text-sm">OpenClaw Mini CRM</span>
+          <span className="font-bold text-sm">Keep Line</span>
         </div>
         <div className="flex items-center gap-2">
           {[1, 2, 3, 4, 5].map((s) => (
@@ -190,7 +190,7 @@ export default function OnboardingPage() {
               </div>
 
               <div className="theme-bg-secondary border theme-border rounded-2xl p-6 text-left space-y-4">
-                <h2 className="font-semibold theme-text">ตั้งค่า OpenClaw Mini CRM ของคุณ</h2>
+                <h2 className="font-semibold theme-text">ตั้งค่า Keep Line ของคุณ</h2>
                 <p className="text-sm theme-text-secondary leading-relaxed">
                   ระบบนี้ฟรีทั้งหมด คุณใช้ MongoDB Atlas และ AI API key ของตัวเองได้เลย
                   ทำตามขั้นตอน 4 ขั้นตอนนี้เพื่อเริ่มต้น:
@@ -253,7 +253,7 @@ export default function OnboardingPage() {
                     type="text"
                     value={mongoUri}
                     onChange={(e) => { setMongoUri(e.target.value); setMongoTest(null); }}
-                    placeholder="mongodb+srv://user:password@cluster.mongodb.net/seaandhill"
+                    placeholder="mongodb+srv://user:password@cluster.mongodb.net/keepline"
                     className="w-full px-4 py-2.5 theme-input border rounded-xl text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition font-mono"
                     autoComplete="off"
                   />

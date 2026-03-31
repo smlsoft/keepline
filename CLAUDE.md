@@ -1,4 +1,4 @@
-# OpenClaw Mini CRM — Project Rules
+# Keep Line — Project Rules
 
 ## Architecture
 ```
@@ -10,19 +10,19 @@ Agent (Docker) → AI + RAG + MCP → reply (DM only, group = เก็บข้
   ↓
 MongoDB (messages + customers + groups)
   ↓
-OpenClaw (แกนหลัก) ← cron ทุก 1 ชม. → วิเคราะห์ → เก็บ advice
+Keep Line (แกนหลัก) ← cron ทุก 1 ชม. → วิเคราะห์ → เก็บ advice
   ↓
 Dashboard (Docker) → Google Login → แสดงสนทนา + CRM + KPI + Advice + Costs
 ```
 
 ## Brand
-- **ชื่อ:** OpenClaw Mini CRM
+- **ชื่อ:** Keep Line
 - **Tagline:** AI Chat Intelligence — LINE
-- **Domain:** seaandhill.satistang.com (production)
-- **Deploy:** Hetzner VPS + Docker Compose
+- **Domain:** keepline.satistang.com (production)
+- **Deploy:** DigitalOcean VPS + Docker Compose
 
-## Core Principle — OpenClaw เป็นแกนหลัก
-- **OpenClaw** = สมองกลาง (AI Advisor) — gateway + cron + multi-channel
+## Core Principle — Keep Line เป็นแกนหลัก
+- **Keep Line** = สมองกลาง (AI Advisor) — gateway + cron + multi-channel
 - **Agent** = หูและปาก (LINE webhook + RAG + AI reply + MCP)
 - **Dashboard** = ตา (แสดงข้อมูลจาก MongoDB + Google Login)
 
@@ -30,14 +30,14 @@ Dashboard (Docker) → Google Login → แสดงสนทนา + CRM + KPI 
 | Service | Role | Port | Folder |
 |---------|------|------|--------|
 | **Nginx** | Reverse proxy + SSL | 80/443 | `nginx/` |
-| **OpenClaw** | AI Advisor (แกนหลัก) | 18789 | `openclaw/` |
+| **Keep Line** | AI Advisor (แกนหลัก) | 18789 | `openclaw/` |
 | **Agent** | LINE webhook + RAG + MCP | 3000 | `proxy/` |
 | **Dashboard** | Web UI + Auth | 3001 | `seaandhilldashboard/` |
 
 ## URLs
-- **Production:** `https://seaandhill.satistang.com/dashboard`
-- **LINE webhook:** `https://seaandhill.satistang.com/webhook`
-- **OpenClaw:** `http://localhost:18789` (internal)
+- **Production:** `https://keepline.satistang.com/dashboard`
+- **LINE webhook:** `https://keepline.satistang.com/webhook`
+- **Keep Line:** `http://localhost:18789` (internal)
 
 ## Platform — LINE Only
 - **sourceId format:** DM=`Uxxx`, Group=`Cxxx`
@@ -83,15 +83,15 @@ chat_analytics  { sourceId, sentiment, purchaseIntent }
 - `LINE_CHANNEL_ACCESS_TOKEN`, `LINE_CHANNEL_SECRET`
 - `SAMBANOVA_API_KEY`, `GROQ_API_KEY`, `CEREBRAS_API_KEY`, `OPENROUTER_API_KEY`, `GOOGLE_API_KEY`
 - `MCP_ERP_API_KEY` — bc-erp MCP auth
-- `OPENCLAW_GATEWAY_TOKEN` — OpenClaw gateway
+- `OPENCLAW_GATEWAY_TOKEN` — Keep Line gateway
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` — Google OAuth
 - `NEXTAUTH_SECRET`, `NEXTAUTH_URL` — NextAuth
 
 ## Deploy
 - **Production:** `docker compose -f docker-compose.prod.yml up -d`
 - **Dev:** `docker compose up -d --build`
-- **CI/CD:** GitHub Actions → SSH → Hetzner
-- **คู่มือ:** `docs/DEPLOY-HETZNER.md`
+- **CI/CD:** GitHub Actions → SSH → DigitalOcean
+- **คู่มือ:** `docs/DEPLOY-DIGITALOCEAN.md`
 
 ## Design Rules (บังคับทุกหน้า)
 - **ภาษาไทยเท่านั้น** — ทุก label, button, placeholder, error message, tooltip ต้องเป็นภาษาไทย ห้ามใช้ภาษาอังกฤษ (ยกเว้นชื่อเฉพาะ เช่น LINE, CRM, AI)
@@ -106,7 +106,7 @@ chat_analytics  { sourceId, sentiment, purchaseIntent }
 - ห้ามลบ folder/service โดยไม่ถามบอสก่อน
 - ห้ามเปลี่ยน deploy strategy โดยไม่แจ้ง
 - ห้ามแยก MongoDB collection ตามคน/กลุ่ม
-- ห้ามลบ OpenClaw — เป็นแกนหลักของระบบ
+- ห้ามลบ Keep Line — เป็นแกนหลักของระบบ
 - ห้าม hardcode สี Tailwind ในหน้าใหม่ — ใช้ theme-* classes
 
 ## Skills

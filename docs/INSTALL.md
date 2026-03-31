@@ -1,6 +1,6 @@
-# OpenClaw Mini CRM — คู่มือติดตั้งบน Docker Desktop
+# Keep Line — คู่มือติดตั้งบน Docker Desktop
 
-> คู่มือสำหรับติดตั้งระบบ OpenClaw Mini CRM (AI Chat Intelligence) บนเครื่องใหม่
+> คู่มือสำหรับติดตั้งระบบ Keep Line (AI Chat Intelligence) บนเครื่องใหม่
 
 ---
 
@@ -39,7 +39,7 @@
 | `OPENROUTER_API_KEY` | [setup-ai-providers.md](setup-ai-providers.md) | AI Provider (ฟรี) |
 | `GOOGLE_API_KEY` | [setup-ai-providers.md](setup-ai-providers.md) | Gemini Vision (ฟรี) |
 | `MCP_ERP_API_KEY` | ผู้ดูแลระบบ | เชื่อม ERP (ถ้าใช้) |
-| `OPENCLAW_GATEWAY_TOKEN` | สร้างเอง | Token สำหรับ OpenClaw |
+| `OPENCLAW_GATEWAY_TOKEN` | สร้างเอง | Token สำหรับ Keep Line |
 | `CLOUDFLARE_TUNNEL_TOKEN` | [setup-cloudflare-tunnel.md](setup-cloudflare-tunnel.md) | Cloudflare Tunnel |
 | `CONFIG_PASSWORD` | ตั้งเอง | รหัสเข้าหน้า Config บน Dashboard |
 
@@ -50,8 +50,8 @@
 ### Step 1 — Clone โปรเจค
 
 ```bash
-git clone https://github.com/smlsoft/openclawminicrm.git
-cd openclawminicrm
+git clone https://github.com/smlsoft/keepline.git
+cd keepline
 ```
 
 ### Step 2 — สร้างไฟล์ `.env`
@@ -79,7 +79,7 @@ CEREBRAS_API_KEY=<สมัครที่ cloud.cerebras.ai>
 OPENROUTER_API_KEY=<สมัครที่ openrouter.ai>
 GOOGLE_API_KEY=<สมัครที่ aistudio.google.com>
 
-# === OpenClaw AI Advisor ===
+# === Keep Line AI Advisor ===
 OPENCLAW_GATEWAY_TOKEN=<สร้างด้วย: node -e "console.log(require('crypto').randomBytes(24).toString('hex'))">
 
 # === MCP ERP (เชื่อม ERP — ถ้าไม่ใช้ให้เว้นว่าง) ===
@@ -112,10 +112,10 @@ docker compose ps
 
 ```
 NAME                  STATUS
-seaandhill-openclaw     Up (healthy)    <- AI Advisor (แกนหลัก)
-seaandhill-agent        Up (healthy)
-seaandhill-dashboard    Up
-seaandhill-tunnel       Up
+keepline-openclaw     Up (healthy)    <- AI Advisor (แกนหลัก)
+keepline-agent        Up (healthy)
+keepline-dashboard    Up
+keepline-tunnel       Up
 ```
 
 ### Step 5 — ทดสอบเข้าใช้งาน
@@ -123,9 +123,9 @@ seaandhill-tunnel       Up
 | ทดสอบ | URL | ผลที่ควรได้ |
 |-------|-----|------------|
 | Agent ทำงาน | http://localhost:3000/ | แสดงข้อความ OK |
-| OpenClaw | http://localhost:18789/ | Control UI |
+| Keep Line | http://localhost:18789/ | Control UI |
 | Dashboard | http://localhost:3002/dashboard | เห็นหน้า Dashboard |
-| ผ่าน Internet | https://seaandhill.satistang.com/dashboard | เข้าได้จากข้างนอก |
+| ผ่าน Internet | https://keepline.satistang.com/dashboard | เข้าได้จากข้างนอก |
 
 ---
 
@@ -135,13 +135,13 @@ seaandhill-tunnel       Up
 LINE OA
   |
   v
-Cloudflare Tunnel (seaandhill.satistang.com)
+Cloudflare Tunnel (keepline.satistang.com)
   |
   v
 +------------------ Docker Desktop --------------------+
 |                                                       |
 |  +-----------------+                                  |
-|  |  OpenClaw        |  <- AI Advisor (แกนหลัก)        |
+|  |  Keep Line       |  <- AI Advisor (แกนหลัก)        |
 |  |  Port: 18789     |  <- cron ทุก 1 ชม.             |
 |  |  - AI Gateway    |  <- cost tracking              |
 |  +--------+---------+                                 |
@@ -169,10 +169,10 @@ Cloudflare Tunnel (seaandhill.satistang.com)
 
 | Container | Folder | Port | หน้าที่ |
 |-----------|--------|------|---------|
-| seaandhill-openclaw | `openclaw/` | 18789 | **AI Advisor** — cron ทุก 1 ชม., cost tracking |
-| seaandhill-agent | `proxy/` | 3000 | LINE webhook, AI chatbot, RAG, MCP, Advisor API |
-| seaandhill-dashboard | `seaandhilldashboard/` | 3002 | Web Dashboard (แชท, CRM, KPI, Advice, Cost) |
-| seaandhill-tunnel | cloudflare image | — | เปิดให้เข้าจาก Internet |
+| keepline-openclaw | `openclaw/` | 18789 | **AI Advisor** — cron ทุก 1 ชม., cost tracking |
+| keepline-agent | `proxy/` | 3000 | LINE webhook, AI chatbot, RAG, MCP, Advisor API |
+| keepline-dashboard | `seaandhilldashboard/` | 3002 | Web Dashboard (แชท, CRM, KPI, Advice, Cost) |
+| keepline-tunnel | cloudflare image | — | เปิดให้เข้าจาก Internet |
 
 ---
 
@@ -193,7 +193,7 @@ docker compose restart openclaw
 # ดู Logs
 docker compose logs -f              # ทั้งหมด
 docker compose logs agent -f        # agent
-docker compose logs openclaw -f     # OpenClaw
+docker compose logs openclaw -f     # Keep Line
 docker compose logs dashboard -f    # dashboard
 
 # อัพเดทโค้ดใหม่
@@ -207,12 +207,12 @@ docker compose up -d --build
 
 - [ ] ติดตั้ง Docker Desktop แล้วเปิดใช้งาน
 - [ ] ติดตั้ง Git
-- [ ] `git clone https://github.com/smlsoft/openclawminicrm.git`
-- [ ] `cd openclawminicrm`
+- [ ] `git clone https://github.com/smlsoft/keepline.git`
+- [ ] `cd keepline`
 - [ ] สร้างไฟล์ `.env` พร้อมใส่ค่าทั้งหมด
 - [ ] `docker compose up -d --build`
 - [ ] `docker compose ps` → 4 containers running
-- [ ] ทดสอบ http://localhost:18789/ → OpenClaw Control UI
+- [ ] ทดสอบ http://localhost:18789/ → Keep Line Control UI
 - [ ] ทดสอบ http://localhost:3000/ → Agent OK
 - [ ] ทดสอบ http://localhost:3002/dashboard → เห็น Dashboard
 - [ ] ทดสอบส่งข้อความ LINE → บอทตอบ

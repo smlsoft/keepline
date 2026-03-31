@@ -168,7 +168,7 @@ export default function KpiPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-base font-bold">📊 แดชบอร์ด KPI</h1>
-            <p className="text-xs theme-text-secondary">OpenClaw Mini CRM &middot; อัปเดตอัตโนมัติ</p>
+            <p className="text-xs theme-text-secondary">Keep Line &middot; อัปเดตอัตโนมัติ</p>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />

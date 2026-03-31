@@ -1,5 +1,5 @@
 # ==============================================
-# OpenClaw Mini CRM Production — Hetzner VPS
+# Keep Line Production — DigitalOcean VPS
 # ใช้: docker compose -f docker-compose.prod.yml up -d
 # ==============================================
 
@@ -7,7 +7,7 @@ services:
   # === Nginx Reverse Proxy + SSL ===
   nginx:
     image: nginx:alpine
-    container_name: seaandhill-nginx
+    container_name: keepline-nginx
     restart: always
     ports:
       - "80:80"
@@ -29,17 +29,17 @@ services:
   # === SSL Certificate (Let's Encrypt) ===
   certbot:
     image: certbot/certbot:latest
-    container_name: seaandhill-certbot
+    container_name: keepline-certbot
     volumes:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
       - certbot-webroot:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done'"
 
-  # === OpenClaw — AI Advisor (แกนหลัก) ===
+  # === Keep Line — AI Advisor (แกนหลัก) ===
   openclaw:
     image: ghcr.io/openclaw/openclaw:latest
-    container_name: seaandhill-openclaw
+    container_name: keepline-openclaw
     restart: always
     volumes:
       - ./openclaw:/home/node/.openclaw
@@ -76,7 +76,7 @@ services:
     build:
       context: ./proxy
       dockerfile: Dockerfile
-    container_name: seaandhill-agent
+    container_name: keepline-agent
     restart: always
     env_file:
       - .env
@@ -99,7 +99,7 @@ services:
     build:
       context: ./seaandhilldashboard
       dockerfile: Dockerfile.prod
-    container_name: seaandhill-dashboard
+    container_name: keepline-dashboard
     restart: always
     env_file:
       - .env
@@ -123,7 +123,7 @@ services:
   # === Edge TTS — เสียงไทย Neural ฟรี ===
   edge-tts:
     image: travisvn/openai-edge-tts:latest
-    container_name: seaandhill-edge-tts
+    container_name: keepline-edge-tts
     restart: always
     environment:
       - PORT=5050
@@ -137,7 +137,7 @@ services:
   # === Watchtower — Auto-update images ===
   watchtower:
     image: containrrr/watchtower:latest
-    container_name: seaandhill-watchtower
+    container_name: keepline-watchtower
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -146,7 +146,7 @@ services:
       - WATCHTOWER_POLL_INTERVAL=86400
       - WATCHTOWER_LABEL_ENABLE=false
       - TZ=Asia/Bangkok
-    command: seaandhill-openclaw seaandhill-nginx
+    command: keepline-openclaw keepline-nginx
 
 volumes:
   certbot-etc:

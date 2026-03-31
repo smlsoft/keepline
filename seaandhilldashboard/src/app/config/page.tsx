@@ -12,7 +12,7 @@ export default function ConfigPage() {
 
   // MongoDB
   const [mongoUri, setMongoUri] = useState("");
-  const [mongoDb, setMongoDb] = useState("seaandhill");
+  const [mongoDb, setMongoDb] = useState("keepline");
   const [mongoResult, setMongoResult] = useState<TestResult | null>(null);
   const [mongoLoading, setMongoLoading] = useState(false);
 
@@ -83,7 +83,7 @@ export default function ConfigPage() {
             <div className="w-16 h-16 theme-bg-card rounded-2xl flex items-center justify-center text-3xl mx-auto mb-3">
               🔒
             </div>
-            <h1 className="text-xl font-bold theme-text">OpenClaw Mini CRM Config</h1>
+            <h1 className="text-xl font-bold theme-text">Keep Line Config</h1>
             <p className="text-sm theme-text-secondary mt-1">กรอกรหัสผ่านเพื่อเข้าถึง</p>
           </div>
           <div className="space-y-4">
@@ -151,7 +151,7 @@ export default function ConfigPage() {
                 type="text"
                 value={mongoDb}
                 onChange={(e) => setMongoDb(e.target.value)}
-                placeholder="seaandhill"
+                placeholder="keepline"
                 className="w-full px-4 py-2.5 theme-input border theme-border rounded-xl text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition font-mono"
               />
             </div>

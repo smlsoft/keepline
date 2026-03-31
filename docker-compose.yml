@@ -1,8 +1,8 @@
 services:
-  # === OpenClaw — AI Advisor (แกนหลัก) ===
+  # === Keep Line — AI Advisor (แกนหลัก) ===
   openclaw:
     image: ghcr.io/openclaw/openclaw:latest
-    container_name: seaandhill-openclaw
+    container_name: keepline-openclaw
     restart: unless-stopped
     ports:
       - "18789:18789"
@@ -35,7 +35,7 @@ services:
   # === AI Agent (LINE + RAG + MCP + Analytics) ===
   agent:
     build: ./proxy
-    container_name: seaandhill-agent
+    container_name: keepline-agent
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -54,7 +54,7 @@ services:
   # === Dashboard (Next.js) ===
   dashboard:
     build: ./seaandhilldashboard
-    container_name: seaandhill-dashboard
+    container_name: keepline-dashboard
     restart: unless-stopped
     ports:
       - "3002:3001"
@@ -69,7 +69,7 @@ services:
   # === Cloudflare Named Tunnel (URL คงที่) ===
   tunnel:
     image: cloudflare/cloudflared:latest
-    container_name: seaandhill-tunnel
+    container_name: keepline-tunnel
     restart: unless-stopped
     command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
     depends_on:

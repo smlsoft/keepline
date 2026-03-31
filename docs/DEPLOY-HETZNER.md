@@ -1,4 +1,4 @@
-# Deploy OpenClaw Mini CRM บน Hetzner VPS (เลิกใช้แล้ว)
+# Deploy Keep Line บน Hetzner VPS (เลิกใช้แล้ว)
 
 > **หมายเหตุ:** ย้ายไป **DigitalOcean + Caddy** แล้ว ตั้งแต่ 2026-03-26
 > ดูคู่มือใหม่ที่ [DEPLOY-DIGITALOCEAN.md](DEPLOY-DIGITALOCEAN.md)
@@ -7,7 +7,7 @@
 
 ---
 
-# (Legacy) Deploy OpenClaw Mini CRM บน Hetzner VPS
+# (Legacy) Deploy Keep Line บน Hetzner VPS
 
 ## สเปค VPS แนะนำ
 
@@ -46,8 +46,8 @@ script จะติดตั้ง: Docker, Firewall (80/443/SSH), Auto-update
 ```bash
 ssh root@YOUR_IP
 cd /opt
-git clone https://github.com/smlsoft/openclawminicrm.git
-cd openclawminicrm
+git clone https://github.com/smlsoft/keepline.git
+cd keepline
 ```
 
 ### 4. สร้าง .env บน server
@@ -64,7 +64,7 @@ nano .env
 # ชี้ domain ไปที่ IP ของ Hetzner ก่อน (DNS A record)
 # แล้วรัน:
 chmod +x scripts/setup-ssl.sh
-./scripts/setup-ssl.sh seaandhill.satistang.com admin@satistang.com
+./scripts/setup-ssl.sh keepline.satistang.com admin@satistang.com
 ```
 
 ### 6. Deploy
@@ -83,15 +83,15 @@ docker compose -f docker-compose.prod.yml ps
 
 ```
 NAME                  STATUS
-seaandhill-nginx        Up (healthy)
-seaandhill-agent        Up (healthy)
-seaandhill-dashboard    Up (healthy)
-seaandhill-openclaw     Up (healthy)
-seaandhill-certbot      Up
-seaandhill-watchtower   Up
+keepline-nginx        Up (healthy)
+keepline-agent        Up (healthy)
+keepline-dashboard    Up (healthy)
+keepline-openclaw     Up (healthy)
+keepline-certbot      Up
+keepline-watchtower   Up
 ```
 
-ทดสอบ: https://seaandhill.satistang.com/dashboard
+ทดสอบ: https://keepline.satistang.com/dashboard
 
 ---
 
@@ -118,7 +118,7 @@ push to main → GitHub Actions → SSH to Hetzner → git pull → rebuild → 
 ## คำสั่งที่ใช้บ่อย (บน server)
 
 ```bash
-cd /opt/seaandhilllinegroup
+cd /opt/keepline
 
 # ดูสถานะ
 docker compose -f docker-compose.prod.yml ps
@@ -148,7 +148,7 @@ docker stats --no-stream
 
 ที่ Cloudflare DNS:
 1. ลบ Tunnel route เดิม
-2. เพิ่ม A record: `seaandhill` → IP ของ Hetzner
+2. เพิ่ม A record: `keepline` → IP ของ Hetzner
 3. **ปิด Proxy (ไม่ต้อง orange cloud)** → DNS only (grey cloud)
 
 หรือถ้าจะใช้ Cloudflare Proxy ด้วย:
@@ -188,5 +188,5 @@ docker compose -f docker-compose.prod.yml logs --since 1h agent
 ### ตรวจ SSL cert
 
 ```bash
-echo | openssl s_client -connect seaandhill.satistang.com:443 2>/dev/null | openssl x509 -noout -dates
+echo | openssl s_client -connect keepline.satistang.com:443 2>/dev/null | openssl x509 -noout -dates
 ```

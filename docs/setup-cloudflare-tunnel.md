@@ -27,7 +27,7 @@
 2. ไปที่ **Networks** → **Tunnels**
 3. กด **Create a tunnel**
 4. เลือก **Cloudflared** → กด **Next**
-5. ตั้งชื่อ Tunnel เช่น `seaandhill` → กด **Save tunnel**
+5. ตั้งชื่อ Tunnel เช่น `keepline` → กด **Save tunnel**
 
 ## Step 4 — Copy Tunnel Token
 
@@ -41,13 +41,13 @@
 
 1. กดแท็บ **Public Hostname** → กด **Add a public hostname**
 2. กรอก:
-   - **Subdomain:** `seaandhill` (หรือชื่อที่ต้องการ)
+   - **Subdomain:** `keepline` (หรือชื่อที่ต้องการ)
    - **Domain:** เลือกโดเมนที่เพิ่มไว้
    - **Type:** `HTTP`
    - **URL:** `agent:3000`
 3. กด **Save hostname**
 
-> ผลลัพธ์: `https://seaandhill.satistang.com` → จะ forward ไปที่ agent container port 3000
+> ผลลัพธ์: `https://keepline.satistang.com` → จะ forward ไปที่ agent container port 3000
 
 ## Step 6 — เพิ่ม Dashboard route (ถ้าต้องการ)
 
@@ -68,8 +68,8 @@ CLOUDFLARE_TUNNEL_TOKEN=eyJhIjoixxxxxxxxx...
 
 1. ดู logs: `docker compose logs tunnel -f`
 2. ต้องเห็น `Connection registered` หรือ `Registered tunnel connection`
-3. เข้า `https://seaandhill.satistang.com/` → ต้องตอบ OK
-4. เข้า `https://seaandhill.satistang.com/dashboard` → ต้องเห็น Dashboard
+3. เข้า `https://keepline.satistang.com/` → ต้องตอบ OK
+4. เข้า `https://keepline.satistang.com/dashboard` → ต้องเห็น Dashboard
 
 ## แก้ปัญหา
 

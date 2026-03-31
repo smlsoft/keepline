@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     await client.db("admin").command({ ping: 1 });
 
     // ดึงชื่อ DB จาก URI
-    let dbName = "seaandhill";
+    let dbName = "keepline";
     try {
       const url = new URL(uri);
       const pathDb = url.pathname.replace("/", "").trim();

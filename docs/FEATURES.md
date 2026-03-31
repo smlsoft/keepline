@@ -1,17 +1,17 @@
-# OpenClaw Mini CRM — AI Chat Intelligence
+# Keep Line — AI Chat Intelligence
 
 ### ระบบ Mini CRM อัจฉริยะ ฟรี 100% สำหรับธุรกิจไทย
 ### ฟังทุกแชท วิเคราะห์ทุกข้อความ แนะนำทุกโอกาส — อัตโนมัติ
 
 ---
 
-## ทำไมต้อง OpenClaw Mini CRM?
+## ทำไมต้อง Keep Line?
 
 > ลูกค้าทักมาทาง LINE, Facebook, Instagram พร้อมกัน
 > พนักงานตอบช้า ลูกค้าหลุด เจ้าของไม่รู้ตัว
 > ข้อมูลกระจาย ไม่มีระบบ ไม่รู้ว่าใครสนใจซื้อ ใครกำลังจะหนี
 
-**OpenClaw Mini CRM แก้ทุกปัญหานี้ — ฟรี ไม่มีค่าใช้จ่าย**
+**Keep Line แก้ทุกปัญหานี้ — ฟรี ไม่มีค่าใช้จ่าย**
 
 ---
 
@@ -142,7 +142,7 @@ AI เรียกใช้อัตโนมัติเมื่อลูก�
 
 | รายการ | ราคา |
 |--------|------|
-| OpenClaw Mini CRM | **ฟรี** |
+| Keep Line | **ฟรี** |
 | MongoDB Atlas (ฐานข้อมูล) | **ฟรี** (M0 512MB) |
 | AI (OpenRouter free models) | **ฟรี** |
 | LINE OA | **ฟรี** (200 msg/เดือน) |
@@ -158,7 +158,7 @@ AI เรียกใช้อัตโนมัติเมื่อลูก�
 ## เริ่มใช้งาน — 5 นาที
 
 ```
-1. เปิด seaandhill.satistang.com
+1. เปิด keepline.satistang.com
 2. Login ด้วย Google
 3. ทำตาม setup wizard (ใส่ MongoDB URI + AI key)
 4. เชื่อม LINE OA / Facebook / Instagram
@@ -169,7 +169,7 @@ AI เรียกใช้อัตโนมัติเมื่อลูก�
 
 ## เปรียบเทียบกับ CRM อื่นในไทย
 
-| | OpenClaw Mini CRM | R-CRM | Oho Chat | Zoho CRM |
+| | Keep Line | R-CRM | Oho Chat | Zoho CRM |
 |---|---|---|---|---|
 | **ราคา** | **ฟรี** | ฿1,590/เดือน | ฿990/เดือน | ฿500/เดือน |
 | **LINE** | รองรับ | รองรับ | รองรับ | ไม่รองรับ |
@@ -187,20 +187,20 @@ AI เรียกใช้อัตโนมัติเมื่อลูก�
 
 | ส่วน | เทคโนโลยี |
 |------|-----------|
-| AI Advisor | OpenClaw + OpenRouter (Qwen3-235B) |
+| AI Advisor | Keep Line + OpenRouter (Qwen3-235B) |
 | Agent | Node.js + Express |
 | Dashboard | Next.js + Tailwind CSS |
 | Database | MongoDB Atlas (คุณเป็นเจ้าของ) |
-| Deploy | Docker + Hetzner VPS |
+| Deploy | Docker + DigitalOcean VPS |
 | AI | OpenRouter / SambaNova / Groq / Cerebras / Gemini |
 
 ---
 
 ## ติดต่อ
 
-- Web: [seaandhill.satistang.com](https://seaandhill.satistang.com)
-- GitHub: [github.com/smlsoft/openclawminicrm](https://github.com/smlsoft/openclawminicrm)
+- Web: [keepline.satistang.com](https://keepline.satistang.com)
+- GitHub: [github.com/smlsoft/keepline](https://github.com/smlsoft/keepline)
 
 ---
 
-**OpenClaw Mini CRM — ฟรี ไม่จำกัด ข้อมูลเป็นของคุณ**
+**Keep Line — ฟรี ไม่จำกัด ข้อมูลเป็นของคุณ**

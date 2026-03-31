@@ -1,6 +1,6 @@
 # Docker Desktop — วิธีติดตั้งและตั้งค่า
 
-> ใช้รัน OpenClaw Mini CRM ทั้งระบบบนเครื่อง
+> ใช้รัน Keep Line ทั้งระบบบนเครื่อง
 
 ---
 
@@ -55,7 +55,7 @@ docker compose version
 | Memory | 4 GB | 2 GB |
 | Disk | 20 GB | 10 GB |
 
-> OpenClaw Mini CRM ใช้ RAM ประมาณ 1-2 GB (agent + dashboard + tunnel)
+> Keep Line ใช้ RAM ประมาณ 1-2 GB (agent + dashboard + tunnel)
 
 ## Step 4 — เปิด Docker Desktop
 
@@ -65,7 +65,7 @@ docker compose version
 
 ---
 
-## ทดสอบ Docker ก่อนรัน OpenClaw Mini CRM
+## ทดสอบ Docker ก่อนรัน Keep Line
 
 ```bash
 # ทดสอบว่า Docker ทำงานได้

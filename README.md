@@ -1,6 +1,6 @@
 <div align="center">
 
-# OpenClaw Mini CRM
+# Keep Line
 
 ### น้องกุ้ง 13 ตัว + CEO รวม 14 ตัว --- Multi AI Agent คุมทั้งระบบ 24/7
 
@@ -15,13 +15,13 @@
 [![Facebook](https://img.shields.io/badge/Facebook-Graph_API-1877F2?logo=facebook&logoColor=white)](#multi-platform)
 [![Instagram](https://img.shields.io/badge/Instagram-Graph_API-E4405F?logo=instagram&logoColor=white)](#multi-platform)
 
-[Demo](https://seaandhill.satistang.com/dashboard) · [คู่มือ](https://seaandhill.satistang.com/dashboard/guide) · [ห้องน้องกุ้ง 3D](https://seaandhill.satistang.com/dashboard/kung-room) · [แจ้งปัญหา](https://github.com/smlsoft/openclawminicrm/issues)
+[Demo](https://keepline.satistang.com/dashboard) · [คู่มือ](https://keepline.satistang.com/dashboard/guide) · [ห้องน้องกุ้ง 3D](https://keepline.satistang.com/dashboard/kung-room) · [แจ้งปัญหา](https://github.com/smlsoft/keepline/issues)
 
 </div>
 
 ---
 
-> **English:** OpenClaw Mini CRM is a free, open-source AI-powered CRM for Thai SMEs. It unifies LINE, Facebook, and Instagram in a single dashboard with 30+ screens, 65+ APIs, and 14 autonomous AI agents ("น้องกุ้ง" — shrimps) including a CEO that patrols the 3D virtual office. Features include real-time activity log, AI chat analysis, RAG knowledge base, customer memory, churn prediction, payment slip detection, document classification, auto-discover free AI models, cost tracking in Thai Baht, and more. Self-hosted on Docker Compose + Caddy + DigitalOcean. Zero monthly AI cost.
+> **English:** Keep Line is a free, open-source AI-powered CRM for Thai SMEs. It unifies LINE, Facebook, and Instagram in a single dashboard with 30+ screens, 65+ APIs, and 14 autonomous AI agents ("น้องกุ้ง" — shrimps) including a CEO that patrols the 3D virtual office. Features include real-time activity log, AI chat analysis, RAG knowledge base, customer memory, churn prediction, payment slip detection, document classification, auto-discover free AI models, cost tracking in Thai Baht, and more. Self-hosted on Docker Compose + Caddy + DigitalOcean. Zero monthly AI cost.
 
 ---
 
@@ -202,7 +202,7 @@ Agent (Docker) ---> AI + RAG + MCP ---> reply
   |
 MongoDB (Docker, local)    images ---> Cloudflare R2 CDN
   |
-OpenClaw (cron ทุก 1 ชม.) ---> วิเคราะห์ ---> เก็บ advice
+Keep Line (cron ทุก 1 ชม.) ---> วิเคราะห์ ---> เก็บ advice
   |
 Dashboard (Next.js) ---> Google Login ---> 30+ หน้าจอ + ห้องกุ้ง 3D
   |
@@ -218,7 +218,7 @@ Qdrant Cloud (Knowledge Base vector search)
 | 3D Office | Three.js + React Three Fiber + @react-three/drei |
 | Database | MongoDB 7 (Docker, local) --- เก็บทุกอย่าง |
 | Vector Search | Qdrant Cloud + Gemini Embedding (768 dims) |
-| AI Advisor | OpenClaw + OpenRouter (auto-discover free models) |
+| AI Advisor | Keep Line + OpenRouter (auto-discover free models) |
 | Auth | Google OAuth (NextAuth) --> redirect kung-room |
 | Deploy | Docker Compose + Caddy + DigitalOcean VPS (Singapore) |
 | Reverse Proxy | Caddy (Auto HTTPS) |
@@ -231,7 +231,7 @@ Qdrant Cloud (Knowledge Base vector search)
 |---------|------|------|--------|
 | Caddy | Auto HTTPS + reverse proxy | 80/443 | `Caddyfile` |
 | MongoDB | Database (local Docker) | 27017 | volume |
-| OpenClaw | AI Advisor (แกนหลัก) | 18789 | `openclaw/` |
+| Keep Line | AI Advisor (แกนหลัก) | 18789 | `openclaw/` |
 | Agent | LINE/FB/IG + RAG + MCP | 3000 | `proxy/` |
 | Dashboard | Web UI + Auth + 3D Office | 3001 | `seaandhilldashboard/` |
 
@@ -241,8 +241,8 @@ Qdrant Cloud (Knowledge Base vector search)
 
 ```bash
 # 1. Clone
-git clone https://github.com/smlsoft/openclawminicrm.git
-cd openclawminicrm
+git clone https://github.com/smlsoft/keepline.git
+cd keepline
 
 # 2. Setup environment
 cp .env.example .env
@@ -262,7 +262,7 @@ docker compose up -d --build
 ```bash
 # Production (บน server)
 ssh root@YOUR_IP
-cd /opt/openclawminicrm
+cd /opt/keepline
 docker compose -f docker-compose.caddy.yml up -d --build
 ```
 
@@ -272,7 +272,7 @@ docker compose -f docker-compose.caddy.yml up -d --build
 
 | รายการ | ราคา |
 |--------|------|
-| OpenClaw Mini CRM | **ฟรี** |
+| Keep Line | **ฟรี** |
 | AI (OpenRouter auto-discover + SambaNova + Gemini) | **ฟรี** |
 | AI เสียเงิน (Groq + Cerebras) | **optional** --- ปิดโดย default |
 | MongoDB (Docker, local) | **ฟรี** (ไม่จำกัด) |
@@ -317,11 +317,11 @@ docker compose -f docker-compose.caddy.yml up -d --build
 
 <div align="center">
 
-**OpenClaw Mini CRM**
+**Keep Line**
 
 น้องกุ้ง 14 ตัว (13 + CEO) ทำงานให้คุณ 24/7 --- ฟรี 100% --- ข้อมูลเป็นของคุณ
 
-[seaandhill.satistang.com](https://seaandhill.satistang.com) · [GitHub](https://github.com/smlsoft/openclawminicrm)
+[keepline.satistang.com](https://keepline.satistang.com) · [GitHub](https://github.com/smlsoft/keepline)
 
 Made with love for Thai SMEs
 

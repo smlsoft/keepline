@@ -1,11 +1,11 @@
 #!/bin/bash
 # ==============================================
-# OpenClaw Mini CRM — Setup Hetzner VPS (รันครั้งแรกครั้งเดียว)
+# Keep Line — Setup DigitalOcean VPS (รันครั้งแรกครั้งเดียว)
 # Usage: ssh root@YOUR_IP 'bash -s' < scripts/setup-server.sh
 # ==============================================
 set -e
 
-echo "=== OpenClaw Mini CRM Server Setup ==="
+echo "=== Keep Line Server Setup ==="
 
 # 1. Update system
 echo "[1/6] Updating system..."
@@ -21,7 +21,7 @@ apt-get install -y docker-compose-plugin
 
 # 4. Create project directory
 echo "[4/6] Creating project directory..."
-mkdir -p /opt/seaandhilllinegroup
+mkdir -p /opt/keepline
 
 # 5. Setup firewall
 echo "[5/6] Configuring firewall..."
@@ -42,6 +42,6 @@ echo ""
 echo "=== Server setup complete! ==="
 echo ""
 echo "Next steps:"
-echo "  1. Copy .env to server: scp .env root@SERVER_IP:/opt/seaandhilllinegroup/"
+echo "  1. Copy .env to server: scp .env root@SERVER_IP:/opt/keepline/"
 echo "  2. Deploy: DEPLOY_HOST=SERVER_IP ./scripts/deploy.sh"
-echo "  3. Setup SSL: ssh root@SERVER_IP 'cd /opt/seaandhilllinegroup && ./scripts/setup-ssl.sh'"
+echo "  3. Setup SSL: ssh root@SERVER_IP 'cd /opt/keepline && ./scripts/setup-ssl.sh'"

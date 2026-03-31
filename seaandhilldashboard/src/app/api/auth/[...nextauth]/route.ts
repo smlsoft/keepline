@@ -10,8 +10,8 @@ let authDb: Db | null = null;
 
 async function getAuthDB(): Promise<Db> {
   if (authDb) return authDb;
-  const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/seaandhill";
-  const dbName = process.env.MONGODB_DB || "seaandhill";
+  const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/keepline";
+  const dbName = process.env.MONGODB_DB || "keepline";
   authClient = new MongoClient(uri);
   await authClient.connect();
   authDb = authClient.db(dbName);

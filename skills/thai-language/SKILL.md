@@ -1,4 +1,4 @@
-# OpenClaw Mini CRM — Thai Language Skill
+# Keep Line — Thai Language Skill
 
 ## หลักการ: ภาษาไทยที่เข้าใจง่าย
 
@@ -142,7 +142,7 @@
 - **Facebook** (ไม่ใช่ "เฟซบุ๊ก")
 - **Instagram** (ไม่ใช่ "อินสตาแกรม")
 - **Telegram**
-- **OpenClaw**
+- **Keep Line**
 - **น้องกุ้ง** (ชื่อ AI — ใช้ภาษาไทยเสมอ)
 - **MongoDB**, **Docker**, **Next.js** (ศัพท์ dev — ใช้เฉพาะหน้า dev)
 

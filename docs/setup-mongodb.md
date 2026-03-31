@@ -1,6 +1,6 @@
 # MongoDB Atlas — วิธีสมัครและตั้งค่า
 
-> ฐานข้อมูลหลักของ OpenClaw Mini CRM (ฟรี M0 Tier)
+> ฐานข้อมูลหลักของ Keep Line (ฟรี M0 Tier)
 
 ---
 
@@ -22,7 +22,7 @@
 
 1. ระบบจะถาม **How would you like to authenticate?**
 2. เลือก **Username and Password**
-3. ตั้ง Username เช่น `seaandhill_user`
+3. ตั้ง Username เช่น `keepline_user`
 4. ตั้ง Password (กด Autogenerate ได้) → **จดไว้!**
 5. กด **Create Database User**
 
@@ -40,7 +40,7 @@
 
 1. ไปที่ **Database** → กดชื่อ Cluster → **Browse Collections**
 2. กด **Add My Own Data**
-3. Database name: `seaandhill`
+3. Database name: `keepline`
 4. Collection name: `messages`
 5. กด **Create**
 
@@ -56,13 +56,13 @@
 5. แก้ `<password>` → password ที่ตั้งไว้
 6. เพิ่มชื่อ database หลัง `.net/`:
    ```
-   mongodb+srv://seaandhill_user:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/seaandhill?appName=Cluster0
+   mongodb+srv://keepline_user:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/keepline?appName=Cluster0
    ```
 
 ## ใส่ค่าใน `.env`
 
 ```env
-MONGODB_URI=mongodb+srv://seaandhill_user:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/seaandhill?appName=Cluster0
+MONGODB_URI=mongodb+srv://keepline_user:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/keepline?appName=Cluster0
 ```
 
 ---

@@ -1,4 +1,4 @@
-# Deploy OpenClaw Mini CRM บน DigitalOcean
+# Deploy Keep Line บน DigitalOcean
 
 > ย้ายจาก Hetzner + Nginx มาใช้ **DigitalOcean + Caddy** ตั้งแต่ 2026-03-26
 > Caddy จัดการ SSL อัตโนมัติ ไม่ต้องตั้ง Certbot
@@ -45,8 +45,8 @@ ufw --force enable
 
 ```bash
 cd /opt
-git clone https://github.com/smlsoft/openclawminicrm.git
-cd openclawminicrm
+git clone https://github.com/smlsoft/keepline.git
+cd keepline
 ```
 
 ### 4. สร้าง .env
@@ -60,7 +60,7 @@ nano .env
 ### 5. DNS --- ชี้ domain
 
 ที่ Cloudflare DNS (หรือ registrar อื่น):
-- เพิ่ม A record: `seaandhill.satistang.com` --> IP ของ DigitalOcean
+- เพิ่ม A record: `keepline.satistang.com` --> IP ของ DigitalOcean
 - **DNS only (grey cloud)** --- ให้ Caddy จัดการ SSL เอง
 
 ### 6. Deploy
@@ -78,19 +78,19 @@ docker compose -f docker-compose.caddy.yml ps
 ต้องเห็น containers:
 
 ```
-seaandhill-caddy        Up
-seaandhill-agent        Up
-seaandhill-dashboard    Up
-seaandhill-openclaw     Up
-seaandhill-mongodb      Up
+keepline-caddy        Up
+keepline-agent        Up
+keepline-dashboard    Up
+keepline-openclaw     Up
+keepline-mongodb      Up
 ```
 
-ทดสอบ: https://seaandhill.satistang.com/dashboard
+ทดสอบ: https://keepline.satistang.com/dashboard
 
 ### 8. Seed ข้อมูลตัวอย่าง
 
 ```bash
-curl -s -X POST "https://seaandhill.satistang.com/dashboard/api/seed"
+curl -s -X POST "https://keepline.satistang.com/dashboard/api/seed"
 ```
 
 ---
@@ -98,7 +98,7 @@ curl -s -X POST "https://seaandhill.satistang.com/dashboard/api/seed"
 ## คำสั่งที่ใช้บ่อย (บน server)
 
 ```bash
-cd /opt/openclawminicrm
+cd /opt/keepline
 
 # ดูสถานะ
 docker compose -f docker-compose.caddy.yml ps
@@ -152,7 +152,7 @@ MongoDB อยู่บน server เดียวกัน (Docker volume):
 
 ```bash
 # Backup ทุกวัน (ใส่ใน crontab)
-0 3 * * * docker exec seaandhill-mongodb mongodump --out=/data/backup/$(date +\%Y\%m\%d)
+0 3 * * * docker exec keepline-mongodb mongodump --out=/data/backup/$(date +\%Y\%m\%d)
 ```
 
 ---

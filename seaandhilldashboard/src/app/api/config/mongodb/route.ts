@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "กรุณากรอก MongoDB URI" }, { status: 400 });
   }
 
-  const testDb = dbName || "seaandhill";
+  const testDb = dbName || "keepline";
   let client: MongoClient | null = null;
 
   try {

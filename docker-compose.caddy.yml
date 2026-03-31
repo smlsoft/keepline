@@ -1,12 +1,12 @@
 # ==============================================
-# Sea and Hill LINE Group — Caddy mode (shared with openclawminicrm)
+# Keep Line — Caddy mode
 # ใช้: docker compose -f docker-compose.caddy.yml up -d --build
 # ==============================================
 
 services:
   openclaw:
     image: ghcr.io/openclaw/openclaw:latest
-    container_name: seaandhill-openclaw
+    container_name: keepline-openclaw
     restart: always
     volumes: ["./openclaw:/home/node/.openclaw"]
     env_file: [.env]
@@ -18,7 +18,7 @@ services:
 
   agent:
     build: {context: ./proxy, dockerfile: Dockerfile}
-    container_name: seaandhill-agent
+    container_name: keepline-agent
     restart: always
     env_file: [.env]
     environment: ["PORT=3000", "NODE_ENV=production"]
@@ -29,7 +29,7 @@ services:
     build:
       context: ./seaandhilldashboard
       dockerfile: Dockerfile.prod
-    container_name: seaandhill-dashboard
+    container_name: keepline-dashboard
     restart: always
     env_file: [.env]
     environment: ["PORT=3001", "NODE_ENV=production", "AGENT_URL=http://agent:3000", "HOSTNAME=0.0.0.0"]
@@ -39,7 +39,7 @@ services:
 
   edge-tts:
     image: travisvn/openai-edge-tts:latest
-    container_name: seaandhill-edge-tts
+    container_name: keepline-edge-tts
     restart: always
     environment: ["PORT=5050", "REQUIRE_API_KEY=false"]
     deploy: {resources: {limits: {memory: 128M, cpus: "0.25"}}}
@@ -47,4 +47,4 @@ services:
 networks:
   caddy_net:
     external: true
-    name: openclawminicrm_default
+    name: keepline_default

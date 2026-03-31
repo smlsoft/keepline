@@ -1,4 +1,4 @@
-# OpenClaw Mini CRM — Theming Skill
+# Keep Line — Theming Skill
 
 ## Color System (CSS Variables)
 

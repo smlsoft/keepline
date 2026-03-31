@@ -2,7 +2,7 @@
 # Seed extra demo data to production via existing API endpoints
 # Uses cookies from /tmp/crm-cookies.txt (login first)
 
-BASE="https://seaandhill.satistang.com/dashboard/api"
+BASE="https://keepline.satistang.com/dashboard/api"
 COOKIES="/tmp/crm-cookies.txt"
 
 post() {

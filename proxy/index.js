@@ -1,5 +1,5 @@
 /**
- * OpenClaw Mini CRM — AI Agent
+ * Keep Line — AI Agent
  * LINE webhook → เก็บ MongoDB → RAG → AI → ตอบ
  * All-in-One: LINE + RAG + AI Agent + MCP + Analytics
  */
@@ -332,7 +332,7 @@ async function getDB() {
   try {
     const client = new MongoClient(uri, { serverSelectionTimeoutMS: 3000 });
     await client.connect();
-    db = client.db(process.env.MONGODB_DB || "seaandhill");
+    db = client.db(process.env.MONGODB_DB || "keepline");
     console.log("[DB] MongoDB connected");
     return db;
   } catch (e) {
@@ -3084,7 +3084,7 @@ app.post("/advice/generate", async (req, res) => {
   res.json(latest);
 });
 
-// === Advisor API — ให้ OpenClaw เรียกดึงข้อมูล ===
+// === Advisor API — ให้ Keep Line เรียกดึงข้อมูล ===
 // (path ยังเป็น /api/advisor/* เพื่อ backward compatibility)
 
 // ดึง sources ที่มีข้อความใหม่หลัง since
@@ -3184,7 +3184,7 @@ app.get("/api/advisor/source-detail/:sourceId", async (req, res) => {
   }
 });
 
-// บันทึกคำแนะนำจาก OpenClaw Advisor
+// บันทึกคำแนะนำจาก Keep Line Advisor
 app.post("/api/advisor/advice", express.json(), async (req, res) => {
   const database = await getDB();
   if (!database) return res.status(500).json({ error: "DB not ready" });
@@ -3248,7 +3248,7 @@ app.get("/api/advisor/advice-by-type", async (req, res) => {
   }
 });
 
-// ส่ง Telegram alert สำหรับ critical findings จาก OpenClaw
+// ส่ง Telegram alert สำหรับ critical findings จาก Keep Line
 app.post("/api/advisor/telegram-alert", express.json(), async (req, res) => {
   const database = await getDB();
   if (!database) return res.status(500).json({ error: "DB not ready" });
@@ -3291,7 +3291,7 @@ app.post("/api/advisor/telegram-alert", express.json(), async (req, res) => {
   }
 });
 
-// อัพเดต lastPulledAt ของ sources ที่ OpenClaw ดึงไปแล้ว
+// อัพเดต lastPulledAt ของ sources ที่ Keep Line ดึงไปแล้ว
 app.post("/api/advisor/update-pulled", express.json(), async (req, res) => {
   const database = await getDB();
   if (!database) return res.status(500).json({ error: "DB not ready" });
@@ -3328,7 +3328,7 @@ app.post("/api/staff/clear-cache", (req, res) => {
 
 // === Cost Tracking API ===
 
-// รับ cost จาก OpenClaw/external
+// รับ cost จาก Keep Line/external
 app.post("/api/advisor/cost", express.json(), async (req, res) => {
   const database = await getDB();
   if (!database) return res.status(500).json({ error: "DB not ready" });
@@ -3997,7 +3997,7 @@ app.post("/api/inbox/upload", uploadLimiter, upload.single("image"), (req, res) 
     return res.status(400).json({ error: "ไฟล์ไม่ใช่รูปภาพที่รองรับ (JPEG/PNG/GIF/WebP)" });
   }
   // สร้าง public URL (ผ่าน nginx/proxy)
-  const baseUrl = process.env.BASE_URL || `https://seaandhill.satistang.com`;
+  const baseUrl = process.env.BASE_URL || `https://keepline.satistang.com`;
   const imageUrl = `${baseUrl}/uploads/${req.file.filename}`;
   auditLog("upload_image", { filename: req.file.filename }).catch(() => {});
   res.json({ ok: true, imageUrl, filename: req.file.filename });
@@ -4924,7 +4924,7 @@ app.post("/webhook/telegram", express.json(), async (req, res) => {
   }
 
   if (text === "/start") {
-    await sendTelegram(chatId, "🦐 น้องกุ้งค่ะ! กรุณาเชื่อมต่อบัญชีผ่าน OpenClaw Mini CRM Dashboard ก่อนนะคะ\n\nไปที่: ตั้งค่า → เชื่อมต่อ → Telegram");
+    await sendTelegram(chatId, "🦐 น้องกุ้งค่ะ! กรุณาเชื่อมต่อบัญชีผ่าน Keep Line Dashboard ก่อนนะคะ\n\nไปที่: ตั้งค่า → เชื่อมต่อ → Telegram");
     return;
   }
 
@@ -4984,7 +4984,7 @@ async function handleTelegramQuery(chatId, question, account) {
     const mongoUri = account.mongodbUri || process.env.MONGODB_URI;
     const client = new MongoClient(mongoUri, { serverSelectionTimeoutMS: 5000 });
     await client.connect();
-    userDb = client.db(process.env.MONGODB_DB || "seaandhill");
+    userDb = client.db(process.env.MONGODB_DB || "keepline");
   } catch (e) {
     await sendTelegram(chatId, "❌ เชื่อมต่อฐานข้อมูลไม่ได้ กรุณาตรวจสอบ MongoDB URI ใน Dashboard");
     return;
@@ -5060,7 +5060,7 @@ app.get("/setup-telegram-webhook", async (req, res) => {
   if (!TELEGRAM_BOT_TOKEN) {
     return res.status(400).json({ error: "TELEGRAM_BOT_TOKEN not set" });
   }
-  const webhookUrl = `https://seaandhill.satistang.com/webhook/telegram`;
+  const webhookUrl = `https://keepline.satistang.com/webhook/telegram`;
   try {
     const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook`, {
       method: "POST",
@@ -5157,7 +5157,7 @@ app.get("/api/ab-results", async (req, res) => {
 
 // Health check
 app.get("/", (req, res) => {
-  res.json({ status: "ok", service: "OpenClaw Mini CRM AI Agent" });
+  res.json({ status: "ok", service: "Keep Line AI Agent" });
 });
 
 // === Start ===

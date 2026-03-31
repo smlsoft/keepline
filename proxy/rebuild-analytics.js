@@ -3,7 +3,7 @@ const { MongoClient } = require("mongodb");
 async function rebuild() {
   const client = new MongoClient(process.env.MONGODB_URI);
   await client.connect();
-  const db = client.db("seaandhill");
+  const db = client.db("keepline");
 
   const sourceIds = await db.collection("messages").distinct("sourceId");
   console.log("Groups:", sourceIds.length);

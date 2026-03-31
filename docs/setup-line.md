@@ -1,6 +1,6 @@
 # LINE Messaging API — วิธีสมัครและตั้งค่า
 
-> เชื่อมต่อ LINE OA กับ OpenClaw Mini CRM เพื่อรับ-ส่งข้อความ
+> เชื่อมต่อ LINE OA กับ Keep Line เพื่อรับ-ส่งข้อความ
 
 ---
 
@@ -15,7 +15,7 @@
 
 1. เข้า https://developers.line.biz/console/
 2. ล็อกอิน → กด **Create a new provider** (หรือเลือก provider ที่มี)
-3. ตั้งชื่อ Provider เช่น `OpenClaw Mini CRM`
+3. ตั้งชื่อ Provider เช่น `Keep Line`
 4. กด **Create a Messaging API channel**
 5. เลือก LINE OA ที่สร้างไว้ → กรอกข้อมูล → กด **Create**
 
@@ -36,7 +36,7 @@
 2. หา **Webhook URL** → กด **Edit**
 3. ใส่:
    ```
-   https://seaandhill.satistang.com/webhook
+   https://keepline.satistang.com/webhook
    ```
    (หรือ URL ของ Cloudflare Tunnel ที่ตั้งไว้)
 4. กด **Update**

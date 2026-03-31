@@ -27,7 +27,7 @@ const SECTIONS: Section[] = [
 • สร้าง Cluster ชนิด M0 (Free) เลือก Region: Singapore หรือ Hong Kong
 • ไปที่ Database Access → สร้าง user + password (จดไว้)
 • ไปที่ Network Access → เพิ่ม 0.0.0.0/0 (Allow from anywhere)
-• คัดลอก Connection String: mongodb+srv://user:pass@cluster.mongodb.net/seaandhill
+• คัดลอก Connection String: mongodb+srv://user:pass@cluster.mongodb.net/keepline
 • วางใน .env ที่ MONGODB_URI= แล้ว docker compose up -d --build
 • หรือใช้ MongoDB Docker บน server เดียวกัน (เร็วกว่า Atlas 100x)`,
       },
@@ -55,7 +55,7 @@ const SECTIONS: Section[] = [
 3. ไปที่ tab "Basic settings" → คัดลอก Channel Secret
 4. ใส่ใน .env: LINE_CHANNEL_ACCESS_TOKEN= และ LINE_CHANNEL_SECRET=
 5. กลับไปที่ LINE Developer → Messaging API tab
-6. ตั้ง Webhook URL: https://seaandhill.satistang.com/webhook
+6. ตั้ง Webhook URL: https://keepline.satistang.com/webhook
 7. เปิด "Use webhook" = Enabled
 8. ปิด "Auto-reply messages" (ให้ AI ตอบแทน)
 9. ทดสอบ: ส่งข้อความใน LINE OA → ดูใน Dashboard ถ้าขึ้นแสดงว่าสำเร็จ`,
@@ -68,7 +68,7 @@ const SECTIONS: Section[] = [
 2. ตั้งชื่อ bot เช่น "SML น้องกุ้ง" → ตั้ง username เช่น sml_kung_bot
 3. BotFather จะส่ง Bot Token มา (รูปแบบ 123456:ABC-DEF...)
 4. ใส่ใน .env ที่ TELEGRAM_BOT_TOKEN=
-5. Restart Docker → เปิดเบราว์เซอร์ไปที่: https://seaandhill.satistang.com/setup-telegram-webhook
+5. Restart Docker → เปิดเบราว์เซอร์ไปที่: https://keepline.satistang.com/setup-telegram-webhook
 6. ถ้าขึ้น {"ok":true} = สำเร็จ
 7. เปิด Telegram bot → ส่ง /start → น้องกุ้งตอบทันที
 8. ลอง: "สรุปแชทวันนี้" → น้องกุ้งวิเคราะห์ให้`,
@@ -892,7 +892,7 @@ Agent (Node.js) → AI + RAG + MCP → reply
   ↓
 MongoDB (messages + users + teams)
   ↓
-OpenClaw (แกนหลัก) ← cron ทุก 1 ชม. → วิเคราะห์ → advice
+Keep Line (แกนหลัก) ← cron ทุก 1 ชม. → วิเคราะห์ → advice
   ↓
 Dashboard (Next.js 16) → Auth → CRM + KPI + Analytics`,
       },
@@ -911,7 +911,7 @@ Dashboard (Next.js 16) → Auth → CRM + KPI + Analytics`,
       },
       {
         title: "Deploy ด้วย Docker",
-        content: `1. Clone repo: git clone https://github.com/smlsoft/openclawminicrm.git
+        content: `1. Clone repo: git clone https://github.com/smlsoft/keepline.git
 2. Copy .env.example → .env แล้วใส่ค่าทั้งหมด
 3. Run: docker compose -f docker-compose.caddy.yml up -d
 4. เปิด https://your-domain.com/dashboard
@@ -1002,7 +1002,7 @@ export default function GuidePage() {
       <header className="page-header">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-lg md:text-xl font-bold" style={{ color: "var(--text-primary)" }}>📖 คู่มือการใช้งาน</h1>
-          <p className="text-xs md:text-sm mt-0.5" style={{ color: "var(--text-muted)" }}>OpenClaw Mini CRM — คู่มือละเอียดทุกฟีเจอร์</p>
+          <p className="text-xs md:text-sm mt-0.5" style={{ color: "var(--text-muted)" }}>Keep Line — คู่มือละเอียดทุกฟีเจอร์</p>
         </div>
       </header>
 
@@ -1017,7 +1017,7 @@ export default function GuidePage() {
                 <div className="w-12 h-12 gradient-bg rounded-2xl flex items-center justify-center text-2xl shadow-lg"
                   style={{ boxShadow: "0 4px 16px rgba(99,102,241,0.3)" }}>💬</div>
                 <div>
-                  <h2 className="text-base md:text-lg font-bold gradient-text">OpenClaw Mini CRM</h2>
+                  <h2 className="text-base md:text-lg font-bold gradient-text">Keep Line</h2>
                   <p className="text-xs" style={{ color: "var(--text-muted)" }}>AI Chat Intelligence — Open Source เพื่อการศึกษา</p>
                 </div>
               </div>
@@ -1053,7 +1053,7 @@ export default function GuidePage() {
             <div className="flex items-center justify-center gap-3 mt-4 flex-wrap">
               <Link href="/" className="px-4 py-2 rounded-xl text-xs font-medium gradient-bg text-white hover:opacity-90 transition">📊 ไป Dashboard</Link>
               <Link href="/analytics" className="px-4 py-2 rounded-xl text-xs font-medium transition" style={{ background: "var(--primary-bg)", color: "var(--primary)" }}>📊 Analytics</Link>
-              <a href="https://github.com/smlsoft/openclawminicrm" target="_blank" className="px-4 py-2 rounded-xl text-xs font-medium transition" style={{ background: "var(--bg-hover)", color: "var(--text-secondary)" }}>GitHub</a>
+              <a href="https://github.com/smlsoft/keepline" target="_blank" className="px-4 py-2 rounded-xl text-xs font-medium transition" style={{ background: "var(--bg-hover)", color: "var(--text-secondary)" }}>GitHub</a>
             </div>
           </div>
         </div>

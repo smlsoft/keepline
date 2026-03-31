@@ -1,13 +1,13 @@
 /**
  * Backfill user_skills จากข้อมูล messages ที่มีอยู่
- * รันครั้งเดียว: docker exec seaandhill-agent node backfill-skills.js
+ * รันครั้งเดียว: docker exec keepline-agent node backfill-skills.js
  */
 const { MongoClient } = require("mongodb");
 
 async function backfill() {
   const client = new MongoClient(process.env.MONGODB_URI);
   await client.connect();
-  const db = client.db(process.env.MONGODB_DB || "seaandhill");
+  const db = client.db(process.env.MONGODB_DB || "keepline");
 
   // ดึง distinct sourceId + userName pairs
   const pairs = await db.collection("messages").aggregate([

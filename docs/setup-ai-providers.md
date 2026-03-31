@@ -1,6 +1,6 @@
 # AI Providers — วิธีสมัครและดึง API Key
 
-> OpenClaw Mini CRM ใช้ AI หลายตัวแบบ fallback chain (ตัวไหนล่มก็ข้ามไป)
+> Keep Line ใช้ AI หลายตัวแบบ fallback chain (ตัวไหนล่มก็ข้ามไป)
 > **ฟรีทั้งหมด** — ไม่ต้องจ่ายเงิน
 
 ---

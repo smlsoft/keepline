@@ -14,7 +14,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248?logo=mongodb&logoColor=white)](#tech-stack)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white)](#tech-stack)
 
-[ทดลองใช้งาน](https://keepline.satistang.com/dashboard) · [คู่มือ](https://keepline.satistang.com/dashboard/guide) · [แจ้งปัญหา](https://github.com/smlsoft/keepline/issues)
+[ดูตัวอย่าง](https://keepline.satistang.com/dashboard) · [คู่มือ](https://keepline.satistang.com/dashboard/guide) · [แจ้งปัญหา](https://github.com/smlsoft/keepline/issues)
 
 </div>
 

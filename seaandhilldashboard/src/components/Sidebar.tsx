@@ -75,6 +75,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     groupLabel: "AI",
     items: [
+      { href: "/kung-room", icon: "🦐", label: "ห้องทำงาน" },
       { href: "/advice", icon: "💡", label: "คำแนะนำ" },
       { href: "/costs", icon: "💰", label: "ค่าใช้จ่าย AI" },
     ],

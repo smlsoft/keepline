@@ -14,7 +14,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248?logo=mongodb&logoColor=white)](#tech-stack)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white)](#tech-stack)
 
-[ดูตัวอย่าง](https://keepline.satistang.com/dashboard) · [คู่มือ](https://keepline.satistang.com/dashboard/guide) · [แจ้งปัญหา](https://github.com/smlsoft/keepline/issues)
+[ดูตัวอย่าง](https://keepline.satistang.com/dashboard/kung-room) · [คู่มือ](https://keepline.satistang.com/dashboard/guide) · [แจ้งปัญหา](https://github.com/smlsoft/keepline/issues)
 
 </div>
 
@@ -82,6 +82,15 @@
 - **วิเคราะห์ความพอใจ / โอกาสซื้อ / แท็กอัตโนมัติ**
 - **AI แนะนำคำตอบ** --- กดปุ่มเดียว AI ร่างคำตอบให้
 - **Broadcast แยกกลุ่มเป้าหมาย** --- ส่งโปรตรงกลุ่มตาม Pipeline, Tag, คะแนน
+
+### AI เลือก Model เองอัตโนมัติ
+- **งานง่ายใช้ model ถูก งานยากใช้ model เก่ง** --- ประหยัดค่า AI ได้ 40-60%
+- **ตอบแชท** → model เร็ว ราคาถูก | **วิเคราะห์เอกสาร** → Vision AI ระดับสูง | **AI Advisor** → model ฉลาดสุด
+- **ไม่ต้องตั้งค่าเอง** --- ระบบเลือกให้เหมาะกับงานแต่ละประเภท
+
+### ปลอดภัย + PDPA
+- **Google OAuth** + Audit Log + PII Masking
+- **ข้อมูลอยู่ใน server ของคุณ** --- ไม่ส่งออกไปที่ไหน
 
 ---
 

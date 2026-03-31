@@ -73,18 +73,10 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    groupLabel: "🦐 น้องกุ้ง AI",
+    groupLabel: "AI",
     items: [
-      { href: "/kung-room", icon: "🦐", label: "ห้องทำงาน" },
       { href: "/advice", icon: "💡", label: "คำแนะนำ" },
       { href: "/costs", icon: "💰", label: "ค่าใช้จ่าย AI" },
-    ],
-  },
-  {
-    groupLabel: "บัญชี",
-    items: [
-      { href: "/tax-calendar", icon: "📅", label: "ปฏิทินภาษี" },
-      { href: "/staff", icon: "👔", label: "พนักงาน" },
     ],
   },
   {

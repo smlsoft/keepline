@@ -47,4 +47,4 @@ services:
 networks:
   caddy_net:
     external: true
-    name: keepline_default
+    name: openclawminicrm_default

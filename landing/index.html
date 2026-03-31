@@ -449,26 +449,60 @@
 
   <!-- Pricing -->
   <section class="py-16 px-4">
-    <div class="max-w-2xl mx-auto text-center">
-      <h2 class="text-2xl md:text-3xl font-bold mb-4">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-2xl md:text-3xl font-bold text-center mb-4">
         <span class="gradient-text">ฟรี 100%</span> --- Open Source
       </h2>
-      <p class="text-gray-400 mb-8">ไม่มีค่ารายเดือน ไม่มีค่า AI ไม่มีค่าฟีเจอร์ซ่อน</p>
-      <div class="glass rounded-2xl p-8 text-left">
-        <div class="text-center mb-6">
-          <span class="text-5xl font-extrabold gradient-text">0 บาท</span>
-          <span class="text-gray-400 text-lg">/เดือน</span>
+      <p class="text-center text-gray-400 mb-10">เริ่มต้นฟรี อัพเกรด AI เมื่อพร้อม</p>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Free Plan -->
+        <div class="glass rounded-2xl p-6 text-left">
+          <div class="text-center mb-5">
+            <div class="text-xs text-gray-400 mb-1">เริ่มต้น</div>
+            <span class="text-4xl font-extrabold gradient-text">ฟรี</span>
+          </div>
+          <ul class="space-y-2.5 text-sm">
+            <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> เก็บแชท LINE OA & Group ตลอดชีวิต</li>
+            <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> AI ฟรี ตอบอัตโนมัติ (OpenRouter, SambaNova, Gemini)</li>
+            <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> CRM + Pipeline + Lead Scoring</li>
+            <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> ตามลูกค้า + ตามงานพนักงาน</li>
+            <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> ตรวจสลิป + จำแนกเอกสาร</li>
+            <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> Analytics + KPI + รายงาน</li>
+            <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> ข้อมูลเป็นของคุณ 100%</li>
+          </ul>
+          <div class="mt-5 p-3 rounded-xl text-xs" style="background: rgba(6,199,85,0.08); border: 1px solid rgba(6,199,85,0.2);">
+            <p class="text-line font-medium mb-1">AI ฟรี ใช้ได้ทันที</p>
+            <p class="text-gray-400">OpenRouter (10+ models ฟรี), SambaNova, Gemini --- เหมาะสำหรับเริ่มต้น ตอบลูกค้าได้ดี</p>
+          </div>
+          <p class="text-xs text-gray-500 mt-3 text-center">ค่าใช้จ่ายเดียว: VPS ~$24/เดือน</p>
         </div>
-        <ul class="space-y-3 text-sm">
-          <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> เก็บแชท LINE OA & Group ตลอดชีวิต</li>
-          <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> AI วิเคราะห์ + ตอบอัตโนมัติ</li>
-          <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> CRM + Pipeline + Lead Scoring</li>
-          <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> ตามลูกค้า + ตามงานพนักงาน</li>
-          <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> ตรวจสลิป + จำแนกเอกสาร</li>
-          <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> Analytics + KPI + รายงาน</li>
-          <li class="flex items-center gap-2"><span class="text-line">&#10003;</span> ข้อมูลเป็นของคุณ 100%</li>
-        </ul>
-        <p class="text-xs text-gray-500 mt-4 text-center">ค่าใช้จ่ายเดียว: ค่า VPS ~$24/เดือน (DigitalOcean)</p>
+
+        <!-- Pro AI -->
+        <div class="rounded-2xl p-6 text-left relative overflow-hidden" style="background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(6,199,85,0.1)); border: 1px solid rgba(99,102,241,0.3);">
+          <div class="absolute top-0 right-0 bg-indigo-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg">แนะนำ</div>
+          <div class="text-center mb-5">
+            <div class="text-xs text-gray-400 mb-1">ฉลาดขึ้น</div>
+            <span class="text-4xl font-extrabold text-indigo-400">AI Pro</span>
+          </div>
+          <ul class="space-y-2.5 text-sm">
+            <li class="flex items-center gap-2"><span class="text-indigo-400">&#10003;</span> ทุกอย่างในแพ็คฟรี +</li>
+            <li class="flex items-center gap-2"><span class="text-indigo-400">★</span> <strong>GPT-4o / Claude</strong> --- ตอบฉลาดกว่า เข้าใจบริบทลึก</li>
+            <li class="flex items-center gap-2"><span class="text-indigo-400">★</span> <strong>วิเคราะห์แม่นขึ้น</strong> --- sentiment, intent, เอกสาร</li>
+            <li class="flex items-center gap-2"><span class="text-indigo-400">★</span> <strong>ตอบภาษาไทยดีขึ้น</strong> --- เข้าใจสำนวน ภาษาพูด</li>
+            <li class="flex items-center gap-2"><span class="text-indigo-400">★</span> <strong>ตรวจสลิปแม่นขึ้น</strong> --- Vision AI ระดับสูง</li>
+            <li class="flex items-center gap-2"><span class="text-indigo-400">★</span> <strong>AI Advisor ฉลาดขึ้น</strong> --- คำแนะนำมีคุณภาพ</li>
+          </ul>
+          <div class="mt-5 p-3 rounded-xl text-xs" style="background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);">
+            <p class="text-indigo-400 font-medium mb-1">ค่า AI ตามการใช้จริง</p>
+            <p class="text-gray-400 leading-relaxed">
+              เพิ่ม API Key จาก OpenAI, Anthropic, หรือ Groq --- จ่ายตามจำนวนข้อความ<br>
+              ตัวอย่าง: ร้านค้าแชทวันละ 100 ข้อความ ≈ <strong class="text-gray-300">200-500 บาท/เดือน</strong><br>
+              สำนักงานบัญชี + วิเคราะห์เอกสาร ≈ <strong class="text-gray-300">500-1,500 บาท/เดือน</strong>
+            </p>
+          </div>
+          <p class="text-xs text-gray-500 mt-3 text-center">ใส่ API Key เมื่อไหร่ก็ได้ --- อัพเกรดทันที ไม่ต้อง restart</p>
+        </div>
       </div>
     </div>
   </section>

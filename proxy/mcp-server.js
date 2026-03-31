@@ -442,7 +442,8 @@ function setupMCPServer(app, getDB) {
   });
 
   // Messages endpoint — client → server (JSON-RPC)
-  app.post("/mcp/messages", async (req, res) => {
+  const express = require("express");
+  app.post("/mcp/messages", express.json(), async (req, res) => {
     const sessionId = req.query.sessionId;
     const session = sessions.get(sessionId);
 

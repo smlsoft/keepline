@@ -73,13 +73,13 @@ export default function LoginPage() {
             disabled={demoLoading}
             className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 active:from-indigo-700 active:to-cyan-700 text-white font-medium py-3 px-4 rounded-xl transition-all duration-150 shadow-md hover:shadow-lg disabled:opacity-50"
           >
-            <span className="text-xl">🦐</span>
-            <span>{demoLoading ? "กำลังเข้าสู่ระบบ..." : "ทดลองใช้งาน Demo"}</span>
+            <span className="text-xl">💬</span>
+            <span>{demoLoading ? "กำลังเข้าสู่ระบบ..." : "ดูตัวอย่าง"}</span>
           </button>
 
           {/* Footer note */}
           <p className="text-center text-xs theme-text-muted mt-4">
-            Demo: ดูข้อมูลตัวอย่าง ทดลองฟีเจอร์ทั้งหมด
+            ดูข้อมูลตัวอย่าง ทดลองฟีเจอร์ทั้งหมด
           </p>
         </div>
 
